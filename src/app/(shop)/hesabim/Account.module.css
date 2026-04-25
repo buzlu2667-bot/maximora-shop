@@ -1,0 +1,221 @@
+.container {
+  padding-bottom: 5rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.headerTitle {
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  margin-bottom: 0.25rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: #111;
+}
+
+.headerEmail {
+  color: #666;
+  font-size: 1rem;
+}
+
+.creditBadge {
+  background: linear-gradient(135deg, #111 0%, #333 100%);
+  padding: 0.8rem 1.4rem;
+  border-radius: 16px;
+  color: white;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.creditLabel {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  opacity: 0.8;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  margin-bottom: 2px;
+}
+
+.creditAmount {
+  font-size: 1.3rem;
+  font-weight: 900;
+}
+
+.logoutBtn {
+  padding: 0.8rem 1.5rem;
+  font-size: 0.9rem;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+/* TABS */
+.tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid #eee;
+  margin-bottom: 2.5rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  padding: 1rem 2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #888;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  white-space: nowrap;
+}
+
+.tabActive {
+  font-weight: 800;
+  color: #111;
+  border-bottom-color: #111;
+}
+
+.tabIcon {
+  transition: transform 0.2s;
+}
+
+.tabActive .tabIcon {
+  transform: scale(1.1);
+}
+
+/* FAVORITES GRID */
+.favoritesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 2rem;
+}
+
+.favCard {
+  text-decoration: none;
+  display: block;
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid #f0f0f0;
+  transition: all 0.3s ease;
+}
+
+.favCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+}
+
+.favImgWrapper {
+  aspect-ratio: 3/4;
+  overflow: hidden;
+  background-color: #fafafa;
+  position: relative;
+}
+
+.favImgWrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.favCard:hover .favImgWrapper img {
+  transform: scale(1.05);
+}
+
+.favInfo {
+  padding: 1.25rem;
+}
+
+.favName {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 0.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.favPriceRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.oldPrice {
+  font-size: 0.85rem;
+  color: #aaa;
+  text-decoration: line-through;
+}
+
+.currentPrice {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #e11d48;
+}
+
+/* MOBILE ADJUSTMENTS */
+@media (max-width: 768px) {
+  .header {
+    margin-bottom: 2rem;
+  }
+
+  .headerTitle {
+    font-size: 1.8rem;
+  }
+
+  .creditBadge {
+    width: 100%;
+    order: -1;
+  }
+
+  .tab {
+    padding: 0.85rem 1.25rem;
+    font-size: 0.9rem;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .favoritesGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .favInfo {
+    padding: 0.85rem;
+  }
+
+  .favName {
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .currentPrice {
+    font-size: 0.95rem;
+  }
+
+  .oldPrice {
+    font-size: 0.75rem;
+  }
+}
