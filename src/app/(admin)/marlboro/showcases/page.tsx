@@ -202,7 +202,7 @@ export default function AdminShowcasesPage() {
                   <div>
                     <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem', color: '#666' }}>Kategori Filtresi (Opsiyonel)</label>
                     <select 
-                      value={showcase.category} 
+                      value={showcase.category || ''} 
                       onChange={e => handleChange(showcase.id, 'category', e.target.value)}
                       style={{ width: '100%', padding: '0.75rem', border: '1px solid #ddd', borderRadius: '4px', backgroundColor: 'white' }}
                     >
@@ -215,7 +215,7 @@ export default function AdminShowcasesPage() {
                   <div>
                     <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem', color: '#666' }}>Marka Filtresi (Opsiyonel)</label>
                     <select 
-                      value={showcase.brand} 
+                      value={showcase.brand || ''} 
                       onChange={e => handleChange(showcase.id, 'brand', e.target.value)}
                       style={{ width: '100%', padding: '0.75rem', border: '1px solid #ddd', borderRadius: '4px', backgroundColor: 'white' }}
                     >
