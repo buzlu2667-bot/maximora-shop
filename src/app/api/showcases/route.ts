@@ -45,15 +45,25 @@ export async function POST(request: Request) {
 
 
     // Önce hepsini silip yeniden ekle (sync)
-    await supabaseAdmin.from('showcases').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+    const { error: delError } = await supabaseAdmin.from('showcases').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+    if (delError) {
+      console.error('Delete error:', delError.message);
+      throw delError;
+    }
 
     const { error } = await supabaseAdmin
       .from('showcases')
       .insert(rows);
 
-    if (error) throw error;
+    if (error) {
+      console.error('Insert error:', error.message);
+      throw error;
+    }
+
     return NextResponse.json({ success: true });
   } catch (error: any) {
+    console.error('Showcases API Catch:', error.message);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
+
 }

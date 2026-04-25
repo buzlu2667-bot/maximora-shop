@@ -30,8 +30,8 @@ export async function POST(request: Request) {
     
     const { error } = await supabaseAdmin
       .from('settings')
-      .update({ newest_settings: body })
-      .eq('id', 1);
+      .upsert({ id: 1, newest_settings: body });
+
 
     if (error) throw error;
     return NextResponse.json({ success: true });
