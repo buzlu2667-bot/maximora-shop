@@ -264,10 +264,13 @@ export default function AdminOrdersPage() {
                           <button onClick={() => handleMarkAsSeen(order.id)} style={{ background: '#fffbeb', border: '1px solid #fde68a', color: '#d97706', cursor: 'pointer', padding: '0.6rem 1rem', borderRadius: '12px', fontSize: '0.85rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.4rem' }}><CheckCircle size={16} /> Görüldü</button>
                         )}
                         <div style={{ textAlign: 'right', minWidth: '120px' }}>
-                          {(order.coupon_discount > 0 || order.used_credit > 0) && (
+                          {(order.cart_discount > 0 || order.coupon_discount > 0 || order.used_credit > 0) && (
                             <div style={{ fontSize: '0.75rem', marginBottom: '0.3rem', lineHeight: '1.8' }}>
+                              {order.cart_discount > 0 && (
+                                <div style={{ color: '#ea580c', fontWeight: 700 }}>🏷️ Sepet İndirimi: -{Number(order.cart_discount).toFixed(2)} TL</div>
+                              )}
                               {order.coupon_discount > 0 && (
-                                <div style={{ color: '#16a34a', fontWeight: 700 }}>🎟️ {order.coupon_code}: -{Number(order.coupon_discount).toFixed(2)} TL</div>
+                                <div style={{ color: '#16a34a', fontWeight: 700 }}>🎟️ Kupon ({order.coupon_code}): -{Number(order.coupon_discount).toFixed(2)} TL</div>
                               )}
                               {order.used_credit > 0 && (
                                 <div style={{ color: '#7c3aed', fontWeight: 700 }}>💜 Kredi: -{Number(order.used_credit).toFixed(2)} TL</div>

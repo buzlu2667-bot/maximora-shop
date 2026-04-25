@@ -59,6 +59,7 @@ export async function POST(request: Request) {
       used_credit: body.usedCredit || 0,
       coupon_code: body.couponCode || null,
       coupon_discount: body.couponDiscount || 0,
+      cart_discount: body.cartDiscount || 0,
       status: body.status || 'pending',
       shipping_address: body.shippingAddress || '',
       customer_email: body.customerEmail || null,
