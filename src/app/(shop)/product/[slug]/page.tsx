@@ -6,6 +6,26 @@ import ProductCard from '@/components/ProductCard/ProductCard';
 import sharedStyles from '@/app/(shop)/page.module.css';
 
 import { getProducts, getProductBySlug } from '@/lib/data';
+import { Metadata } from 'next';
+
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const params = await props.params;
+  const product = await getProductBySlug(params.slug);
+
+  if (!product) {
+    return { title: 'Ürün Bulunamadı' };
+  }
+
+  return {
+    title: product.name,
+    description: product.description?.slice(0, 160) || `${product.name} - Maximora kalitesiyle hemen keşfedin.`,
+    openGraph: {
+      title: product.name,
+      description: product.description?.slice(0, 160),
+      images: [product.images[0]],
+    },
+  };
+}
 
 export default async function ProductPage(props: { params: Promise<{ slug: string }> }) {
   const params = await props.params;

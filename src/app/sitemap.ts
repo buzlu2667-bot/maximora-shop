@@ -1,9 +1,22 @@
 import { MetadataRoute } from 'next';
+import { getProducts } from '@/lib/data';
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://maximorashop.com';
+  
+  // Tüm ürünleri çekelim
+  const products = await getProducts();
+  
+  // Ürün linklerini oluşturalım
+  const productEntries: MetadataRoute.Sitemap = products.map((product) => ({
+    url: `${baseUrl}/product/${product.slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'daily',
+    priority: 0.7,
+  }));
 
-  return [
+  // Sabit sayfalar
+  const staticEntries: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
       lastModified: new Date(),
@@ -53,4 +66,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.5,
     },
   ];
+
+  return [...staticEntries, ...productEntries];
 }
