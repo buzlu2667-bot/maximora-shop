@@ -164,7 +164,7 @@
 }
 
 .creditAmount {
-  fontWeight: 800;
+  font-weight: 800;
   color: #166534;
   font-size: 1.1rem;
   white-space: nowrap;
