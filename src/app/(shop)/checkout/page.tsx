@@ -192,7 +192,8 @@ export default function CheckoutPage() {
       });
     } catch (err) {}
     window.open(link, '_blank');
-    setTimeout(() => { clearCart(); setAppliedCoupon(null); router.push('/checkout/success'); }, 1000);
+    setTimeout(() => { clearCart(); setAppliedCoupon(null); router.push('/checkout/success?p=shopier'); }, 1000);
+
   };
 
   return (

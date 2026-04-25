@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { Search, Package, MapPin, Calendar, CreditCard, AlertCircle, Truck } from 'lucide-react';
+import styles from './OrderTrack.module.css';
 
 export default function OrderTrackPage() {
   const [orderId, setOrderId] = useState('');
@@ -61,59 +62,41 @@ export default function OrderTrackPage() {
   };
 
   return (
-    <div className="container section" style={{ minHeight: '85vh', paddingBottom: '5rem' }}>
-      <div style={{ maxWidth: '700px', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-          <h1 style={{ fontSize: 'clamp(1.8rem, 6vw, 2.8rem)', fontWeight: 800, marginBottom: '1.25rem', letterSpacing: '-0.5px' }}>Sipariş Takibi</h1>
-          <p style={{ color: '#666', fontSize: '1.05rem', lineHeight: '1.6' }}>Siparişinizin güncel durumunu öğrenmek için aşağıdaki <br/> bilgileri kullanabilirsiniz.</p>
+    <div className={`container section ${styles.trackContainer}`}>
+      <div className={styles.trackWrapper}>
+        <div className={styles.header}>
+          <h1>Sipariş Takibi</h1>
+          <p>Siparişinizin güncel durumunu öğrenmek için aşağıdaki bilgileri kullanabilirsiniz.</p>
         </div>
 
-        <form 
-          onSubmit={handleTrack}
-          style={{ 
-            backgroundColor: 'white', 
-            padding: '2.5rem', 
-            borderRadius: '24px', 
-            boxShadow: '0 20px 50px rgba(0,0,0,0.06)',
-            border: '1px solid #f0f0f0',
-            marginBottom: '3rem',
-            position: 'relative',
-            overflow: 'hidden'
-          }}
-        >
-          {/* Decorative Gradient */}
-          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: 'linear-gradient(to right, #e11d48, #fb7185)' }}></div>
+        <form onSubmit={handleTrack} className={styles.searchForm}>
+          <div className={styles.gradientBar}></div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
-            <div>
-              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, marginBottom: '0.6rem', color: '#333', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Sipariş Numarası</label>
+          <div className={styles.inputGrid}>
+            <div className={styles.inputGroup}>
+              <label>Sipariş Numarası</label>
               <input 
                 type="text" 
                 placeholder="Örn: ORD-581192" 
                 value={orderId}
                 onChange={(e) => setOrderId(e.target.value)}
-                style={{ width: '100%', padding: '1rem 1.25rem', borderRadius: '14px', border: '1px solid #e2e8f0', fontSize: '1rem', outline: 'none', transition: 'all 0.2s' }}
+                className={styles.inputField}
               />
             </div>
-            <div>
-              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, marginBottom: '0.6rem', color: '#333', textTransform: 'uppercase', letterSpacing: '0.5px' }}>E-posta / Telefon</label>
+            <div className={styles.inputGroup}>
+              <label>E-posta / Telefon</label>
               <input 
                 type="text" 
                 placeholder="Siparişte kullandığınız bilgi" 
                 value={contact}
                 onChange={(e) => setContact(e.target.value)}
-                style={{ width: '100%', padding: '1rem 1.25rem', borderRadius: '14px', border: '1px solid #e2e8f0', fontSize: '1rem', outline: 'none', transition: 'all 0.2s' }}
+                className={styles.inputField}
               />
             </div>
           </div>
           
-          <button 
-            type="submit" 
-            disabled={loading}
-            className="btn btn-primary" 
-            style={{ width: '100%', padding: '1.1rem', fontSize: '1.1rem', borderRadius: '14px', fontWeight: 700, boxShadow: '0 10px 20px rgba(225, 29, 72, 0.2)' }}
-          >
-            {loading ? 'Sorgulanıyor...' : <><Search size={20} style={{ marginRight: '0.5rem' }} /> Siparişimi Bul</>}
+          <button type="submit" disabled={loading} className={`${styles.submitBtn} btn btn-primary`}>
+            {loading ? 'Sorgulanıyor...' : <><Search size={20} /> Siparişimi Bul</>}
           </button>
         </form>
 
@@ -121,35 +104,24 @@ export default function OrderTrackPage() {
           {searched && orders.map((order, idx) => {
             const sc = statusLabels[order.status] || statusLabels.pending;
             return (
-              <div key={idx} style={{ backgroundColor: 'white', padding: '2.5rem', borderRadius: '32px', border: '1px solid #f0f0f0', boxShadow: '0 20px 50px rgba(0,0,0,0.06)' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1.5rem' }}>
+              <div key={idx} className={styles.orderCard}>
+                <div className={styles.cardHeader}>
                   <div>
-                    <span style={{ fontSize: '0.85rem', color: '#999', fontFamily: 'monospace', letterSpacing: '1px', fontWeight: 600 }}>{order.id}</span>
-                    <div style={{ 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      gap: '0.75rem', 
-                      marginTop: '0.75rem',
-                      padding: '0.6rem 1.5rem',
-                      borderRadius: '100px',
-                      backgroundColor: sc.bg,
-                      color: sc.color,
-                      width: 'fit-content'
-                    }}>
+                    <span className={styles.orderId}>{order.id}</span>
+                    <div className={styles.statusBadge} style={{ backgroundColor: sc.bg, color: sc.color }}>
                       {sc.icon}
-                      <span style={{ fontWeight: 800, fontSize: '1rem' }}>{sc.label}</span>
+                      <span className={styles.statusLabel}>{sc.label}</span>
                     </div>
                   </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <p style={{ fontSize: '1.8rem', fontWeight: 900, margin: 0, color: '#e11d48', letterSpacing: '-0.5px' }}>{Number(order.total_amount).toFixed(2)} TL</p>
-                    <span style={{ fontSize: '0.9rem', color: '#888', fontWeight: 500 }}>{new Date(order.created_at).toLocaleDateString('tr-TR')}</span>
+                  <div className={styles.priceDate}>
+                    <p className={styles.totalPrice}>{Number(order.total_amount).toFixed(2)} TL</p>
+                    <span className={styles.date}>{new Date(order.created_at).toLocaleDateString('tr-TR')}</span>
                   </div>
                 </div>
 
-                {/* İptal Nedeni */}
                 {order.status === 'cancelled' && order.cancel_reason && (
-                  <div style={{ marginBottom: '2rem', padding: '1.25rem', backgroundColor: '#fff1f2', borderRadius: '20px', border: '1px solid #fecdd3', display: 'flex', gap: '1rem' }}>
-                     <div style={{ backgroundColor: '#e11d48', color: 'white', padding: '0.6rem', borderRadius: '12px', flexShrink: 0, height: 'fit-content' }}>
+                  <div className={`${styles.infoBox} ${styles.cancelBox}`}>
+                     <div className={`${styles.iconContainer} ${styles.cancelIcon}`}>
                        <AlertCircle size={22} />
                      </div>
                      <div>
@@ -159,34 +131,31 @@ export default function OrderTrackPage() {
                   </div>
                 )}
 
-                {/* Kargo Bilgisi */}
                 {order.tracking_number && (
-                  <div style={{ marginBottom: '2rem', padding: '1.5rem', backgroundColor: '#eff6ff', borderRadius: '24px', border: '1px solid #bfdbfe', display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-                    <div style={{ backgroundColor: '#3b82f6', color: 'white', padding: '0.8rem', borderRadius: '16px', boxShadow: '0 8px 15px rgba(59, 130, 246, 0.3)' }}>
+                  <div className={`${styles.infoBox} ${styles.cargoBox}`}>
+                    <div className={`${styles.iconContainer} ${styles.cargoIcon}`}>
                       <Truck size={28} />
                     </div>
                     <div>
-                      <p style={{ margin: 0, fontSize: '0.8rem', color: '#1e40af', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px' }}>Kargo Bilgisi</p>
-                      <p style={{ margin: '0.3rem 0 0', fontSize: '1.2rem', color: '#1e3a8a', fontWeight: 800 }}>
-                        {order.cargo_company}: <span style={{ fontFamily: 'monospace', backgroundColor: 'rgba(255,255,255,0.5)', padding: '0.1rem 0.4rem', borderRadius: '4px' }}>{order.tracking_number}</span>
+                      <p className={styles.cargoTitle} style={{ color: '#1e40af' }}>Kargo Bilgisi</p>
+                      <p className={styles.cargoText} style={{ color: '#1e3a8a' }}>
+                        {order.cargo_company}: <span className={styles.trackingCode}>{order.tracking_number}</span>
                       </p>
                     </div>
                   </div>
                 )}
 
-                <div style={{ borderTop: '1px solid #f5f5f5', paddingTop: '2rem' }}>
-                  <h4 style={{ marginBottom: '1.5rem', fontSize: '1.1rem', fontWeight: 800 }}>Sipariş Özeti</h4>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                <div className={styles.itemsList}>
+                  <h4>Sipariş Özeti</h4>
+                  <div className={styles.itemsContainer}>
                     {order.items?.map((item: any, i: number) => (
-                      <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', backgroundColor: '#fafafa', padding: '1rem', borderRadius: '20px', border: '1px solid #f8f8f8' }}>
-                        <div style={{ width: '60px', height: '80px', borderRadius: '12px', overflow: 'hidden', flexShrink: 0, border: '1px solid #eee' }}>
-                          <img src={item.product?.images?.[0]} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <div key={i} className={styles.itemCard}>
+                        <div className={styles.productImg}>
+                          <img src={item.product?.images?.[0]} alt="" />
                         </div>
-                        <div style={{ flex: 1 }}>
-                          <p style={{ margin: 0, fontWeight: 700, fontSize: '1.1rem', color: '#111' }}>{item.quantity}× {item.product?.name}</p>
-                          <p style={{ margin: '0.3rem 0 0', fontSize: '0.9rem', color: '#777', fontWeight: 500 }}>
-                            Birim Fiyat: {Number(item.product?.price).toFixed(2)} TL
-                          </p>
+                        <div className={styles.itemInfo}>
+                          <p>{item.quantity}× {item.product?.name}</p>
+                          <p>Birim Fiyat: {Number(item.product?.price).toFixed(2)} TL</p>
                         </div>
                       </div>
                     ))}
@@ -200,3 +169,4 @@ export default function OrderTrackPage() {
     </div>
   );
 }
+
