@@ -232,7 +232,7 @@ export default function AccountPage() {
             <div className={styles.emptyCredit} style={{ width: '100%' }}>
               <Ticket size={48} style={{ marginBottom: '1.5rem', opacity: 0.2 }} />
               <p style={{ fontSize: '1.1rem', fontWeight: 600, color: '#111' }}>Mağaza krediniz bulunmuyor.</p>
-              <p style={{ fontSize: '0.9rem', color: '#888', marginTop: '0.5rem' }}>Alışveriş yaptıkça veya iadelerinizde kredi kazanabilirsiniz.</p>
+              <p style={{ fontSize: '0.9rem', color: '#888', marginTop: '0.5rem' }}>Alışveriş yaptıkça kredi kazanabilirsiniz.</p>
             </div>
           )}
         </div>

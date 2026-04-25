@@ -245,15 +245,15 @@ export default function CheckoutPage() {
              <h3 className={styles.sectionHeader}>3. Ödeme Yöntemi</h3>
              
              {creditBalance > 0 && (
-               <div style={{ backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', padding: '1.25rem', borderRadius: '12px', marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+               <div className={styles.creditBox}>
                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                    <input type="checkbox" id="use-credit" checked={useCredit} onChange={e => setUseCredit(e.target.checked)} style={{ width: '20px', height: '20px' }} />
+                    <input type="checkbox" id="use-credit" checked={useCredit} onChange={e => setUseCredit(e.target.checked)} style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
                     <div>
-                      <label htmlFor="use-credit" style={{ fontWeight: 700, color: '#166534', cursor: 'pointer' }}>Mağaza Kredimi Kullan</label>
-                      <p style={{ margin: 0, fontSize: '0.8rem', color: '#15803d' }}>Bakiye: {creditBalance.toFixed(2)} TL</p>
+                      <label htmlFor="use-credit" className={styles.creditLabel}>Mağaza Kredimi Kullan</label>
+                      <p className={styles.creditBalance}>Bakiye: {creditBalance.toFixed(2)} TL</p>
                     </div>
                  </div>
-                 {useCredit && <span style={{ fontWeight: 800, color: '#166534', fontSize: '1.1rem' }}>-{appliedCredit.toFixed(2)} TL</span>}
+                 {useCredit && <span className={styles.creditAmount}>-{appliedCredit.toFixed(2)} TL</span>}
                </div>
              )}
 
