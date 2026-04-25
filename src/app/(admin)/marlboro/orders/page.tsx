@@ -21,33 +21,12 @@ export default function AdminOrdersPage() {
   const [emailContent, setEmailContent] = useState({ subject: '', message: '' });
   const [sendingEmail, setSendingEmail] = useState(false);
 
-  useEffect(() => {
-    fetchOrders();
-
-    const channel = supabase
-      .channel('admin_orders_page')
-      .on(
-        'postgres_changes',
-        { event: '*', table: 'orders', schema: 'public' },
-        () => {
-          fetchOrders();
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, []);
-
   const fetchOrders = async () => {
     try {
-      const { data, error } = await supabase
-        .from('orders')
-        .select('*')
-        .order('created_at', { ascending: false });
-      
-      if (error) throw error;
+      // /api/orders → supabaseAdmin kullanır → RLS bypass → tüm siparişleri görebilir
+      const res = await fetch('/api/orders?_t=' + Date.now());
+      if (!res.ok) throw new Error('API hatası');
+      const data = await res.json();
       setOrders(data || []);
     } catch (error) {
       toast.error("Siparişler yüklenemedi.");
@@ -55,6 +34,12 @@ export default function AdminOrdersPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchOrders();
+    const interval = setInterval(fetchOrders, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleMarkAsSeen = async (id: string) => {
     try {

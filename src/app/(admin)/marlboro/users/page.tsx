@@ -75,13 +75,10 @@ export default function AdminUsersPage() {
 
   const fetchUsers = async () => {
     try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (!error && data) {
-        setUsers(data);
+      const res = await fetch('/api/marlboro/users?t=' + Date.now());
+      if (res.ok) {
+        const data = await res.json();
+        setUsers(data || []);
       }
     } catch (err) {
       console.error(err);

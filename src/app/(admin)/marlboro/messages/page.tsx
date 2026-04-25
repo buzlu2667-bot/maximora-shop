@@ -9,50 +9,35 @@ export default function AdminMessagesPage() {
   const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchMessages();
-
-    // Canlı takip: Yeni mesaj gelirse listeyi yenile
-    const channel = supabase
-      .channel('admin_messages_page')
-      .on(
-        'postgres_changes',
-        { event: '*', table: 'contact_messages', schema: 'public' },
-        () => {
-          fetchMessages();
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, []);
-
   const fetchMessages = async () => {
     try {
-      const { data, error } = await supabase
-        .from('contact_messages')
-        .select('*')
-        .order('created_at', { ascending: false });
-      
-      if (error) throw error;
+      // /api/marlboro/messages → supabaseAdmin kullanır → RLS bypass → tüm mesajları görebilir
+      const res = await fetch('/api/marlboro/messages?_t=' + Date.now());
+      if (!res.ok) throw new Error('API hatası');
+      const data = await res.json();
       setMessages(data || []);
     } catch (err) {
-      toast.error('Mesajlar yüklenemedi.');
+      // sessiz kal
     } finally {
       setLoading(false);
     }
   };
 
+  useEffect(() => {
+    fetchMessages();
+    const interval = setInterval(fetchMessages, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
   const handleMarkAsRead = async (id: string) => {
     try {
-      const { error } = await supabase
-        .from('contact_messages')
-        .update({ is_read: true })
-        .eq('id', id);
+      const res = await fetch(`/api/marlboro/messages?id=${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ is_read: true })
+      });
 
-      if (error) throw error;
+      if (!res.ok) throw new Error('Güncelleme başarısız');
       
       setMessages(messages.map(m => m.id === id ? { ...m, is_read: true } : m));
       toast.success('Okundu olarak işaretlendi.');
@@ -65,12 +50,11 @@ export default function AdminMessagesPage() {
     if (!confirm('Bu mesajı kalıcı olarak silmek istediğinize emin misiniz?')) return;
 
     try {
-      const { error } = await supabase
-        .from('contact_messages')
-        .delete()
-        .eq('id', id);
+      const res = await fetch(`/api/marlboro/messages?id=${id}`, {
+        method: 'DELETE'
+      });
 
-      if (error) throw error;
+      if (!res.ok) throw new Error('Silme başarısız');
       
       toast.success('Mesaj silindi.');
       setMessages(messages.filter(m => m.id !== id));

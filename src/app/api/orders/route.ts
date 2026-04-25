@@ -10,9 +10,6 @@ export async function GET(request: Request) {
     const email = searchParams.get('email');
     const phone = searchParams.get('phone');
 
-    console.log('--- Order Search Debug ---');
-    console.log('Params:', { userId, orderId, email, phone });
-
     let query = supabaseAdmin
       .from('orders')
       .select('*')
@@ -35,11 +32,8 @@ export async function GET(request: Request) {
 
     const { data, error } = await query;
     if (error) {
-      console.error('Supabase Error:', error);
       throw error;
     }
-    console.log('Result count:', data?.length || 0);
-    if (data && data.length > 0) console.log('First result ID:', data[0].id);
 
     return NextResponse.json(data || []);
   } catch (error: any) {

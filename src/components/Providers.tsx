@@ -8,10 +8,37 @@ import { useStore } from '@/store/useStore';
 export function Providers() {
   const { syncUserData, setUser } = useStore();
 
+  // Next.js kendi console.error'ını hidrasyon SONRASI sarmalıyor.
+  // Bu yüzden biz de hidrasyon sonrası tekrar sarmalıyoruz → Lock hatası overlay'e ulaşamaz.
+  useEffect(() => {
+    const isSbLockErr = (v: any) => {
+      // AbortError tipindeki hatalar (Supabase lock hatası) her zaman susturulur
+      if (v && (v.name === 'AbortError' || v instanceof DOMException)) return true;
+      const s = typeof v === 'string' ? v : (v?.message ?? '');
+      return (
+        s.includes('Lock broken') ||
+        s.includes('stole it') ||
+        s.includes('was released because') ||
+        s.includes('released because another') ||
+        s.includes('steal') ||
+        s.includes('Lock "lock:')
+      );
+    };
+
+    const original = console.error.bind(console);
+    console.error = (...args: any[]) => {
+      if (isSbLockErr(args[0])) return;
+      original(...args);
+    };
+
+    return () => {
+      console.error = original;
+    };
+  }, []);
+
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_IN' && session?.user) {
-        // OAuth veya normal giriş sonrası store'u senkronize et
         await syncUserData(session.user.id);
       } else if (event === 'SIGNED_OUT') {
         setUser(null);

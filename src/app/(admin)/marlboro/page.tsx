@@ -19,12 +19,10 @@ export default function AdminDashboardOverview() {
         }
         
         // Gerçek kayıtlı kullanıcı sayısı
-        const { count, error } = await supabase
-          .from('profiles')
-          .select('*', { count: 'exact', head: true });
-          
-        if (!error && count !== null) {
-          setUserCount(count);
+        const usersRes = await fetch('/api/marlboro/users?t=' + Date.now());
+        if (usersRes.ok) {
+          const usersData = await usersRes.json();
+          setUserCount(usersData.length);
         }
       } catch (e) {}
     };

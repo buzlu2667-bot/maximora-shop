@@ -60,6 +60,38 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <body>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              // Supabase'in "Lock" hatalarını tamamen susturur (siteyi etkilemez, sadece gürültü)
+              const _isSbLockErr = function(msg) {
+                if (!msg) return false;
+                var s = typeof msg === 'string' ? msg : (msg.message || '');
+                return s.includes('Lock broken') || s.includes('stole it') || s.includes('Lock "lock:') || s.includes('was released because') || s.includes('released because another');
+              };
+
+              const originalError = console.error;
+              console.error = function(...args) {
+                if (_isSbLockErr(args[0])) return;
+                originalError.apply(console, args);
+              };
+
+              window.addEventListener('unhandledrejection', function(event) {
+                if (event.reason && _isSbLockErr(event.reason.message || event.reason)) {
+                  event.preventDefault();
+                  event.stopImmediatePropagation();
+                }
+              }, true);
+
+              window.addEventListener('error', function(event) {
+                if (_isSbLockErr(event.message)) {
+                  event.preventDefault();
+                  event.stopImmediatePropagation();
+                }
+              }, true);
+            `
+          }}
+        />
         <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}>
           <Providers />
           {children}

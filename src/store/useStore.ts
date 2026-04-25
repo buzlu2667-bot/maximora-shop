@@ -22,6 +22,10 @@ interface StoreState {
   logout: () => void;
   syncUserData: (userId: string) => Promise<void>;
 
+  // Credit
+  creditBalance: number;
+  setCreditBalance: (balance: number) => void;
+
   // Cart
   cart: CartItem[];
   addToCart: (product: Product, quantity: number, selectedVariants?: Record<string, string>) => void;
@@ -49,7 +53,11 @@ export const useStore = create<StoreState>()(
 
       setUser: (user) => set({ user }),
 
-      logout: () => set({ user: null, favorites: [] }),
+      logout: () => set({ user: null, favorites: [], creditBalance: 0 }),
+
+      // ---- CREDIT ----
+      creditBalance: 0,
+      setCreditBalance: (balance) => set({ creditBalance: balance }),
 
       // Kullanıcı giriş yaptıktan sonra Supabase'den favorilerini çeker
       syncUserData: async (userId: string) => {
@@ -271,6 +279,7 @@ export const useStore = create<StoreState>()(
         cart: state.cart,
         favorites: state.favorites,
         user: state.user,
+        creditBalance: state.creditBalance,
       }),
     }
   )

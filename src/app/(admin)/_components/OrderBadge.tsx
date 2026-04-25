@@ -1,52 +1,41 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabase';
 
 export default function OrderBadge() {
   const [newOrderCount, setNewOrderCount] = useState(0);
 
   useEffect(() => {
-    const fetchNewOrderCount = async () => {
-      const { count } = await supabase
-        .from('orders')
-        .select('*', { count: 'exact', head: true })
-        .eq('is_new', true);
-      
-      setNewOrderCount(count || 0);
+    const fetchCount = async () => {
+      try {
+        // supabaseAdmin kullanan API route → RLS bypass → tüm siparişleri görebilir
+        const res = await fetch('/api/orders?_t=' + Date.now());
+        if (!res.ok) return;
+        const data = await res.json();
+        const newOrders = (data || []).filter((o: any) => o.is_new === true);
+        setNewOrderCount(newOrders.length);
+      } catch (e) {
+        // sessiz kal
+      }
     };
 
-    fetchNewOrderCount();
-
-    const channelId = Math.random().toString(36).substring(7);
-    const channel = supabase
-      .channel(`orders_realtime_${channelId}`)
-      .on(
-        'postgres_changes',
-        { event: '*', table: 'orders', schema: 'public' },
-        () => {
-          fetchNewOrderCount();
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
+    fetchCount();
+    const interval = setInterval(fetchCount, 5000);
+    return () => clearInterval(interval);
   }, []);
 
   if (newOrderCount === 0) return null;
 
   return (
-    <span 
+    <span
       key={newOrderCount}
-      style={{ 
-        backgroundColor: '#f59e0b', // Siparişler için turuncu/sarı daha ayırt edici olur
-        color: 'white', 
-        fontSize: '0.75rem', 
-        fontWeight: 'bold', 
-        padding: '2px 8px', 
-        borderRadius: '50px', 
+      style={{
+        backgroundColor: '#f59e0b',
+        color: 'white',
+        fontSize: '0.75rem',
+        fontWeight: 'bold',
+        padding: '2px 8px',
+        borderRadius: '50px',
         marginLeft: '10px',
         display: 'inline-flex',
         alignItems: 'center',

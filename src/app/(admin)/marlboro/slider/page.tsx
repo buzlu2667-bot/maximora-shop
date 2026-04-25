@@ -184,7 +184,7 @@ export default function AdminSliderPage() {
                       <label style={{ display: 'block', fontSize: '0.85rem', color: '#666', marginBottom: '0.3rem' }}>Veya manuel URL girin:</label>
                       <input 
                         type="url" 
-                        value={slide.image} 
+                        value={slide.image || ''} 
                         onChange={e => handleChange(slide.id, 'image', e.target.value)}
                         placeholder="https://site.com/image.jpg"
                         style={{ width: '100%', padding: '0.5rem', border: '1px solid #ddd', borderRadius: '4px' }}
@@ -198,7 +198,7 @@ export default function AdminSliderPage() {
                       <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: '#333' }}>Başlık (İsteğe Bağlı)</label>
                       <input 
                         type="text" 
-                        value={slide.title} 
+                        value={slide.title || ''} 
                         onChange={e => handleChange(slide.id, 'title', e.target.value)}
                         placeholder="Örn: Yeni Sezon Çantalar"
                         style={{ width: '100%', padding: '0.75rem', border: '1px solid #ddd', borderRadius: '4px' }}
@@ -210,7 +210,7 @@ export default function AdminSliderPage() {
                       <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: '#333' }}>Alt Başlık (İsteğe Bağlı)</label>
                       <input 
                         type="text" 
-                        value={slide.subtitle} 
+                        value={slide.subtitle || ''} 
                         onChange={e => handleChange(slide.id, 'subtitle', e.target.value)}
                         placeholder="Stilinizi tamamlayacak özel parçalar"
                         style={{ width: '100%', padding: '0.75rem', border: '1px solid #ddd', borderRadius: '4px' }}
@@ -222,7 +222,7 @@ export default function AdminSliderPage() {
                         <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: '#333' }}>Bağlantı (Link)</label>
                         <input 
                           type="text" 
-                          value={slide.link} 
+                          value={slide.link || ''} 
                           onChange={e => handleChange(slide.id, 'link', e.target.value)}
                           placeholder="/categories/yeni-sezon"
                           style={{ width: '100%', padding: '0.75rem', border: '1px solid #ddd', borderRadius: '4px' }}
@@ -232,7 +232,7 @@ export default function AdminSliderPage() {
                       <div style={{ flex: '1' }}>
                         <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: '#333' }}>Yazı Konumu</label>
                         <select 
-                          value={slide.textPosition} 
+                          value={slide.textPosition || 'center'} 
                           onChange={e => handleChange(slide.id, 'textPosition', e.target.value)}
                           style={{ width: '100%', padding: '0.75rem', border: '1px solid #ddd', borderRadius: '4px', backgroundColor: 'white' }}
                         >

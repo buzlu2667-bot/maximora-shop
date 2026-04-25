@@ -1,54 +1,41 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabase';
 
 export default function MessageBadge() {
   const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
-    const fetchUnreadCount = async () => {
-      const { count } = await supabase
-        .from('contact_messages')
-        .select('*', { count: 'exact', head: true })
-        .eq('is_read', false);
-      
-      setUnreadCount(count || 0);
+    const fetchCount = async () => {
+      try {
+        // supabaseAdmin kullanan API route → RLS bypass → tüm mesajları görebilir
+        const res = await fetch('/api/marlboro/messages?_t=' + Date.now());
+        if (!res.ok) return;
+        const data = await res.json();
+        const unread = (data || []).filter((m: any) => m.is_read === false);
+        setUnreadCount(unread.length);
+      } catch (e) {
+        // sessiz kal
+      }
     };
 
-    fetchUnreadCount();
-
-    // Canlı bağlantı kanalı
-    const channelId = Math.random().toString(36).substring(7);
-    const channel = supabase
-      .channel(`messages_realtime_${channelId}`)
-      .on(
-        'postgres_changes',
-        { event: '*', table: 'contact_messages', schema: 'public' },
-        (payload) => {
-          console.log('Canlı Değişiklik:', payload);
-          fetchUnreadCount();
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
+    fetchCount();
+    const interval = setInterval(fetchCount, 5000);
+    return () => clearInterval(interval);
   }, []);
 
   if (unreadCount === 0) return null;
 
   return (
-    <span 
-      key={unreadCount} 
-      style={{ 
-        backgroundColor: '#ef4444', 
-        color: 'white', 
-        fontSize: '0.75rem', 
-        fontWeight: 'bold', 
-        padding: '2px 8px', 
-        borderRadius: '50px', 
+    <span
+      key={unreadCount}
+      style={{
+        backgroundColor: '#ef4444',
+        color: 'white',
+        fontSize: '0.75rem',
+        fontWeight: 'bold',
+        padding: '2px 8px',
+        borderRadius: '50px',
         marginLeft: '10px',
         display: 'inline-flex',
         alignItems: 'center',

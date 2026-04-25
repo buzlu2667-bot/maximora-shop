@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { useStore } from '@/store/useStore';
-import { MapPin, AlertCircle, Package, Heart, Ticket } from 'lucide-react';
+import { MapPin, Package, Ticket } from 'lucide-react';
 import toast from 'react-hot-toast';
 import styles from './Account.module.css';
 
@@ -20,60 +20,59 @@ const statusLabels: Record<string, { label: string; color: string; bg: string }>
 
 export default function AccountPage() {
   const router = useRouter();
-  const { user, logout } = useStore();
+  const { user, logout, creditBalance, setCreditBalance } = useStore();
   const [orders, setOrders] = useState<any[]>([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
   const [activeTab, setActiveTab] = useState<'orders' | 'credit'>('orders');
-
-  const { favorites } = useStore();
-
   const [profile, setProfile] = useState<any>(null);
-
   const [checkingAuth, setCheckingAuth] = useState(true);
 
   useEffect(() => {
-    const checkUser = async () => {
-      if (user) {
-        setCheckingAuth(false);
-        fetchMyOrders();
-        fetchProfile();
-        return;
-      }
+    let isMounted = true;
 
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session) {
-        router.push('/login');
-      } else {
-        setCheckingAuth(false);
-      }
-    };
-
-    checkUser();
-  }, [user?.id, router]);
-
-  // Her "Mağaza Kredisi" sekmesine geçildiğinde bakiyeyi tazelemek için
-  useEffect(() => {
-    if (user?.id && activeTab === 'credit') {
-      fetchProfile();
+    if (!user?.id) {
+      const t = setTimeout(() => {
+        if (!useStore.getState().user && isMounted) {
+           router.push('/login');
+        }
+      }, 500);
+      return () => { clearTimeout(t); isMounted = false; };
     }
-  }, [activeTab, user?.id]);
 
-  const fetchProfile = async () => {
+    setCheckingAuth(false);
+    fetchMyOrders(user.id);
+    fetchProfile(user.id);
+
+    return () => { isMounted = false; };
+  }, [router, user?.id]);
+
+  // Krediyi 2 saniyede bir arka planda taze çek
+  useEffect(() => {
     if (!user?.id) return;
+    const interval = setInterval(() => fetchProfile(user.id), 2000);
+    return () => clearInterval(interval);
+  }, [user?.id]);
+
+  const fetchProfile = async (userId: string) => {
     try {
-      const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single();
-      if (data) setProfile(data);
+      // /api/profile → supabaseAdmin kullanır → RLS bypass → cache yok → her zaman taze veri
+      const res = await fetch(`/api/profile?userId=${userId}&_t=${Date.now()}`);
+      if (!res.ok) return;
+      const data = await res.json();
+      if (data && !data.error) {
+        setProfile({ ...data });
+        setCreditBalance(Number(data.credit_balance) || 0);
+      }
     } catch (e) {
-      console.error(e);
+      // sessiz kal
     }
   };
 
-  const fetchMyOrders = async () => {
-    if (!user) return;
+
+  const fetchMyOrders = async (userId: string) => {
     setLoadingOrders(true);
     try {
-      const res = await fetch(`/api/orders?userId=${user.id}`);
+      const res = await fetch(`/api/orders?userId=${userId}&t=${Date.now()}`);
       const data = await res.json();
       setOrders(data);
     } catch {
@@ -83,27 +82,29 @@ export default function AccountPage() {
     }
   };
 
-  const handleLogout = async () => {
-    try {
-      await supabase.auth.signOut();
-    } catch (e) {
-      console.error(e);
-    } finally {
-      logout();
-      toast.success('Çıkış yapıldı.');
-      router.push('/');
-    }
+  const handleLogout = () => {
+    // Toastı hemen göster (async bekleme olmadan)
+    toast.success('Çıkış yapıldı! Görüşürüz 👋', { duration: 2500 });
+
+    // signOut arka planda ateşle, bekleme (await) = kilitlenme riski)
+    supabase.auth.signOut().catch(() => {});
+
+    // Zustand'ı temizle
+    logout();
+
+    // Toastın görünmesi için bekle, sonra yönlendir
+    setTimeout(() => {
+      window.location.href = '/';
+    }, 1800);
   };
 
-  if (checkingAuth && !user) {
+  if (checkingAuth || !user) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh' }}>
         <p style={{ color: 'var(--color-text-muted)' }}>Yükleniyor...</p>
       </div>
     );
   }
-
-  if (!user) return null;
 
   return (
     <div className={`container section ${styles.container}`}>
@@ -134,13 +135,23 @@ export default function AccountPage() {
               {tab === 'orders' ? <Package size={20} /> : <Ticket size={20} />}
             </div>
             <span>{tab === 'orders' ? 'Siparişlerim' : 'Mağaza Kredisi'}</span>
-            <span style={{ fontSize: '0.8rem', opacity: 0.6, marginLeft: '4px' }}>
-               ({tab === 'orders' ? orders.length : profile?.credit_balance > 0 ? '1' : '0'})
-            </span>
-            
-            {tab === 'credit' && profile?.credit_balance > 0 && (
-              <div className={styles.tabBadge}></div>
-            )}
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <span style={{ fontSize: '0.8rem', opacity: 0.6, marginLeft: '4px' }}>
+                 ({tab === 'orders' ? orders.length : creditBalance > 0 ? '1' : '0'})
+              </span>
+              
+              {tab === 'credit' && creditBalance > 0 && (
+                <span style={{ 
+                  width: '8px', 
+                  height: '8px', 
+                  backgroundColor: '#e11d48', 
+                  borderRadius: '50%', 
+                  display: 'inline-block',
+                  marginLeft: '6px',
+                  transform: 'translateY(-6px)'
+                }} />
+              )}
+            </div>
           </button>
         ))}
       </div>
@@ -220,7 +231,7 @@ export default function AccountPage() {
       {/* Mağaza Kredisi */}
       {activeTab === 'credit' && (
         <div style={{ display: 'flex', justifyContent: 'center', padding: '1rem 0' }}>
-          {profile?.credit_balance > 0 ? (
+          {creditBalance > 0 ? (
             <div className={styles.creditCard}>
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
@@ -228,7 +239,7 @@ export default function AccountPage() {
                   <Ticket size={24} opacity={0.5} />
                 </div>
                 <p className={styles.cardTitle}>MEVCUT BAKİYE</p>
-                <p className={styles.cardBalance}>{Number(profile.credit_balance).toFixed(2)} TL</p>
+                <p className={styles.cardBalance}>{creditBalance.toFixed(2)} TL</p>
               </div>
               
               <div className={styles.cardFooter}>
