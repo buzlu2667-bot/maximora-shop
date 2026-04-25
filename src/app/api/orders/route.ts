@@ -107,9 +107,9 @@ export async function POST(request: Request) {
       }
     }
 
-    // Mail Operasyonlarını Başlat (Arka planda)
-    emailService.sendAdminOrderNotification(data);
-    emailService.sendCustomerOrderConfirmation(data);
+    // Mail Operasyonlarını Başlat (Awaited for reliability in serverless)
+    await emailService.sendAdminOrderNotification(data);
+    await emailService.sendCustomerOrderConfirmation(data);
 
     return NextResponse.json(data, { status: 201 });
   } catch (error: any) {
@@ -141,14 +141,14 @@ export async function PATCH(request: Request) {
 
     if (error) throw error;
     
-    // Durum Değişikliğine Göre Mail Tetikle (Arka planda ve Güvenli modda)
+    // Durum Değişikliğine Göre Mail Tetikle (Awaited for reliability)
     try {
       if (body.status === 'processing') {
-        emailService.sendOrderApprovedNotification(data);
+        await emailService.sendOrderApprovedNotification(data);
       } else if (body.status === 'shipped') {
-        emailService.sendShippingNotification(data);
+        await emailService.sendShippingNotification(data);
       } else if (body.status === 'cancelled') {
-        emailService.sendCancellationNotification(data);
+        await emailService.sendCancellationNotification(data);
       }
     } catch (mailErr) {
       console.error('API Durum Mail Hatası:', mailErr);
