@@ -14,7 +14,8 @@ export default function AccountPage() {
   const { user, logout } = useStore();
   const [orders, setOrders] = useState<any[]>([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
-  const [activeTab, setActiveTab] = useState<'orders' | 'favorites'>('orders');
+  const [activeTab, setActiveTab] = useState<'orders' | 'credit'>('orders');
+
   const { favorites } = useStore();
 
   const [profile, setProfile] = useState<any>(null);
@@ -103,14 +104,6 @@ export default function AccountPage() {
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-          {/* Mağaza Kredisi */}
-          {profile?.credit_balance > 0 && (
-            <div className={styles.creditBadge}>
-              <span className={styles.creditLabel}>Mağaza Kredisi</span>
-              <span className={styles.creditAmount}>{Number(profile.credit_balance).toFixed(2)} TL</span>
-            </div>
-          )}
-          
           <button onClick={handleLogout} className={`${styles.logoutBtn} btn btn-secondary`}>
             Çıkış Yap
           </button>
@@ -119,17 +112,21 @@ export default function AccountPage() {
 
       {/* Tabs */}
       <div className={styles.tabs}>
-        {(['orders', 'favorites'] as const).map(tab => (
+        {(['orders', 'credit'] as const).map(tab => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
             className={`${styles.tab} ${activeTab === tab ? styles.tabActive : ''}`}
+            style={{ position: 'relative' }}
           >
             <div className={styles.tabIcon}>
-              {tab === 'orders' ? <Package size={20} /> : <Heart size={20} fill={activeTab === tab ? 'currentColor' : 'none'} />}
+              {tab === 'orders' ? <Package size={20} /> : <Ticket size={20} />}
             </div>
-            <span>{tab === 'orders' ? 'Siparişlerim' : 'Favorilerim'}</span>
-            <span style={{ fontSize: '0.8rem', opacity: 0.6 }}>({tab === 'orders' ? orders.length : favorites.length})</span>
+            <span>{tab === 'orders' ? 'Siparişlerim' : 'Mağaza Kredisi'}</span>
+            
+            {tab === 'credit' && profile?.credit_balance > 0 && (
+              <div className={styles.tabBadge}></div>
+            )}
           </button>
         ))}
       </div>
@@ -140,8 +137,8 @@ export default function AccountPage() {
           {loadingOrders ? (
             <p style={{ color: 'var(--color-text-muted)' }}>Siparişler yükleniyor...</p>
           ) : orders.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '4rem 0' }}>
-              <p style={{ fontSize: '1.1rem', color: 'var(--color-text-muted)', marginBottom: '1.5rem' }}>Henüz siparişiniz bulunmamaktadır.</p>
+            <div className={styles.emptyCredit}>
+              <p style={{ fontSize: '1.1rem', marginBottom: '1.5rem' }}>Henüz siparişiniz bulunmamaktadır.</p>
               <Link href="/" className="btn btn-primary">Alışverişe Başla</Link>
             </div>
           ) : (
@@ -187,17 +184,6 @@ export default function AccountPage() {
                     })}
                   </div>
 
-                  {/* İptal Nedeni */}
-                  {order.status === 'cancelled' && order.cancel_reason && (
-                    <div style={{ marginTop: '1.25rem', padding: '1rem', backgroundColor: '#fff1f2', borderRadius: '12px', border: '1px solid #fecdd3', display: 'flex', gap: '0.75rem' }}>
-                      <AlertCircle size={20} color="#e11d48" style={{ flexShrink: 0 }} />
-                      <div>
-                        <p style={{ margin: 0, fontSize: '0.8rem', fontWeight: 800, color: '#9f1239' }}>İptal Nedeni</p>
-                        <p style={{ margin: '0.2rem 0 0', fontSize: '0.85rem', color: '#be123c' }}>{order.cancel_reason}</p>
-                      </div>
-                    </div>
-                  )}
-
                   {/* Kargo Bilgisi */}
                   {order.tracking_number && (
                     <div style={{ marginTop: '1.25rem', padding: '1rem', backgroundColor: '#eff6ff', borderRadius: '12px', border: '1px solid #bfdbfe', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -217,36 +203,43 @@ export default function AccountPage() {
         </div>
       )}
 
-      {/* Favoriler */}
-      {activeTab === 'favorites' && (
-        <div>
-          {favorites.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '4rem 0' }}>
-              <p style={{ fontSize: '1.1rem', color: 'var(--color-text-muted)', marginBottom: '1.5rem' }}>Favori listeniz boş.</p>
-              <Link href="/" className="btn btn-primary">Ürünleri İncele</Link>
+      {/* Mağaza Kredisi */}
+      {activeTab === 'credit' && (
+        <div style={{ display: 'flex', justifyContent: 'center', padding: '1rem 0' }}>
+          {profile?.credit_balance > 0 ? (
+            <div className={styles.creditCard}>
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                  <div className={styles.cardChip}></div>
+                  <Ticket size={24} opacity={0.5} />
+                </div>
+                <p className={styles.cardTitle}>MEVCUT BAKİYE</p>
+                <p className={styles.cardBalance}>{Number(profile.credit_balance).toFixed(2)} TL</p>
+              </div>
+              
+              <div className={styles.cardFooter}>
+                <div>
+                  <p className={styles.cardNumber}>**** **** **** {user.id.slice(-4)}</p>
+                  <p className={styles.cardHolder}>{user.email?.split('@')[0]}</p>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  <p style={{ fontSize: '0.6rem', opacity: 0.6, margin: 0 }}>VALID THRU</p>
+                  <p style={{ fontSize: '0.9rem', margin: 0, fontWeight: 700 }}>12/29</p>
+                </div>
+              </div>
             </div>
           ) : (
-            <div className={styles.favoritesGrid}>
-              {favorites.map((fav: any) => (
-                <Link key={fav.id} href={`/product/${fav.slug}`} className={styles.favCard}>
-                  <div className={styles.favImgWrapper}>
-                    <img src={fav.images?.[0]} alt={fav.name} />
-                  </div>
-                  <div className={styles.favInfo}>
-                    <p className={styles.favName}>{fav.name}</p>
-                    <div className={styles.favPriceRow}>
-                      {fav.oldPrice && (
-                        <span className={styles.oldPrice}>{Number(fav.oldPrice).toFixed(2)} TL</span>
-                      )}
-                      <p className={styles.currentPrice}>{Number(fav.price).toFixed(2)} TL</p>
-                    </div>
-                  </div>
-                </Link>
-              ))}
+            <div className={styles.emptyCredit} style={{ width: '100%' }}>
+              <Ticket size={48} style={{ marginBottom: '1.5rem', opacity: 0.2 }} />
+              <p style={{ fontSize: '1.1rem', fontWeight: 600, color: '#111' }}>Mağaza krediniz bulunmuyor.</p>
+              <p style={{ fontSize: '0.9rem', color: '#888', marginTop: '0.5rem' }}>Alışveriş yaptıkça veya iadelerinizde kredi kazanabilirsiniz.</p>
             </div>
           )}
         </div>
       )}
+    </div>
+  );
+}
     </div>
   );
 }

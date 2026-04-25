@@ -43,18 +43,14 @@ export default function FavoritesPage() {
         ) : (
           favorites.map(product => (
             <div key={product.id} className={styles.card}>
-               <button className={styles.removeBtn} title="Favorilerden Çıkar" onClick={() => handleRemove(product.id)}>
-                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2">
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                 </svg>
-               </button>
-
                <Link href={`/product/${product.slug}`} className={styles.imgWrapper}>
                   <img src={product.images[0]} alt={product.name} />
                </Link>
 
                <div className={styles.info}>
-                  <h3 className={styles.name}><Link href={`/product/${product.slug}`}>{product.name}</Link></h3>
+                  <h3 className={styles.name}>
+                    <Link href={`/product/${product.slug}`}>{product.name}</Link>
+                  </h3>
                   
                   <div className={styles.priceRow}>
                     {product.oldPrice && (
@@ -62,10 +58,6 @@ export default function FavoritesPage() {
                     )}
                     <p className={styles.price}>{Number(product.price).toFixed(2)} TL</p>
                   </div>
-
-                  <p className={styles.stockStatus} style={{ color: product.inStock ? '#10b981' : '#ef4444' }}>
-                    {product.inStock ? 'Stokta Var' : 'Tükendi'}
-                  </p>
     
                   <div className={styles.actions}>
                      {product.variants && product.variants.length > 0 ? (
@@ -81,6 +73,13 @@ export default function FavoritesPage() {
                      )}
                   </div>
                </div>
+
+               <button className={styles.removeBtn} onClick={() => handleRemove(product.id)}>
+                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style={{ marginRight: '4px' }}>
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                 </svg>
+                 <span>SİL</span>
+               </button>
             </div>
           ))
         )}
