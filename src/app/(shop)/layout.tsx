@@ -3,6 +3,7 @@ import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
 import MaintenanceGuard from '@/components/Maintenance/MaintenanceGuard';
 import AnnouncementPopup from '@/components/AnnouncementPopup/AnnouncementPopup';
+import Newsletter from '@/components/Newsletter/Newsletter';
 
 export default function ShopLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -12,6 +13,7 @@ export default function ShopLayout({ children }: { children: React.ReactNode }) 
       <main style={{ minHeight: '80vh' }}>
         {children}
       </main>
+      <Newsletter />
       <Footer />
     </MaintenanceGuard>
   );

@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState } from 'react';
-import { Mail, Send, User, Tag, AlignLeft, Sparkles, ChevronDown } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { Mail, Send, User, Tag, AlignLeft, Sparkles, ChevronDown, Image as ImageIcon, Users, Loader2 } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 import toast from 'react-hot-toast';
 
 // --- HAZIR ŞABLONLAR ---
-type TemplateVar = { key: string; label: string; placeholder: string };
+type TemplateVar = { key: string; label: string; placeholder: string; type?: 'text' | 'image' };
 
 type Template = {
   id: string;
@@ -17,6 +18,18 @@ type Template = {
 };
 
 const TEMPLATES: Template[] = [
+  {
+    id: 'campaign',
+    label: '🔥 Yeni Kampanya',
+    icon: '🔥',
+    subject: 'Günün Fırsatını Kaçırma! 🔥',
+    vars: [
+      { key: 'title', label: 'Kampanya Başlığı', placeholder: 'Örn: Büyük Yaz İndirimi Başladı!' },
+      { key: 'imageUrl', label: 'Kampanya Görseli', placeholder: 'Görsel yükleyin veya link yapıştırın', type: 'image' },
+      { key: 'buttonLink', label: 'Buton Linki', placeholder: 'Örn: https://maximora.shop/categories/all' },
+    ],
+    buildMessage: (v) => `${v.title || '[KAMPANYA BAŞLIĞI]'}\n\n${v.imageUrl ? '![Görsel](' + v.imageUrl + ')\n\n' : ''}Harika fırsatları keşfetmek için hemen sitemizi ziyaret et!\n\nAlışverişe Başla: ${v.buttonLink || 'https://maximora.shop'}`
+  },
   {
     id: 'cargo',
     label: '🚚 Kargo Bildirimi',
@@ -40,38 +53,6 @@ const TEMPLATES: Template[] = [
     buildMessage: (v) => `Harika haber! #${v.orderNo || '[SİPARİŞ NO]'} nolu siparişinin ödemesi başarıyla onaylandı.\n\nEkibimiz şu anda ürünlerini hazırlamaya başladı. Kargoya verildiğinde seni tekrar takip numarasıyla bilgilendireceğiz. 🙏`
   },
   {
-    id: 'order_confirm',
-    label: '📦 Sipariş Alındı (Shopier)',
-    icon: '📦',
-    subject: 'Siparişin Alındı! ✨',
-    vars: [
-      { key: 'orderNo', label: 'Sipariş No', placeholder: 'Örn: 1745234567890' },
-    ],
-    buildMessage: (v) => `Harika bir seçim yaptın! #${v.orderNo || '[SİPARİŞ NO]'} nolu siparişin başarıyla bize ulaştı.\n\nÖdemen onaylandıktan sonra hazırlıklara başlayacağız ve kargo aşamasında tekrar bilgilendireceğiz. 😊`
-  },
-  {
-    id: 'cancel',
-    label: '❌ İptal Bildirimi',
-    icon: '❌',
-    subject: 'Sipariş İptali Hakkında',
-    vars: [
-      { key: 'orderNo', label: 'Sipariş No', placeholder: 'Örn: 1745234567890' },
-      { key: 'reason', label: 'İptal Nedeni', placeholder: 'Örn: Stok yetersizliği' },
-    ],
-    buildMessage: (v) => `Merhaba, #${v.orderNo || '[SİPARİŞ NO]'} nolu siparişin maalesef iptal edilmiştir.\n\nİptal Nedeni: ${v.reason || '[İPTAL NEDENİ]'}\n\nHerhangi bir sorunuz varsa bizimle iletişime geçebilirsiniz. Üzüntümüzü paylaşırız.`
-  },
-  {
-    id: 'iban',
-    label: '💳 IBAN Hatırlatma',
-    icon: '💳',
-    subject: 'IBAN Ödeme Hatırlatması',
-    vars: [
-      { key: 'orderNo', label: 'Sipariş No', placeholder: 'Örn: 1745234567890' },
-      { key: 'amount', label: 'Tutar (TL)', placeholder: 'Örn: 1250.00' },
-    ],
-    buildMessage: (v) => `Merhaba! #${v.orderNo || '[SİPARİŞ NO]'} nolu siparişiniz için ${v.amount ? v.amount + ' TL' : '[TUTAR]'} tutarında ödeme bekliyoruz.\n\nHesap Sahibi: burak agarak\nIBAN: TR66 0015 7000 0000 0095 7755 66\n\nLütfen açıklama kısmına sipariş numaranızı (#${v.orderNo || '[SİPARİŞ NO]'}) yazmayı unutmayın! 🙏`
-  },
-  {
     id: 'custom',
     label: '✏️ Serbest Yazım',
     icon: '✏️',
@@ -84,7 +65,10 @@ const TEMPLATES: Template[] = [
 export default function AdminSendEmailPage() {
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>('custom');
   const [templateVars, setTemplateVars] = useState<Record<string, string>>({});
-  const [showTemplates, setShowTemplates] = useState(true);
+  const [showTemplates, setShowTemplates] = useState(false);
+  const [targetType, setTargetType] = useState<'individual' | 'subscribers'>('individual');
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [emailData, setEmailData] = useState({
     to: '',
@@ -121,26 +105,80 @@ export default function AdminSendEmailPage() {
     }
   };
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random()}.${fileExt}`;
+      const filePath = `campaigns/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('newsletter')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data } = supabase.storage
+        .from('newsletter')
+        .getPublicUrl(filePath);
+
+      handleVarChange('imageUrl', data.publicUrl);
+      toast.success('Görsel yüklendi!');
+    } catch (error: any) {
+      toast.error('Görsel yüklenemedi: ' + error.message);
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!emailData.to || !emailData.subject || !emailData.message) {
-      toast.error("Lütfen tüm alanları doldurun.");
+    
+    let recipients: string[] = [];
+    
+    if (targetType === 'individual') {
+      if (!emailData.to) {
+        toast.error("Lütfen alıcı adresi girin.");
+        return;
+      }
+      recipients = [emailData.to];
+    } else {
+      // Aboneleri çek
+      const { data, error } = await supabase.from('newsletter_subscribers').select('email');
+      if (error || !data) {
+        toast.error("Aboneler çekilemedi.");
+        return;
+      }
+      recipients = data.map(d => d.email);
+    }
+
+    if (recipients.length === 0) {
+      toast.error("Gönderilecek abone bulunamadı.");
+      return;
+    }
+
+    if (!emailData.subject || !emailData.message) {
+      toast.error("Lütfen konu ve mesaj alanlarını doldurun.");
       return;
     }
 
     setLoading(true);
     try {
-      const res = await fetch('/api/marlboro/send-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(emailData)
-      });
+      // NOT: API'nin toplu gönderimi desteklemesi lazım, veya tek tek döngüyle atılmalı.
+      // Basitleştirmek için tek tek atıyoruz (Resend limitlerine dikkat)
+      for (const to of recipients) {
+        await fetch('/api/marlboro/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...emailData, to })
+        });
+      }
 
-      if (!res.ok) throw new Error('Gönderim başarısız');
-
-      toast.success("E-posta başarıyla gönderildi! ✨");
-      setEmailData(prev => ({ ...prev, to: '' }));
-      setTemplateVars({});
+      toast.success(`${recipients.length} adet e-posta gönderildi! ✨`);
+      if (targetType === 'individual') setEmailData(prev => ({ ...prev, to: '' }));
     } catch (error) {
       toast.error("E-posta gönderilemedi.");
     } finally {
@@ -151,174 +189,121 @@ export default function AdminSendEmailPage() {
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto', padding: 'clamp(1rem, 4vw, 2rem)' }}>
       <div style={{ marginBottom: '2rem' }}>
-        <h1 style={{ fontSize: 'clamp(1.5rem, 5vw, 2.2rem)', fontWeight: 800, color: '#111', margin: 0, display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+        <h1 style={{ fontSize: 'clamp(1.5rem, 5vw, 2.2rem)', fontWeight: 800, color: '#111', margin: 0, display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <Mail size={28} /> E-posta Gönder
         </h1>
-        <p style={{ color: '#666', marginTop: '0.5rem', fontSize: '0.9rem' }}>Müşterilerinize hazır şablonla veya serbest yazarak profesyonel e-posta gönderin.</p>
+        <p style={{ color: '#666', marginTop: '0.5rem' }}>Müşterilerinize veya tüm abonelere profesyonel e-posta gönderin.</p>
+      </div>
+
+      {/* GÖNDERİM HEDEFİ SEÇİCİ */}
+      <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
+        <button 
+          onClick={() => setTargetType('individual')}
+          style={{ flex: 1, padding: '1rem', borderRadius: '16px', border: '1px solid #ddd', backgroundColor: targetType === 'individual' ? '#111' : 'white', color: targetType === 'individual' ? 'white' : '#666', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
+        >
+          <User size={18} /> Tek Kişiye
+        </button>
+        <button 
+          onClick={() => setTargetType('subscribers')}
+          style={{ flex: 1, padding: '1rem', borderRadius: '16px', border: '1px solid #ddd', backgroundColor: targetType === 'subscribers' ? '#111' : 'white', color: targetType === 'subscribers' ? 'white' : '#666', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
+        >
+          <Users size={18} /> Tüm Abonelere
+        </button>
       </div>
 
       {/* ŞABLON SEÇİCİ */}
       <div style={{ marginBottom: '1.5rem' }}>
         <button
           onClick={() => setShowTemplates(!showTemplates)}
-          style={{
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            padding: '1rem 1.25rem',
-            backgroundColor: selectedTemplateId !== 'custom' ? '#111' : 'white',
-            color: selectedTemplateId !== 'custom' ? '#d4af37' : '#333',
-            border: '1px solid #ddd',
-            borderRadius: '14px',
-            cursor: 'pointer',
-            fontWeight: 700,
-            fontSize: '0.95rem'
-          }}
+          style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem 1.25rem', backgroundColor: 'white', color: '#111', border: '1px solid #ddd', borderRadius: '14px', cursor: 'pointer', fontWeight: 700 }}
         >
           <span>{selectedTemplate.icon} {selectedTemplate.label}</span>
           <ChevronDown size={18} style={{ transform: showTemplates ? 'rotate(180deg)' : 'rotate(0)', transition: '0.2s' }} />
         </button>
-
         {showTemplates && (
-          <div style={{
-            marginTop: '0.5rem',
-            backgroundColor: 'white',
-            border: '1px solid #eee',
-            borderRadius: '14px',
-            overflow: 'hidden',
-            boxShadow: '0 8px 30px rgba(0,0,0,0.08)'
-          }}>
-            {TEMPLATES.map((t, i) => (
-              <button
-                key={t.id}
-                onClick={() => handleSelectTemplate(t)}
-                style={{
-                  width: '100%',
-                  textAlign: 'left',
-                  padding: '0.9rem 1.25rem',
-                  background: selectedTemplateId === t.id ? '#f9f5e7' : 'white',
-                  border: 'none',
-                  borderBottom: i < TEMPLATES.length - 1 ? '1px solid #f3f3f3' : 'none',
-                  cursor: 'pointer',
-                  fontSize: '0.9rem',
-                  fontWeight: selectedTemplateId === t.id ? 700 : 500,
-                  color: selectedTemplateId === t.id ? '#d4af37' : '#333',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem'
-                }}
-              >
-                <span>{t.icon}</span> {t.label.replace(/^\S+\s/, '')}
+          <div style={{ marginTop: '0.5rem', backgroundColor: 'white', border: '1px solid #eee', borderRadius: '14px', overflow: 'hidden', boxShadow: '0 8px 30px rgba(0,0,0,0.08)' }}>
+            {TEMPLATES.map(t => (
+              <button key={t.id} onClick={() => handleSelectTemplate(t)} style={{ width: '100%', textAlign: 'left', padding: '1rem', background: selectedTemplateId === t.id ? '#f9f5e7' : 'white', border: 'none', borderBottom: '1px solid #f3f3f3', cursor: 'pointer', fontWeight: selectedTemplateId === t.id ? 700 : 500, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span>{t.icon}</span> {t.label}
               </button>
             ))}
           </div>
         )}
       </div>
 
-      <div style={{ backgroundColor: 'white', padding: 'clamp(1.25rem, 5vw, 2.5rem)', borderRadius: '28px', boxShadow: '0 10px 40px rgba(0,0,0,0.03)', border: '1px solid #f0f0f0' }}>
+      <div style={{ backgroundColor: 'white', padding: 'clamp(1.25rem, 5vw, 2.5rem)', borderRadius: '28px', border: '1px solid #f0f0f0' }}>
         <form onSubmit={handleSend} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
 
           {/* Şablon Değişkenleri */}
           {selectedTemplate.vars.length > 0 && (
             <div style={{ padding: '1.25rem', backgroundColor: '#fafaf5', borderRadius: '16px', border: '1px solid #f0e8c0' }}>
-              <p style={{ margin: '0 0 1rem 0', fontSize: '0.8rem', fontWeight: 800, color: '#d4af37', textTransform: 'uppercase', letterSpacing: '1px' }}>
-                ✨ Şablon Bilgilerini Doldur
-              </p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              <p style={{ margin: '0 0 1rem 0', fontSize: '0.8rem', fontWeight: 800, color: '#d4af37', textTransform: 'uppercase' }}>✨ Şablon Detayları</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 {selectedTemplate.vars.map(v => (
                   <div key={v.key}>
                     <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#555', marginBottom: '0.3rem' }}>{v.label}</label>
-                    <input
-                      type="text"
-                      placeholder={v.placeholder}
-                      value={templateVars[v.key] || ''}
-                      onChange={e => handleVarChange(v.key, e.target.value)}
-                      style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '10px', border: '1px solid #e5e7eb', fontSize: '0.9rem', outline: 'none' }}
-                    />
+                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                      <input
+                        type="text"
+                        placeholder={v.placeholder}
+                        value={templateVars[v.key] || ''}
+                        onChange={e => handleVarChange(v.key, e.target.value)}
+                        style={{ flex: 1, padding: '0.75rem', borderRadius: '10px', border: '1px solid #e5e7eb' }}
+                      />
+                      {v.type === 'image' && (
+                        <>
+                          <input type="file" ref={fileInputRef} onChange={handleImageUpload} style={{ display: 'none' }} accept="image/*" />
+                          <button type="button" onClick={() => fileInputRef.current?.click()} style={{ padding: '0.75rem', borderRadius: '10px', border: '1px solid #ddd', background: 'white', cursor: 'pointer' }}>
+                            {uploading ? <Loader2 size={18} className="animate-spin" /> : <ImageIcon size={18} />}
+                          </button>
+                        </>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
           )}
 
-          {/* Alıcı */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
-            <label style={{ fontSize: '0.85rem', fontWeight: 700, color: '#111', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <User size={14} /> ALICI E-POSTA
-            </label>
-            <input
-              type="email"
-              placeholder="ornek@mail.com"
-              value={emailData.to}
-              onChange={e => setEmailData({ ...emailData, to: e.target.value })}
-              style={{ padding: '1rem 1.25rem', borderRadius: '14px', border: '1px solid #e5e7eb', fontSize: '1rem', outline: 'none' }}
-              onFocus={e => e.currentTarget.style.borderColor = '#111'}
-              onBlur={e => e.currentTarget.style.borderColor = '#e5e7eb'}
-            />
-          </div>
+          {targetType === 'individual' && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+              <label style={{ fontSize: '0.85rem', fontWeight: 700 }}><User size={14} /> ALICI E-POSTA</label>
+              <input
+                type="email"
+                placeholder="ornek@mail.com"
+                value={emailData.to}
+                onChange={e => setEmailData({ ...emailData, to: e.target.value })}
+                style={{ padding: '1rem', borderRadius: '14px', border: '1px solid #e5e7eb' }}
+              />
+            </div>
+          )}
 
-          {/* Konu */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
-            <label style={{ fontSize: '0.85rem', fontWeight: 700, color: '#111', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <Tag size={14} /> KONU
-            </label>
+            <label style={{ fontSize: '0.85rem', fontWeight: 700 }}><Tag size={14} /> KONU</label>
             <input
               type="text"
-              placeholder="E-posta konusunu yazın"
+              placeholder="E-posta konusu"
               value={emailData.subject}
               onChange={e => setEmailData({ ...emailData, subject: e.target.value })}
-              style={{ padding: '1rem 1.25rem', borderRadius: '14px', border: '1px solid #e5e7eb', fontSize: '1rem', outline: 'none' }}
-              onFocus={e => e.currentTarget.style.borderColor = '#111'}
-              onBlur={e => e.currentTarget.style.borderColor = '#e5e7eb'}
+              style={{ padding: '1rem', borderRadius: '14px', border: '1px solid #e5e7eb' }}
             />
           </div>
 
-          {/* Mesaj */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
-            <label style={{ fontSize: '0.85rem', fontWeight: 700, color: '#111', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <AlignLeft size={14} /> MESAJINIZ
-            </label>
+            <label style={{ fontSize: '0.85rem', fontWeight: 700 }}><AlignLeft size={14} /> MESAJ</label>
             <textarea
-              placeholder="Müşteriye iletmek istediğiniz mesajı buraya yazın..."
               value={emailData.message}
               onChange={e => setEmailData({ ...emailData, message: e.target.value })}
-              style={{ padding: '1.25rem', borderRadius: '14px', border: '1px solid #e5e7eb', fontSize: '0.95rem', minHeight: '200px', outline: 'none', resize: 'vertical', fontFamily: 'inherit', lineHeight: '1.6' }}
-              onFocus={e => e.currentTarget.style.borderColor = '#111'}
-              onBlur={e => e.currentTarget.style.borderColor = '#e5e7eb'}
+              style={{ padding: '1rem', borderRadius: '14px', border: '1px solid #e5e7eb', minHeight: '200px', resize: 'vertical' }}
             />
-          </div>
-
-          <div style={{ marginTop: '0.5rem', padding: '1.25rem', backgroundColor: '#fcfcfc', borderRadius: '16px', border: '1px solid #f3f3f3', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <div style={{ backgroundColor: '#fffbeb', color: '#d97706', padding: '0.5rem', borderRadius: '10px', flexShrink: 0 }}>
-              <Sparkles size={18} />
-            </div>
-            <p style={{ margin: 0, fontSize: '0.8rem', color: '#666', lineHeight: '1.5' }}>
-              Mesajınız otomatik olarak <strong>MAXIMORA</strong> şablonuyla (Logo ve şık tasarım) gönderilecektir.
-            </p>
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            style={{
-              marginTop: '1rem',
-              backgroundColor: '#111',
-              color: 'white',
-              padding: '1.1rem',
-              borderRadius: '16px',
-              fontSize: '1rem',
-              fontWeight: 700,
-              border: 'none',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '0.75rem',
-              opacity: loading ? 0.7 : 1
-            }}
+            style={{ marginTop: '1rem', backgroundColor: '#111', color: 'white', padding: '1.1rem', borderRadius: '16px', fontSize: '1rem', fontWeight: 700, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', opacity: loading ? 0.7 : 1 }}
           >
-            {loading ? 'Gönderiliyor...' : <><Send size={20} /> E-posta Gönder</>}
+            {loading ? 'Gönderiliyor...' : <><Send size={20} /> {targetType === 'subscribers' ? 'Kampanyayı Başlat' : 'E-posta Gönder'}</>}
           </button>
         </form>
       </div>
