@@ -9,6 +9,15 @@ import { MapPin, AlertCircle, Package, Heart, Ticket } from 'lucide-react';
 import toast from 'react-hot-toast';
 import styles from './Account.module.css';
 
+const statusLabels: Record<string, { label: string; color: string; bg: string }> = {
+  pending:    { label: 'Bekliyor', color: '#92400e', bg: '#fef3c7' },
+  approved:   { label: 'Onaylandı', color: '#166534', bg: '#dcfce7' },
+  processing: { label: 'Hazırlanıyor', color: '#1e40af', bg: '#dbeafe' },
+  shipped:    { label: 'Kargoda', color: '#4338ca', bg: '#e0e7ff' },
+  delivered:  { label: 'Teslim Edildi', color: '#166534', bg: '#dcfce7' },
+  cancelled:  { label: 'İptal', color: '#991b1b', bg: '#fee2e2' },
+};
+
 export default function AccountPage() {
   const router = useRouter();
   const { user, logout } = useStore();
@@ -41,12 +50,23 @@ export default function AccountPage() {
     };
 
     checkUser();
-  }, [user]);
+  }, [user?.id, router]);
+
+  // Her "Mağaza Kredisi" sekmesine geçildiğinde bakiyeyi tazelemek için
+  useEffect(() => {
+    if (user?.id && activeTab === 'credit') {
+      fetchProfile();
+    }
+  }, [activeTab, user?.id]);
 
   const fetchProfile = async () => {
-    if (!user) return;
-    const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single();
-    if (data) setProfile(data);
+    if (!user?.id) return;
+    try {
+      const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single();
+      if (data) setProfile(data);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const fetchMyOrders = async () => {
@@ -73,15 +93,6 @@ export default function AccountPage() {
       toast.success('Çıkış yapıldı.');
       router.push('/');
     }
-  };
-
-  const statusLabels: Record<string, { label: string; color: string; bg: string }> = {
-    pending:    { label: 'Bekliyor', color: '#92400e', bg: '#fef3c7' },
-    approved:   { label: 'Onaylandı', color: '#166534', bg: '#dcfce7' },
-    processing: { label: 'Hazırlanıyor', color: '#1e40af', bg: '#dbeafe' },
-    shipped:    { label: 'Kargoda', color: '#4338ca', bg: '#e0e7ff' },
-    delivered:  { label: 'Teslim Edildi', color: '#166534', bg: '#dcfce7' },
-    cancelled:  { label: 'İptal', color: '#991b1b', bg: '#fee2e2' },
   };
 
   if (checkingAuth && !user) {

@@ -80,7 +80,6 @@
   color: #888;
   border-bottom: 2px solid transparent;
   margin-bottom: -2px;
-  transition: all 0.25s ease;
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -94,11 +93,9 @@
 }
 
 .tabIcon {
-  transition: transform 0.2s;
 }
 
 .tabActive .tabIcon {
-  transform: scale(1.1);
 }
 
 /* FAVORITES GRID */
