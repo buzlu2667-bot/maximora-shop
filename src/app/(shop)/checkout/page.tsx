@@ -26,12 +26,14 @@ export default function CheckoutPage() {
   const [globalDiscount, setGlobalDiscount] = useState(0);
 
   useEffect(() => {
+    window.scrollTo(0, 0); // Sayfa açıldığında en üste at
     setMounted(true);
     if (user) {
       fetchProfile();
     }
     fetchSettings();
   }, [user]);
+
 
   const fetchSettings = async () => {
     try {
