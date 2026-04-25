@@ -141,7 +141,7 @@
   }
   
   .imageWrapper {
-    height: 200px;
+    max-height: 300px;
   }
   
   .content {
