@@ -72,5 +72,7 @@
   
   .slideItem {
     width: 240px; /* Slightly smaller cards on mobile */
+    scroll-snap-stop: always; /* Mobilde tek tek kaymasını sağlar */
   }
+
 }

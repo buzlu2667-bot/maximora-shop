@@ -10,9 +10,11 @@ import toast from 'react-hot-toast';
 
 interface ProductCardProps {
   product: Product;
+  inSlider?: boolean;
 }
 
-export default function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({ product, inSlider = false }: ProductCardProps) {
+
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { toggleFavorite, favorites } = useStore();
   const isFavorite = favorites.some(f => f.id === product.id);
@@ -76,9 +78,10 @@ export default function ProductCard({ product }: ProductCardProps) {
         className={styles.imageWrapper}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
+        onTouchStart={!inSlider ? handleTouchStart : undefined}
+        onTouchEnd={!inSlider ? handleTouchEnd : undefined}
       >
+
         <Link href={`/product/${product.slug}`}>
           <div className={styles.imageContainer}>
             {images.map((img, idx) => (

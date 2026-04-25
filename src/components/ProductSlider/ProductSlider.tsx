@@ -54,10 +54,11 @@ export default function ProductSlider({ products }: Props) {
       <div className={styles.slider} ref={sliderRef} onScroll={checkScrollPosition}>
         {products.map(product => (
           <div key={product.id} className={styles.slideItem}>
-            <ProductCard product={product} />
+            <ProductCard product={product} inSlider={true} />
           </div>
         ))}
       </div>
+
 
       <button 
         className={`${styles.navButton} ${styles.nextButton} ${isAtEnd ? styles.disabled : ''}`} 
