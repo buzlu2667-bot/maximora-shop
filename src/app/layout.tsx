@@ -3,6 +3,7 @@ import "./globals.css";
 
 import { Providers } from "@/components/Providers";
 import Script from 'next/script';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://maximorashop.com'),
@@ -59,8 +60,10 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <body>
-        <Providers />
-        {children}
+        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}>
+          <Providers />
+          {children}
+        </GoogleOAuthProvider>
         
         {/* SEO Structured Data */}
         <script
