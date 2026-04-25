@@ -13,6 +13,61 @@ export default function AdminUsersPage() {
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [newCredit, setNewCredit] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
+
+  const handleBanUser = async (user: any) => {
+    const confirmText = user.is_banned 
+      ? `${user.email} kullanıcısının yasağını kaldırmak istiyor musunuz?`
+      : `${user.email} kullanıcısını yasaklamak istiyor musunuz? Kullanıcı siteye giriş yapamayacaktır.`;
+    
+    if (!confirm(confirmText)) return;
+
+    setActionLoading(`ban-${user.id}`);
+    try {
+      const res = await fetch('/api/marlboro/users', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user.id, isBanned: !user.is_banned })
+      });
+
+      if (res.ok) {
+        setUsers(users.map(u => u.id === user.id ? { ...u, is_banned: !user.is_banned } : u));
+        toast.success(user.is_banned ? "Yasak kaldırıldı." : "Kullanıcı yasaklandı.");
+      } else {
+        const errData = await res.json();
+        toast.error(`İşlem başarısız: ${errData.error || 'Bilinmeyen hata'}`);
+      }
+    } catch (err) {
+      toast.error("Bir hata oluştu.");
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const handleDeleteUser = async (user: any) => {
+    if (!confirm(`${user.email} kullanıcısını tamamen silmek istediğinize emin misiniz? Bu işlem geri alınamaz!`)) return;
+
+    setActionLoading(`delete-${user.id}`);
+    try {
+      const res = await fetch('/api/marlboro/users', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user.id })
+      });
+
+      if (res.ok) {
+        setUsers(users.filter(u => u.id !== user.id));
+        toast.success("Kullanıcı başarıyla silindi.");
+      } else {
+        const errData = await res.json();
+        toast.error(`Kullanıcı silinemedi: ${errData.error || 'Bilinmeyen hata'}`);
+      }
+    } catch (err) {
+      toast.error("Bir hata oluştu.");
+    } finally {
+      setActionLoading(null);
+    }
+  };
 
   useEffect(() => {
     fetchUsers();
@@ -116,10 +171,46 @@ export default function AdminUsersPage() {
                       </span>
                     </td>
                     <td style={{ padding: '1.25rem' }}>
-                      <button onClick={() => openCreditModal(user)}
-                        style={{ padding: '0.6rem 1.2rem', backgroundColor: '#111', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600 }}>
-                        Kredi Yönet
-                      </button>
+                      <div style={{ display: 'flex', gap: '0.5rem' }}>
+                        <button onClick={() => openCreditModal(user)}
+                          style={{ padding: '0.5rem 0.8rem', backgroundColor: '#111', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600 }}>
+                          Kredi
+                        </button>
+                        <button 
+                          onClick={() => handleBanUser(user)}
+                          disabled={actionLoading === `ban-${user.id}`}
+                          style={{ 
+                            padding: '0.5rem 0.8rem', 
+                            backgroundColor: user.is_banned ? '#10b981' : '#f59e0b', 
+                            color: '#fff', 
+                            border: 'none', 
+                            borderRadius: '6px', 
+                            cursor: 'pointer', 
+                            fontSize: '0.8rem', 
+                            fontWeight: 600,
+                            opacity: actionLoading === `ban-${user.id}` ? 0.7 : 1
+                          }}
+                        >
+                          {user.is_banned ? 'Yasağı Kaldır' : 'Banla'}
+                        </button>
+                        <button 
+                          onClick={() => handleDeleteUser(user)}
+                          disabled={actionLoading === `delete-${user.id}`}
+                          style={{ 
+                            padding: '0.5rem 0.8rem', 
+                            backgroundColor: '#ef4444', 
+                            color: '#fff', 
+                            border: 'none', 
+                            borderRadius: '6px', 
+                            cursor: 'pointer', 
+                            fontSize: '0.8rem', 
+                            fontWeight: 600,
+                            opacity: actionLoading === `delete-${user.id}` ? 0.7 : 1
+                          }}
+                        >
+                          Sil
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -141,17 +232,35 @@ export default function AdminUsersPage() {
                   </div>
                   <span style={{ fontSize: '0.7rem', color: '#999', backgroundColor: '#f3f4f6', padding: '0.2rem 0.5rem', borderRadius: '4px', flexShrink: 0 }}>{user.role}</span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '0.75rem', borderTop: '1px solid #f1f1f1' }}>
-                  <div>
-                    <p style={{ margin: 0, fontSize: '0.75rem', color: '#888' }}>Mağaza Kredisi</p>
-                    <span style={{ fontWeight: 800, color: user.credit_balance > 0 ? '#10b981' : '#333', fontSize: '1.1rem' }}>
-                      {Number(user.credit_balance || 0).toFixed(2)} TL
-                    </span>
+                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', paddingTop: '0.75rem', borderTop: '1px solid #f1f1f1' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div>
+                      <p style={{ margin: 0, fontSize: '0.75rem', color: '#888' }}>Mağaza Kredisi</p>
+                      <span style={{ fontWeight: 800, color: user.credit_balance > 0 ? '#10b981' : '#333', fontSize: '1.1rem' }}>
+                        {Number(user.credit_balance || 0).toFixed(2)} TL
+                      </span>
+                    </div>
+                    <button onClick={() => openCreditModal(user)}
+                      style={{ padding: '0.6rem 1.2rem', backgroundColor: '#111', color: '#fff', border: 'none', borderRadius: '10px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600 }}>
+                      Kredi Yönet
+                    </button>
                   </div>
-                  <button onClick={() => openCreditModal(user)}
-                    style={{ padding: '0.6rem 1.2rem', backgroundColor: '#111', color: '#fff', border: 'none', borderRadius: '10px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600 }}>
-                    Kredi Yönet
-                  </button>
+                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <button 
+                      onClick={() => handleBanUser(user)}
+                      disabled={actionLoading === `ban-${user.id}`}
+                      style={{ flex: 1, padding: '0.6rem', backgroundColor: user.is_banned ? '#10b981' : '#f59e0b', color: '#fff', border: 'none', borderRadius: '10px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600 }}
+                    >
+                      {user.is_banned ? 'Yasağı Kaldır' : 'Banla'}
+                    </button>
+                    <button 
+                      onClick={() => handleDeleteUser(user)}
+                      disabled={actionLoading === `delete-${user.id}`}
+                      style={{ flex: 1, padding: '0.6rem', backgroundColor: '#ef4444', color: '#fff', border: 'none', borderRadius: '10px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600 }}
+                    >
+                      Sil
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
