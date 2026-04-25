@@ -25,15 +25,28 @@ export async function GET() {
 
     return NextResponse.json({ 
       success: true, 
-      message: 'Test maili gönderildi! Lütfen hem gelen kutunu hem de spam klasörünü kontrol et kanka.',
+      message: 'Test maili denendi! Aşağıdaki bilgilere bak kanka.',
+      config: {
+        using_from: from,
+        using_to: to,
+        is_sandbox: from.includes('resend.dev')
+      },
       data 
     });
   } catch (error: any) {
     console.error('Test Email Error:', error);
+    const from = process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev';
+    const to = process.env.ADMIN_EMAIL || 'test@example.com';
+    
     return NextResponse.json({ 
       success: false, 
       error: error.message,
-      hint: 'Eğer "Unauthorized" diyorsa API Key yanlıştır. Eğer "Domain not verified" diyorsa Resend panelinden alan adını onaylatman gerekir.'
+      current_config: {
+        from: from,
+        to: to
+      },
+      hint: 'Eğer "from" kısmında "onboarding@resend.dev" yazıyorsa Vercel ayarların eksiktir kanka.'
     }, { status: 500 });
   }
 }
+
