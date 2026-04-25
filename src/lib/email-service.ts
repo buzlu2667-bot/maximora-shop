@@ -209,5 +209,40 @@ export const emailService = {
     } catch (error) {
       throw error;
     }
+  },
+
+  // İletişim Formu Bildirimi (Admin'e)
+  async sendContactFormNotification(contactData: { name: string; email: string; phone?: string; message: string }) {
+    try {
+      await resend.emails.send({
+        from: FROM_EMAIL,
+        to: ADMIN_EMAIL,
+        subject: `📩 Yeni İletişim Mesajı: ${contactData.name}`,
+        html: `
+          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #eee; border-radius: 16px; overflow: hidden;">
+            <div style="background-color: #111; padding: 2rem; text-align: center;">
+              <h1 style="color: #d4af37; margin: 0; font-size: 20px;">YENİ İLETİŞİM MESAJI</h1>
+            </div>
+            <div style="padding: 2rem;">
+              <div style="margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid #eee;">
+                <p><strong>Gönderen:</strong> ${contactData.name}</p>
+                <p><strong>E-posta:</strong> ${contactData.email}</p>
+                <p><strong>Telefon:</strong> ${contactData.phone || 'Belirtilmedi'}</p>
+              </div>
+              <div style="background-color: #f9fafb; padding: 1.5rem; border-radius: 12px; border: 1px solid #f3f4f6;">
+                <p style="margin: 0 0 0.5rem 0; font-size: 12px; color: #9ca3af; text-transform: uppercase;">Müşteri Mesajı:</p>
+                <p style="margin: 0; color: #374151; line-height: 1.6;">${contactData.message.replace(/\n/g, '<br>')}</p>
+              </div>
+              <p style="margin-top: 2rem; text-align: center;">
+                <a href="mailto:${contactData.email}" style="display: inline-block; padding: 0.8rem 1.5rem; background-color: #111; color: white; text-decoration: none; border-radius: 8px; font-weight: bold;">Müşteriye Cevap Ver</a>
+              </p>
+              ${EMAIL_FOOTER}
+            </div>
+          </div>
+        `
+      });
+    } catch (error: any) {
+      console.error('RESEND ERROR (Contact Notification):', error.message);
+    }
   }
 };

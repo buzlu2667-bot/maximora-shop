@@ -15,12 +15,13 @@ export async function POST(request: Request) {
 
     if (dbError) throw dbError;
 
-    // 2. E-posta Gönderimi (Simülasyon / Bilgi)
-    // NOT: Gerçek e-posta gönderimi için burada Resend, SendGrid veya Nodemailer gibi bir yapı kullanılmalıdır.
-    // Şimdilik destek@maximorashop.com adresine gidecek mesajın hazır olduğunu logluyoruz.
-    console.log(`Yeni İletişim Formu Mesajı! Alıcı: destek@maximorashop.com`);
-    console.log(`Gönderen: ${name} (${email}) - Tel: ${phone}`);
-    console.log(`Mesaj: ${message}`);
+    // 2. E-posta Gönderimi (Admin'e Bildirim)
+    try {
+      const { emailService } = await import('@/lib/email-service');
+      await emailService.sendContactFormNotification({ name, email, phone, message });
+    } catch (emailErr) {
+      console.error('Email Notification Error:', emailErr);
+    }
 
     return NextResponse.json({ success: true });
 
