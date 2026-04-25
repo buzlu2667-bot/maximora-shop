@@ -31,9 +31,7 @@ export async function POST(request: Request) {
     const showcases = Array.isArray(body) ? body : [body];
     
     const rows = showcases.map((item, index) => {
-      const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(item.id);
       return {
-        id: isUUID ? item.id : undefined,
         title: item.title,
         category: item.category || null,
         brand: item.brand || null,
