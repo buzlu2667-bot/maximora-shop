@@ -263,8 +263,18 @@ export default function AdminOrdersPage() {
                         {isNew && (
                           <button onClick={() => handleMarkAsSeen(order.id)} style={{ background: '#fffbeb', border: '1px solid #fde68a', color: '#d97706', cursor: 'pointer', padding: '0.6rem 1rem', borderRadius: '12px', fontSize: '0.85rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.4rem' }}><CheckCircle size={16} /> Görüldü</button>
                         )}
-                        <div style={{ textAlign: 'right', minWidth: '100px' }}>
-                          <h2 style={{ fontSize: 'clamp(1.4rem, 4vw, 1.7rem)', color: '#111', margin: 0, fontWeight: 900 }}>{Number(order.total_amount).toFixed(2)} TL</h2>
+                        <div style={{ textAlign: 'right', minWidth: '120px' }}>
+                          {(order.coupon_discount > 0 || order.used_credit > 0) && (
+                            <div style={{ fontSize: '0.75rem', marginBottom: '0.3rem', lineHeight: '1.8' }}>
+                              {order.coupon_discount > 0 && (
+                                <div style={{ color: '#16a34a', fontWeight: 700 }}>🎟️ {order.coupon_code}: -{Number(order.coupon_discount).toFixed(2)} TL</div>
+                              )}
+                              {order.used_credit > 0 && (
+                                <div style={{ color: '#7c3aed', fontWeight: 700 }}>💜 Kredi: -{Number(order.used_credit).toFixed(2)} TL</div>
+                              )}
+                            </div>
+                          )}
+                          <h2 style={{ fontSize: 'clamp(1.2rem, 4vw, 1.6rem)', color: '#111', margin: 0, fontWeight: 900 }}>{Number(order.total_amount).toFixed(2)} TL</h2>
                         </div>
                         <button onClick={() => toggleArchive(order.id, !!order.is_archived)} style={{ background: '#f8f8f8', border: '1px solid #eee', color: '#888', cursor: 'pointer', padding: '0.6rem', borderRadius: '12px' }}>{order.is_archived ? <ArchiveRestore size={18} /> : <Archive size={18} />}</button>
                      </div>

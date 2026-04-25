@@ -19,8 +19,9 @@ export async function POST(request: Request) {
     try {
       const { emailService } = await import('@/lib/email-service');
       await emailService.sendContactFormNotification({ name, email, phone, message });
-    } catch (emailErr) {
-      console.error('Email Notification Error:', emailErr);
+      console.log('✅ Email bildirimi tetiklendi.');
+    } catch (emailErr: any) {
+      console.error('❌ Email Notification Error:', emailErr.message);
     }
 
     return NextResponse.json({ success: true });
