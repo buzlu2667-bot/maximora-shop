@@ -1,5 +1,4 @@
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+import { supabase } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
@@ -9,8 +8,6 @@ export async function POST(req: Request) {
     if (!email || !email.includes('@')) {
       return NextResponse.json({ error: 'Geçerli bir e-posta adresi girin.' }, { status: 400 });
     }
-
-    const supabase = createRouteHandlerClient({ cookies });
 
     // Önce bu mail zaten kayıtlı mı kontrol et
     const { data: existing } = await supabase

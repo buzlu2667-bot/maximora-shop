@@ -17,6 +17,7 @@ const SIDEBAR_LINKS = [
   { href: '/marlboro/promo-block', label: 'Tanıtım Bloğu (Banner)', color: '#d4af37', bold: true },
   { href: '/marlboro/popup', label: 'Duyuru Popup', color: '#d4af37', bold: true },
   { href: '/marlboro/users', label: 'Kullanıcılar', color: '#ccc', bold: false },
+  { href: '/marlboro/newsletter', label: 'E-Bülten Aboneleri', color: '#d4af37', bold: true },
   { href: '/marlboro/settings', label: 'Site Ayarları', color: '#ccc', bold: false },
 ];
 

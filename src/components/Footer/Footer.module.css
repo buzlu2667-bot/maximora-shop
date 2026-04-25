@@ -1,10 +1,78 @@
 .footer {
   background-color: #000;
   color: #fff;
-  padding: 60px 0 30px;
+  padding-bottom: 30px;
   border-top: 1px solid #222;
   margin-top: 4rem;
 }
+
+.newsletterRow {
+  background-color: #080808; /* Biraz farklı ama bütünleşik siyah */
+  padding: 40px 0;
+  border-bottom: 1px solid #1a1a1a;
+  margin-bottom: 50px;
+}
+
+.newsletterContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+}
+
+.newsletterTitle {
+  font-size: clamp(1.1rem, 4vw, 1.4rem);
+  font-weight: 700;
+  color: #ffffff; /* Bembeyaz yapıldı kanka */
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.newsletterForm {
+  width: 100%;
+  max-width: 420px;
+}
+
+.inputGroup {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.newsletterInput {
+  width: 100%;
+  background-color: #111;
+  border: 1px solid #333;
+  padding: 14px 50px 14px 20px;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.newsletterInput:focus {
+  border-color: #d4af37;
+}
+
+.newsletterBtn {
+  position: absolute;
+  right: 5px;
+  background-color: transparent;
+  border: none;
+  color: #d4af37;
+  cursor: pointer;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 
 .brandHeader {
   display: flex;

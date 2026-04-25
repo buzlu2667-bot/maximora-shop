@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Mail, Send, User, Tag, AlignLeft, Sparkles, ChevronDown, Image as ImageIcon, Users, Loader2 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import toast from 'react-hot-toast';
@@ -53,6 +53,28 @@ const TEMPLATES: Template[] = [
     buildMessage: (v) => `Harika haber! #${v.orderNo || '[SİPARİŞ NO]'} nolu siparişinin ödemesi başarıyla onaylandı.\n\nEkibimiz şu anda ürünlerini hazırlamaya başladı. Kargoya verildiğinde seni tekrar takip numarasıyla bilgilendireceğiz. 🙏`
   },
   {
+    id: 'cancel',
+    label: '❌ İptal Bildirimi',
+    icon: '❌',
+    subject: 'Sipariş İptali Hakkında',
+    vars: [
+      { key: 'orderNo', label: 'Sipariş No', placeholder: 'Örn: 1745234567890' },
+      { key: 'reason', label: 'İptal Nedeni', placeholder: 'Örn: Stok yetersizliği' },
+    ],
+    buildMessage: (v) => `Merhaba, #${v.orderNo || '[SİPARİŞ NO]'} nolu siparişin maalesef iptal edilmiştir.\n\nİptal Nedeni: ${v.reason || '[İPTAL NEDENİ]'}\n\nHerhangi bir sorunuz varsa bizimle iletişime geçebilirsiniz. Üzüntümüzü paylaşırız.`
+  },
+  {
+    id: 'iban',
+    label: '💳 IBAN Hatırlatma',
+    icon: '💳',
+    subject: 'IBAN Ödeme Hatırlatması',
+    vars: [
+      { key: 'orderNo', label: 'Sipariş No', placeholder: 'Örn: 1745234567890' },
+      { key: 'amount', label: 'Tutar (TL)', placeholder: 'Örn: 1250.00' },
+    ],
+    buildMessage: (v) => `Merhaba! #${v.orderNo || '[SİPARİŞ NO]'} nolu siparişiniz için ${v.amount ? v.amount + ' TL' : '[TUTAR]'} tutarında ödeme bekliyoruz.\n\nHesap Sahibi: burak agarak\nIBAN: TR66 0015 7000 0000 0095 7755 66\n\nLütfen açıklama kısmına sipariş numaranızı (#${v.orderNo || '[SİPARİŞ NO]'}) yazmayı unutmayın! 🙏`
+  },
+  {
     id: 'custom',
     label: '✏️ Serbest Yazım',
     icon: '✏️',
@@ -67,6 +89,7 @@ export default function AdminSendEmailPage() {
   const [templateVars, setTemplateVars] = useState<Record<string, string>>({});
   const [showTemplates, setShowTemplates] = useState(false);
   const [targetType, setTargetType] = useState<'individual' | 'subscribers'>('individual');
+  const [subscriberCount, setSubscriberCount] = useState(0);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -76,6 +99,15 @@ export default function AdminSendEmailPage() {
     message: ''
   });
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    fetchSubscriberCount();
+  }, []);
+
+  const fetchSubscriberCount = async () => {
+    const { count } = await supabase.from('newsletter_subscribers').select('*', { count: 'exact', head: true });
+    setSubscriberCount(count || 0);
+  };
 
   const selectedTemplate = TEMPLATES.find(t => t.id === selectedTemplateId)!;
 
@@ -146,7 +178,6 @@ export default function AdminSendEmailPage() {
       }
       recipients = [emailData.to];
     } else {
-      // Aboneleri çek
       const { data, error } = await supabase.from('newsletter_subscribers').select('email');
       if (error || !data) {
         toast.error("Aboneler çekilemedi.");
@@ -167,8 +198,6 @@ export default function AdminSendEmailPage() {
 
     setLoading(true);
     try {
-      // NOT: API'nin toplu gönderimi desteklemesi lazım, veya tek tek döngüyle atılmalı.
-      // Basitleştirmek için tek tek atıyoruz (Resend limitlerine dikkat)
       for (const to of recipients) {
         await fetch('/api/marlboro/send-email', {
           method: 'POST',
@@ -195,7 +224,6 @@ export default function AdminSendEmailPage() {
         <p style={{ color: '#666', marginTop: '0.5rem' }}>Müşterilerinize veya tüm abonelere profesyonel e-posta gönderin.</p>
       </div>
 
-      {/* GÖNDERİM HEDEFİ SEÇİCİ */}
       <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
         <button 
           onClick={() => setTargetType('individual')}
@@ -207,11 +235,10 @@ export default function AdminSendEmailPage() {
           onClick={() => setTargetType('subscribers')}
           style={{ flex: 1, padding: '1rem', borderRadius: '16px', border: '1px solid #ddd', backgroundColor: targetType === 'subscribers' ? '#111' : 'white', color: targetType === 'subscribers' ? 'white' : '#666', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
         >
-          <Users size={18} /> Tüm Abonelere
+          <Users size={18} /> Tüm Abonelere ({subscriberCount})
         </button>
       </div>
 
-      {/* ŞABLON SEÇİCİ */}
       <div style={{ marginBottom: '1.5rem' }}>
         <button
           onClick={() => setShowTemplates(!showTemplates)}
@@ -234,7 +261,6 @@ export default function AdminSendEmailPage() {
       <div style={{ backgroundColor: 'white', padding: 'clamp(1.25rem, 5vw, 2.5rem)', borderRadius: '28px', border: '1px solid #f0f0f0' }}>
         <form onSubmit={handleSend} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
 
-          {/* Şablon Değişkenleri */}
           {selectedTemplate.vars.length > 0 && (
             <div style={{ padding: '1.25rem', backgroundColor: '#fafaf5', borderRadius: '16px', border: '1px solid #f0e8c0' }}>
               <p style={{ margin: '0 0 1rem 0', fontSize: '0.8rem', fontWeight: 800, color: '#d4af37', textTransform: 'uppercase' }}>✨ Şablon Detayları</p>
@@ -303,7 +329,7 @@ export default function AdminSendEmailPage() {
             disabled={loading}
             style={{ marginTop: '1rem', backgroundColor: '#111', color: 'white', padding: '1.1rem', borderRadius: '16px', fontSize: '1rem', fontWeight: 700, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', opacity: loading ? 0.7 : 1 }}
           >
-            {loading ? 'Gönderiliyor...' : <><Send size={20} /> {targetType === 'subscribers' ? 'Kampanyayı Başlat' : 'E-posta Gönder'}</>}
+            {loading ? 'Gönderiliyor...' : <><Send size={20} /> {targetType === 'subscribers' ? `${subscriberCount} Aboneye Kampanya Başlat` : 'E-posta Gönder'}</>}
           </button>
         </form>
       </div>

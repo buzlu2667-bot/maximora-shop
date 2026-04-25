@@ -13,7 +13,6 @@ export default function ShopLayout({ children }: { children: React.ReactNode }) 
       <main style={{ minHeight: '80vh' }}>
         {children}
       </main>
-      <Newsletter />
       <Footer />
     </MaintenanceGuard>
   );

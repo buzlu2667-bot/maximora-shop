@@ -1,15 +1,69 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import styles from './Footer.module.css';
 import { useStore } from '@/store/useStore';
+import { Send, Rocket } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 export default function Footer() {
   const { user } = useStore();
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    setLoading(true);
+    try {
+      const res = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        toast.success(data.message || 'Abonelik başarılı!');
+        setEmail('');
+      } else {
+        toast.error(data.error || 'Bir hata oluştu.');
+      }
+    } catch (error) {
+      toast.error('Bağlantı hatası.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <footer className={styles.footer}>
+      {/* Newsletter Şeridi - Footer ile Bütünleşik */}
+      <div className={styles.newsletterRow}>
+        <div className="container">
+          <div className={styles.newsletterContent}>
+            <h3 className={styles.newsletterTitle}>
+              Özel İndirimleri Kaçırma! E-postana Gelsin <Rocket size={20} style={{ color: '#ff4d4d' }} />
+            </h3>
+            <form onSubmit={handleSubscribe} className={styles.newsletterForm}>
+              <div className={styles.inputGroup}>
+                <input 
+                  type="email" 
+                  placeholder="E-posta adresiniz" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className={styles.newsletterInput}
+                  required
+                />
+                <button type="submit" disabled={loading} className={styles.newsletterBtn}>
+                  {loading ? '...' : <Send size={18} />}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
       <div className="container">
         {/* Logo ve Açıklama Bölümü */}
         <div className={styles.brandHeader}>
