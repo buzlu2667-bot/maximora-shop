@@ -81,14 +81,18 @@ export default function ProductCard({ product }: ProductCardProps) {
       >
         <Link href={`/product/${product.slug}`}>
           <div className={styles.imageContainer}>
-            <img 
-              src={images[currentImageIndex]} 
-              alt={product.name} 
-              className={styles.image}
-              loading="lazy"
-            />
+            {images.map((img, idx) => (
+              <img 
+                key={idx}
+                src={img} 
+                alt={`${product.name} - ${idx + 1}`} 
+                className={`${styles.image} ${idx === currentImageIndex ? styles.activeImage : ''}`}
+                loading={idx === 0 ? "eager" : "lazy"}
+              />
+            ))}
           </div>
         </Link>
+
         
         {/* Favori Butonu */}
         <button 
