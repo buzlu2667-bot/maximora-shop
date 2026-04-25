@@ -36,7 +36,10 @@ export const emailService = {
           </div>
         `
       });
-    } catch (e) { }
+    } catch (e: any) {
+      console.error('RESEND ERROR (Admin):', e.message);
+    }
+
   },
 
   // Müşteriye Sipariş Onayı (Ödeme Yöntemine Göre Özelleştirilmiş)
@@ -84,7 +87,10 @@ export const emailService = {
           </div>
         `
       });
-    } catch (error) { }
+    } catch (error: any) {
+      console.error('RESEND ERROR (Customer):', error.message);
+    }
+
   },
 
   // Müşteriye Ödeme Onayı
@@ -110,7 +116,10 @@ export const emailService = {
           </div>
         `
       });
-    } catch (error) { }
+    } catch (error: any) {
+      console.error('RESEND ERROR (Approved):', error.message);
+    }
+
   },
 
   // Müşteriye Kargo Bildirimi
@@ -139,7 +148,10 @@ export const emailService = {
           </div>
         `
       });
-    } catch (error) { }
+    } catch (error: any) {
+      console.error('RESEND ERROR (Shipping):', error.message);
+    }
+
   },
 
   // Müşteriye İptal Bildirimi
@@ -166,7 +178,10 @@ export const emailService = {
           </div>
         `
       });
-    } catch (error) { }
+    } catch (error: any) {
+      console.error('RESEND ERROR (Cancellation):', error.message);
+    }
+
   },
 
   // Admin'den Müşteriye Manuel Mail
