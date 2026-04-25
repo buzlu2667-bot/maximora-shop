@@ -74,19 +74,28 @@ export default function Header() {
       <header className={styles.header}>
         <div className={`container ${styles.headerContainer}`}>
           
-          {/* Hamburger Menu (Sadece Mobilde Görünür) */}
-          <button className={styles.hamburger} aria-label="Menü" onClick={() => setIsMobileMenuOpen(true)}>
-             <Menu size={28} />
-          </button>
+          {/* SOL TARAF: Hamburger ve Arama (Mobilde yan yana) */}
+          <div className={styles.leftActions}>
+            <button className={styles.hamburger} aria-label="Menü" onClick={() => setIsMobileMenuOpen(true)}>
+               <Menu size={26} />
+            </button>
+            <button 
+              className={`${styles.iconBtn} ${styles.mobileSearchBtn}`} 
+              aria-label="Ara"
+              onClick={() => setIsSearchOpen(true)}
+            >
+              <Search size={22} />
+            </button>
+          </div>
 
-          {/* Logo */}
+          {/* Logo (Orta) */}
           <Link href="/" className={styles.logo}>
             <img src="/logo-gold.png" alt="Maximora" className={styles.logoImage} />
           </Link>
           
-          {/* Masaüstü Navigation Menüsü */}
+          {/* Masaüstü Navigation Menüsü (PC'de Görünür) */}
           <nav className={styles.nav}>
-            
+            {/* ... navigation links ... */}
             <div className={styles.hasMegaMenu}>
                <div className={styles.navLink}>
                   Kadın Aksesuar <ChevronDown size={14} />
@@ -134,29 +143,37 @@ export default function Header() {
             </Link>
           </nav>
 
-          {/* Sağ İkonlar: Arama, Hesap, Favoriler, Sepet */}
+          {/* Sağ İkonlar: Hesap, Favoriler, Sepet */}
           <div className={styles.actions}>
-            
+            {/* Arama (Masaüstünde burada kalır) */}
             <button 
-              className={styles.iconBtn} 
+              className={`${styles.iconBtn} ${styles.desktopSearchBtn}`} 
               aria-label="Ara"
               onClick={() => setIsSearchOpen(true)}
             >
               <Search size={22} />
             </button>
 
-            {/* Kullanıcı ikonu — giriş yapıldıysa dropdown */}
-            <div style={{ position: 'relative' }} className={styles.hideMobileSmall}>
+            {/* Kullanıcı ikonu */}
+            <div style={{ position: 'relative' }}>
               <button
                 aria-label="Hesabım"
                 className={styles.iconBtn}
-                onClick={() => setUserMenuOpen(prev => !prev)}
+                onClick={() => {
+                  if (window.innerWidth < 1025) {
+                    router.push('/hesabim');
+                  } else {
+                    setUserMenuOpen(prev => !prev);
+                  }
+                }}
               >
                 <User size={22} />
                 {mounted && user && (
                   <span style={{ position: 'absolute', top: -4, right: -4, width: 8, height: 8, borderRadius: '50%', backgroundColor: '#22c55e', border: '1.5px solid white' }} />
                 )}
               </button>
+              
+              {/* Dropdown (Sadece Masaüstü) */}
               {userMenuOpen && (
                 <div className={styles.userDropdown} onMouseLeave={() => setUserMenuOpen(false)}>
                   {user ? (
