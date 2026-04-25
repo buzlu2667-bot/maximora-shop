@@ -2,6 +2,7 @@ import React from 'react';
 import ProductCard from '@/components/ProductCard/ProductCard';
 import { Product } from '@/types';
 import Link from 'next/link';
+import { getProducts } from '@/lib/data';
 
 export default async function AllProductsPage(props: { searchParams: Promise<{ category?: string, brand?: string }> }) {
   const searchParams = await props.searchParams;
@@ -10,17 +11,13 @@ export default async function AllProductsPage(props: { searchParams: Promise<{ c
 
   let products: Product[] = [];
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-    const res = await fetch(`${baseUrl}/api/products`, { cache: 'no-store' });
-    if (res.ok) {
-      const allProducts: Product[] = await res.json();
-      products = allProducts.filter(p => {
-        let match = true;
-        if (filterCategory) match = match && p.category === filterCategory;
-        if (filterBrand) match = match && p.brand === filterBrand;
-        return match;
-      });
-    }
+    const allProducts = await getProducts();
+    products = allProducts.filter(p => {
+      let match = true;
+      if (filterCategory) match = match && p.category === filterCategory;
+      if (filterBrand) match = match && p.brand === filterBrand;
+      return match;
+    });
   } catch (e) {
     console.error("Error fetching items", e);
   }

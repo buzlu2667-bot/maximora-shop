@@ -5,43 +5,17 @@ import ClientProductDetails from '@/components/ProductDetails/ClientProductDetai
 import ProductCard from '@/components/ProductCard/ProductCard';
 import sharedStyles from '@/app/(shop)/page.module.css';
 
-async function getProduct(slug: string): Promise<Product | null> {
-  try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-    const res = await fetch(`${baseUrl}/api/products/${slug}`, {
-      cache: 'no-store' 
-    });
-    
-    if (!res.ok) {
-       return null;
-    }
-    return res.json();
-  } catch (error) {
-    console.error("Hata", error);
-    return null;
-  }
-}
-
-async function getAllProducts(): Promise<Product[]> {
-  try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-    const res = await fetch(`${baseUrl}/api/products`, { cache: 'no-store' });
-    if (!res.ok) return [];
-    return res.json();
-  } catch (error) {
-    return [];
-  }
-}
+import { getProducts, getProductBySlug } from '@/lib/data';
 
 export default async function ProductPage(props: { params: Promise<{ slug: string }> }) {
   const params = await props.params;
-  const product = await getProduct(params.slug);
+  const product = await getProductBySlug(params.slug);
 
   if (!product) {
     notFound();
   }
 
-  const allProducts = await getAllProducts();
+  const allProducts = await getProducts();
   
   // Önce aynı kategorideki diğer ürünleri bul
   let relatedProducts = allProducts.filter(p => p.category === product.category && p.id !== product.id);

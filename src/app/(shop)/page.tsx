@@ -12,55 +12,13 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import ClientFeaturedProduct from '@/components/FeaturedProduct/ClientFeaturedProduct';
 
-async function getProducts(): Promise<Product[]> {
-  try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-    const res = await fetch(`${baseUrl}/api/products`, { cache: 'no-store' }); // Her admin eklemesinde canlı gelsin
-    if (!res.ok) return [];
-    return res.json();
-  } catch (e) {
-    return [];
-  }
-}
-
-async function getShowcases(): Promise<any[]> {
-  try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-    const res = await fetch(`${baseUrl}/api/showcases`, { cache: 'no-store' });
-    if (!res.ok) return [];
-    return res.json();
-  } catch (e) {
-    return [];
-  }
-}
-
-async function getPromoBlock(): Promise<any> {
-  try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-    const res = await fetch(`${baseUrl}/api/promo-block`, { cache: 'no-store' });
-    if (!res.ok) return null;
-    return res.json();
-  } catch (e) {
-    return null;
-  }
-}
-
-async function getNewestSettings(): Promise<any> {
-  try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-    const res = await fetch(`${baseUrl}/api/newest-settings`, { cache: 'no-store' });
-    if (!res.ok) return null;
-    return res.json();
-  } catch (e) {
-    return null;
-  }
-}
+import { getProducts, getShowcases, getPromoBlocks, getNewestSettings } from '@/lib/data';
 
 export default async function Home() {
   const products = await getProducts();
   const showcases = await getShowcases();
-  const promoBlock = await getPromoBlock();
-  const newestSettings = await getNewestSettings() || { enabled: true, title: 'En Yeni Ürünler', layout: 'grid', limit: 8 };
+  const promoBlock = await getPromoBlocks();
+  const newestSettings = await getNewestSettings();
   
   const featuredProducts = products.filter(p => p.isFeatured);
   const featuredCollection = products.filter(p => !p.isFeatured); // Diğer ürünler (limit aşağıda ayarlanıyor)

@@ -1,9 +1,8 @@
-export const dynamic = 'force-dynamic';
-
 import React from 'react';
 import ProductCard from '@/components/ProductCard/ProductCard';
 import { Product } from '@/types';
 import Link from 'next/link';
+import { getProducts } from '@/lib/data';
 
 // Component receives the dynamic route segment [slug]
 export default async function BrandPage(props: { params: Promise<{ slug: string }> }) {
@@ -12,13 +11,8 @@ export default async function BrandPage(props: { params: Promise<{ slug: string 
 
   let products: Product[] = [];
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-    const res = await fetch(`${baseUrl}/api/products`, { cache: 'no-store' });
-    if (res.ok) {
-      const allProducts: Product[] = await res.json();
-      // Filter completely client side based on simple string comparison
-      products = allProducts.filter(p => p.brand?.toLowerCase() === brandSlug.toLowerCase());
-    }
+    const allProducts = await getProducts();
+    products = allProducts.filter(p => p.brand?.toLowerCase() === brandSlug.toLowerCase());
   } catch (e) {
     console.error("Error fetching items for brand", e);
   }
