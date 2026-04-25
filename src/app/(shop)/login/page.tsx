@@ -84,6 +84,11 @@ export default function LoginPage() {
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
+            <div style={{ textAlign: 'right', marginTop: '0.5rem' }}>
+              <Link href="/sifremi-unuttum" style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', textDecoration: 'none' }}>
+                Şifremi Unuttum
+              </Link>
+            </div>
           </div>
 
           <button
