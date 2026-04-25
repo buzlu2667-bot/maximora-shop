@@ -89,9 +89,10 @@
     align-items: center;
   }
   .sectionHeader h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
+    font-size: 1.2rem;
+    font-weight: 700;
     margin: 0;
+    letter-spacing: -0.3px;
   }
   .viewAll {
     font-size: 0.75rem;
