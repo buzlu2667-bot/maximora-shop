@@ -7,6 +7,7 @@ import { Save, Megaphone, Image as ImageIcon, Link as LinkIcon, Trash2, Eye } fr
 export default function PopupSettingsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [settings, setSettings] = useState({
     enabled: false,
     title: '',
@@ -14,7 +15,7 @@ export default function PopupSettingsPage() {
     image: '',
     buttonText: '',
     buttonLink: '',
-    id: '' // Bu aslında duyurunun benzersiz ID'si (tarih damgası) olacak
+    id: ''
   });
 
   useEffect(() => {
@@ -27,7 +28,15 @@ export default function PopupSettingsPage() {
       if (res.ok) {
         const data = await res.json();
         if (data.popup_settings) {
-          setSettings(data.popup_settings);
+          setSettings({
+            enabled: data.popup_settings.enabled || false,
+            title: data.popup_settings.title || '',
+            content: data.popup_settings.content || '',
+            image: data.popup_settings.image || '',
+            buttonText: data.popup_settings.buttonText || '',
+            buttonLink: data.popup_settings.buttonLink || '',
+            id: data.popup_settings.id || ''
+          });
         }
       }
     } catch (err) {
@@ -37,13 +46,41 @@ export default function PopupSettingsPage() {
     }
   };
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('files', file);
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        const url = data.urls[0];
+        setSettings(prev => ({ ...prev, image: url }));
+        toast.success('Resim yüklendi!');
+      } else {
+        toast.error('Resim yüklenemedi.');
+      }
+    } catch (err) {
+      toast.error('Yükleme sırasında bir hata oluştu.');
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleSave = async () => {
     setSaving(true);
     try {
-      // Her kayıtta yeni bir ID oluşturuyoruz ki müşterilerin karşısına tekrar çıksın (eğer bir şey değiştiyse)
       const newSettings = { 
         ...settings, 
-        id: Date.now().toString() // Yeni benzersiz ID
+        id: Date.now().toString() 
       };
 
       const res = await fetch('/api/settings', {
@@ -54,7 +91,7 @@ export default function PopupSettingsPage() {
 
       if (res.ok) {
         setSettings(newSettings);
-        toast.success('Duyuru başarıyla güncellendi ve yayına alındı!');
+        toast.success('Duyuru başarıyla yayına alındı! 🚀');
       } else {
         toast.error('Ayarlar kaydedilemedi.');
       }
@@ -65,139 +102,180 @@ export default function PopupSettingsPage() {
     }
   };
 
-  if (loading) return <div className="p-8">Yükleniyor...</div>;
+  if (loading) return <div style={{ padding: '2rem', color: '#666' }}>Yükleniyor kanka...</div>;
 
   return (
-    <div className="p-4 md:p-8 max-w-4xl mx-auto">
-      <div className="flex items-center justify-between mb-8">
+    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '1rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
-          <h1 className="text-2xl font-bold flex items-center gap-2">
-            <Megaphone className="text-primary" /> Duyuru Popup Yönetimi
-          </h1>
-          <p className="text-gray-500 text-sm mt-1">Sitenize giren müşterileri karşılayan özel duyuru penceresi.</p>
+          <h1 style={{ fontSize: '2.2rem', fontWeight: 800, color: '#111', margin: 0 }}>Duyuru Popup Yönetimi</h1>
+          <p style={{ color: '#666', marginTop: '0.5rem' }}>Müşterilerini şık bir duyuru ile karşıla.</p>
         </div>
         <button
           onClick={handleSave}
-          disabled={saving}
-          className="flex items-center gap-2 bg-primary text-white px-6 py-2 rounded-lg font-semibold hover:opacity-90 disabled:opacity-50 transition-all"
+          disabled={saving || uploading}
+          style={{ 
+            backgroundColor: '#d4af37', 
+            color: 'black', 
+            padding: '1rem 2.5rem', 
+            borderRadius: '12px', 
+            fontWeight: '800', 
+            border: 'none', 
+            cursor: 'pointer',
+            boxShadow: '0 4px 15px rgba(212, 175, 55, 0.3)',
+            transition: 'all 0.3s ease'
+          }}
         >
-          <Save size={18} /> {saving ? 'Kaydediliyor...' : 'Yayınla'}
+          {saving ? 'KAYDEDİLİYOR...' : 'YAYINLA'}
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Form Alanı */}
-        <div className="space-y-6 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+        
+        {/* Ayarlar Formu */}
+        <div style={{ backgroundColor: 'white', padding: '2.5rem', borderRadius: '20px', boxShadow: '0 10px 30px rgba(0,0,0,0.05)' }}>
+          
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'space-between', 
+            padding: '1.25rem', 
+            backgroundColor: settings.enabled ? '#f0fdf4' : '#f9fafb', 
+            borderRadius: '15px',
+            marginBottom: '2rem',
+            border: settings.enabled ? '1px solid #bcf0da' : '1px solid #eee'
+          }}>
             <div>
-              <span className="font-semibold block">Duyuru Aktif mi?</span>
-              <span className="text-xs text-gray-500">Kapatırsanız kimse görmez.</span>
+              <span style={{ fontWeight: 700, fontSize: '1.1rem', color: settings.enabled ? '#166534' : '#111' }}>Popup Aktif mi?</span>
+              <p style={{ margin: 0, fontSize: '0.85rem', color: '#666' }}>Açtığın an tüm müşteriler görmeye başlar.</p>
             </div>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input 
-                type="checkbox" 
-                className="sr-only peer" 
-                checked={settings.enabled}
-                onChange={(e) => setSettings({ ...settings, enabled: e.target.checked })}
-              />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-            </label>
+            <input 
+              type="checkbox" 
+              checked={settings.enabled}
+              onChange={(e) => setSettings({ ...settings, enabled: e.target.checked })}
+              style={{ width: '24px', height: '24px', cursor: 'pointer' }}
+            />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Duyuru Başlığı</label>
+          <div style={{ marginBottom: '1.5rem' }}>
+            <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: 600, color: '#444', marginBottom: '0.5rem' }}>Duyuru Başlığı</label>
             <input
               type="text"
               value={settings.title}
               onChange={(e) => setSettings({ ...settings, title: e.target.value })}
-              className="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary/20 outline-none"
-              placeholder="Örn: Yeni Sezon İndirimi!"
+              style={{ width: '100%', padding: '1rem', borderRadius: '10px', border: '1px solid #ddd', fontSize: '1rem' }}
+              placeholder="Örn: BÜYÜK YAZ İNDİRİMİ!"
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Duyuru İçeriği</label>
+          <div style={{ marginBottom: '1.5rem' }}>
+            <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: 600, color: '#444', marginBottom: '0.5rem' }}>Duyuru Metni</label>
             <textarea
               value={settings.content}
               onChange={(e) => setSettings({ ...settings, content: e.target.value })}
-              className="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary/20 outline-none h-32"
-              placeholder="Müşterilere ne söylemek istersiniz?"
+              style={{ width: '100%', padding: '1rem', borderRadius: '10px', border: '1px solid #ddd', fontSize: '1rem', minHeight: '120px', resize: 'vertical' }}
+              placeholder="Müşterilerine ne söylemek istersin?"
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
-              <ImageIcon size={16} /> Görsel URL (Opsiyonel)
-            </label>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={settings.image}
-                onChange={(e) => setSettings({ ...settings, image: e.target.value })}
-                className="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary/20 outline-none text-sm"
-                placeholder="https://..."
-              />
-              {settings.image && (
-                <button 
-                  onClick={() => setSettings({ ...settings, image: '' })}
-                  className="p-3 text-red-500 hover:bg-red-50 rounded-xl transition-all"
-                >
-                  <Trash2 size={20} />
-                </button>
+          <div style={{ marginBottom: '1.5rem' }}>
+            <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: 600, color: '#444', marginBottom: '0.5rem' }}>Kampanya Görseli</label>
+            <div style={{ 
+              border: '2px dashed #ddd', 
+              padding: '2rem', 
+              borderRadius: '15px', 
+              textAlign: 'center',
+              backgroundColor: '#fafafa',
+              position: 'relative'
+            }}>
+              {uploading ? (
+                <p style={{ margin: 0, fontWeight: 600, color: '#d4af37' }}>Yükleniyor...</p>
+              ) : settings.image ? (
+                <div style={{ position: 'relative' }}>
+                  <img src={settings.image} alt="Seçilen" style={{ maxWidth: '100%', maxHeight: '150px', borderRadius: '10px' }} />
+                  <button 
+                    onClick={() => setSettings({ ...settings, image: '' })}
+                    style={{ position: 'absolute', top: -10, right: -10, backgroundColor: 'red', color: 'white', border: 'none', borderRadius: '50%', width: '25px', height: '25px', cursor: 'pointer' }}
+                  >✕</button>
+                </div>
+              ) : (
+                <>
+                  <ImageIcon style={{ color: '#ccc', marginBottom: '0.5rem' }} size={40} />
+                  <p style={{ margin: 0, fontSize: '0.9rem', color: '#888' }}>Bilgisayardan resim seç</p>
+                  <input 
+                    type="file" 
+                    accept="image/*" 
+                    onChange={handleImageUpload}
+                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }}
+                  />
+                </>
               )}
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Buton Yazısı</label>
+              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#444', marginBottom: '0.5rem' }}>Buton Yazısı</label>
               <input
                 type="text"
                 value={settings.buttonText}
                 onChange={(e) => setSettings({ ...settings, buttonText: e.target.value })}
-                className="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary/20 outline-none"
-                placeholder="Örn: Hemen İncele"
+                style={{ width: '100%', padding: '0.8rem', borderRadius: '10px', border: '1px solid #ddd' }}
+                placeholder="Örn: ALIŞVERİŞE BAŞLA"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Buton Linki</label>
+              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#444', marginBottom: '0.5rem' }}>Buton Linki</label>
               <input
                 type="text"
                 value={settings.buttonLink}
                 onChange={(e) => setSettings({ ...settings, buttonLink: e.target.value })}
-                className="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary/20 outline-none"
-                placeholder="/categories/new"
+                style={{ width: '100%', padding: '0.8rem', borderRadius: '10px', border: '1px solid #ddd' }}
+                placeholder="Örn: /categories/all"
               />
             </div>
           </div>
         </div>
 
-        {/* Önizleme Alanı */}
-        <div className="space-y-4">
-          <label className="text-sm font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
-            <Eye size={16} /> Canlı Önizleme
-          </label>
-          <div className="relative border-4 border-dashed border-gray-100 rounded-3xl p-8 min-h-[500px] flex items-center justify-center bg-gray-50/50">
+        {/* Canlı Önizleme */}
+        <div style={{ padding: '1rem' }}>
+          <h3 style={{ fontSize: '1rem', fontWeight: 800, color: '#888', textTransform: 'uppercase', marginBottom: '1.5rem', letterSpacing: '1px' }}>Canlı Önizleme</h3>
+          <div style={{ 
+            backgroundColor: '#f0f0f0', 
+            borderRadius: '30px', 
+            padding: '3rem', 
+            minHeight: '600px', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            backgroundImage: 'radial-gradient(#ddd 1px, transparent 1px)',
+            backgroundSize: '20px 20px'
+          }}>
             {settings.enabled ? (
-              <div className="bg-white rounded-3xl shadow-2xl overflow-hidden max-w-[320px] w-full animate-in fade-in zoom-in duration-300">
+              <div style={{ 
+                backgroundColor: 'white', 
+                width: '320px', 
+                borderRadius: '25px', 
+                overflow: 'hidden', 
+                boxShadow: '0 25px 60px rgba(0,0,0,0.2)',
+                border: '1px solid #eee'
+              }}>
                 {settings.image && (
-                  <img src={settings.image} alt="Önizleme" className="w-full h-48 object-cover" />
+                  <img src={settings.image} alt="Preview" style={{ width: '100%', height: '180px', objectFit: 'cover' }} />
                 )}
-                <div className="p-6 text-center">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">{settings.title || 'Başlık Buraya'}</h3>
-                  <p className="text-gray-600 text-sm mb-6 leading-relaxed">
-                    {settings.content || 'Duyuru metniniz burada görünecek. Müşterileriniz bu alandan haberdar olacak.'}
-                  </p>
-                  <button className="w-full bg-black text-white py-3 rounded-xl font-bold text-sm tracking-wide uppercase">
+                <div style={{ padding: '2rem', textAlign: 'center' }}>
+                  <h4 style={{ margin: '0 0 0.75rem 0', fontSize: '1.5rem', fontWeight: 800 }}>{settings.title || 'BAŞLIK'}</h4>
+                  <p style={{ margin: '0 0 2rem 0', fontSize: '0.9rem', color: '#666', lineHeight: 1.5 }}>{settings.content || 'Duyuru metni burada görünecek...'}</p>
+                  <button style={{ width: '100%', backgroundColor: '#111', color: 'white', padding: '1rem', borderRadius: '12px', fontWeight: 700, border: 'none', cursor: 'default' }}>
                     {settings.buttonText || 'BUTON YAZISI'}
                   </button>
-                  <button className="mt-4 text-gray-400 text-xs hover:text-gray-600">Pencereyi Kapat</button>
+                  <p style={{ marginTop: '1.5rem', fontSize: '0.75rem', color: '#999', textDecoration: 'underline' }}>Pencereyi Kapat</p>
                 </div>
               </div>
             ) : (
-              <div className="text-center text-gray-400">
-                <Megaphone size={48} className="mx-auto mb-4 opacity-20" />
-                <p>Popup şu an devre dışı.</p>
+              <div style={{ textAlign: 'center', color: '#bbb' }}>
+                <Eye size={64} style={{ marginBottom: '1rem', opacity: 0.3 }} />
+                <p style={{ fontWeight: 600 }}>Popup şu an devre dışı.</p>
               </div>
             )}
           </div>
