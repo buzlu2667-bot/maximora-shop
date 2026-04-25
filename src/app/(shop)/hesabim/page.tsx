@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { useStore } from '@/store/useStore';
-import { MapPin, AlertCircle, Package, Heart } from 'lucide-react';
+import { MapPin, AlertCircle, Package, Heart, Ticket } from 'lucide-react';
 import toast from 'react-hot-toast';
 import styles from './Account.module.css';
 
@@ -237,9 +237,6 @@ export default function AccountPage() {
           )}
         </div>
       )}
-    </div>
-  );
-}
     </div>
   );
 }
