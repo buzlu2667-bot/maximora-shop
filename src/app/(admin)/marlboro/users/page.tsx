@@ -74,57 +74,89 @@ export default function AdminUsersPage() {
       {loading ? (
         <p>Yükleniyor...</p>
       ) : (
-        <div style={{ backgroundColor: 'white', borderRadius: '16px', border: '1px solid #eee', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-            <thead>
-              <tr style={{ backgroundColor: '#fafafa', borderBottom: '1px solid #eee' }}>
-                <th style={{ padding: '1.25rem', fontWeight: 600, color: '#333' }}>Kullanıcı</th>
-                <th style={{ padding: '1.25rem', fontWeight: 600, color: '#333' }}>E-posta</th>
-                <th style={{ padding: '1.25rem', fontWeight: 600, color: '#333' }}>Mağaza Kredisi</th>
-                <th style={{ padding: '1.25rem', fontWeight: 600, color: '#333' }}>İşlem</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((user) => (
-                <tr key={user.id} style={{ borderBottom: '1px solid #f1f1f1' }}>
-                  <td style={{ padding: '1.25rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                      <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', color: '#fff', fontSize: '0.9rem' }}>
-                        {(user.full_name || user.email || '?')[0].toUpperCase()}
+        <>
+          <style>{`
+            .users-table { display: block; }
+            .users-cards { display: none; }
+            @media (max-width: 768px) {
+              .users-table { display: none; }
+              .users-cards { display: flex; flex-direction: column; gap: 0.875rem; }
+            }
+          `}</style>
+
+          {/* MASAÜSTÜ: Tablo */}
+          <div className="users-table" style={{ backgroundColor: 'white', borderRadius: '16px', border: '1px solid #eee', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+              <thead>
+                <tr style={{ backgroundColor: '#fafafa', borderBottom: '1px solid #eee' }}>
+                  <th style={{ padding: '1.25rem', fontWeight: 600, color: '#333' }}>Kullanıcı</th>
+                  <th style={{ padding: '1.25rem', fontWeight: 600, color: '#333' }}>E-posta</th>
+                  <th style={{ padding: '1.25rem', fontWeight: 600, color: '#333' }}>Mağaza Kredisi</th>
+                  <th style={{ padding: '1.25rem', fontWeight: 600, color: '#333' }}>İşlem</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map((user) => (
+                  <tr key={user.id} style={{ borderBottom: '1px solid #f1f1f1' }}>
+                    <td style={{ padding: '1.25rem' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', color: '#fff', fontSize: '0.9rem', flexShrink: 0 }}>
+                          {(user.full_name || user.email || '?')[0].toUpperCase()}
+                        </div>
+                        <div>
+                          <p style={{ margin: 0, fontWeight: 600, color: '#111' }}>{user.full_name || 'İsimsiz Müşteri'}</p>
+                          <span style={{ fontSize: '0.75rem', color: '#999', backgroundColor: '#f3f4f6', padding: '0.1rem 0.4rem', borderRadius: '4px' }}>{user.role}</span>
+                        </div>
                       </div>
-                      <div>
-                        <p style={{ margin: 0, fontWeight: 600, color: '#111' }}>{user.full_name || 'İsimsiz Müşteri'}</p>
-                        <span style={{ fontSize: '0.75rem', color: '#999', backgroundColor: '#f3f4f6', padding: '0.1rem 0.4rem', borderRadius: '4px' }}>{user.role}</span>
-                      </div>
-                    </div>
-                  </td>
-                  <td style={{ padding: '1.25rem', color: '#555' }}>{user.email}</td>
-                  <td style={{ padding: '1.25rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <span style={{ 
-                        fontWeight: 800, 
-                        color: user.credit_balance > 0 ? '#10b981' : '#333',
-                        fontSize: '1.1rem'
-                      }}>
+                    </td>
+                    <td style={{ padding: '1.25rem', color: '#555' }}>{user.email}</td>
+                    <td style={{ padding: '1.25rem' }}>
+                      <span style={{ fontWeight: 800, color: user.credit_balance > 0 ? '#10b981' : '#333', fontSize: '1.1rem' }}>
                         {Number(user.credit_balance || 0).toFixed(2)} TL
                       </span>
-                    </div>
-                  </td>
-                  <td style={{ padding: '1.25rem' }}>
-                    <button 
-                      onClick={() => openCreditModal(user)}
-                      style={{ padding: '0.6rem 1.2rem', backgroundColor: '#111', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600, transition: 'all 0.2s' }}
-                      onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#333'}
-                      onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#111'}
-                    >
-                      Kredi Yönet
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                    </td>
+                    <td style={{ padding: '1.25rem' }}>
+                      <button onClick={() => openCreditModal(user)}
+                        style={{ padding: '0.6rem 1.2rem', backgroundColor: '#111', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600 }}>
+                        Kredi Yönet
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* MOBİL: Kartlar */}
+          <div className="users-cards">
+            {users.map((user) => (
+              <div key={user.id} style={{ backgroundColor: 'white', borderRadius: '16px', padding: '1rem', border: '1px solid #eee', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
+                  <div style={{ width: '44px', height: '44px', borderRadius: '50%', backgroundColor: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', color: '#fff', fontSize: '1rem', flexShrink: 0 }}>
+                    {(user.full_name || user.email || '?')[0].toUpperCase()}
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ margin: 0, fontWeight: 700, fontSize: '0.95rem', color: '#111' }}>{user.full_name || 'İsimsiz Müşteri'}</p>
+                    <p style={{ margin: 0, fontSize: '0.8rem', color: '#666', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{user.email}</p>
+                  </div>
+                  <span style={{ fontSize: '0.7rem', color: '#999', backgroundColor: '#f3f4f6', padding: '0.2rem 0.5rem', borderRadius: '4px', flexShrink: 0 }}>{user.role}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '0.75rem', borderTop: '1px solid #f1f1f1' }}>
+                  <div>
+                    <p style={{ margin: 0, fontSize: '0.75rem', color: '#888' }}>Mağaza Kredisi</p>
+                    <span style={{ fontWeight: 800, color: user.credit_balance > 0 ? '#10b981' : '#333', fontSize: '1.1rem' }}>
+                      {Number(user.credit_balance || 0).toFixed(2)} TL
+                    </span>
+                  </div>
+                  <button onClick={() => openCreditModal(user)}
+                    style={{ padding: '0.6rem 1.2rem', backgroundColor: '#111', color: '#fff', border: 'none', borderRadius: '10px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600 }}>
+                    Kredi Yönet
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
       )}
 
       {/* Modern Credit Modal */}

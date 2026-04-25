@@ -80,14 +80,26 @@ export default function AdminCouponsPage() {
 
   return (
     <div style={{ padding: '1rem' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-        <div>
-          <h1 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '0.5rem' }}>İndirim Kuponları</h1>
-          <p style={{ color: '#666' }}>Müşterileriniz için özel indirim kodları tanımlayın.</p>
+      <div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
+          <div>
+            <h1 style={{ fontSize: 'clamp(1.4rem, 5vw, 2rem)', fontWeight: 800, marginBottom: '0.5rem' }}>İndirim Kuponları</h1>
+            <p style={{ color: '#666' }}>Müşterileriniz için özel indirim kodları tanımlayın.</p>
+          </div>
         </div>
-      </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '2rem', alignItems: 'start' }}>
+      <style>{`
+        .coupons-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; align-items: start; }
+        .coupons-table-wrap { display: block; }
+        .coupons-cards-wrap { display: none; }
+        @media (max-width: 768px) {
+          .coupons-grid { grid-template-columns: 1fr; }
+          .coupons-table-wrap { display: none; }
+          .coupons-cards-wrap { display: flex; flex-direction: column; gap: 0.75rem; }
+        }
+      `}</style>
+
+      <div className="coupons-grid">
         
         {/* Create Coupon Form */}
         <div style={{ backgroundColor: 'white', padding: '2rem', borderRadius: '16px', border: '1px solid #eee', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
@@ -165,56 +177,90 @@ export default function AdminCouponsPage() {
         </div>
 
         {/* Coupon List */}
-        <div style={{ backgroundColor: 'white', borderRadius: '16px', border: '1px solid #eee', overflow: 'hidden' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead>
-              <tr style={{ backgroundColor: '#fafafa', borderBottom: '1px solid #eee', textAlign: 'left' }}>
-                <th style={{ padding: '1rem' }}>Kod</th>
-                <th style={{ padding: '1rem' }}>İndirim</th>
-                <th style={{ padding: '1rem' }}>Min. Tutar</th>
-                <th style={{ padding: '1rem' }}>Kullanım</th>
-                <th style={{ padding: '1rem' }}>İşlem</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                <tr><td colSpan={4} style={{ padding: '2rem', textAlign: 'center' }}>Yükleniyor...</td></tr>
-              ) : coupons.length === 0 ? (
-                <tr><td colSpan={4} style={{ padding: '2rem', textAlign: 'center', color: '#999' }}>Kupon bulunamadı.</td></tr>
-              ) : (
-                coupons.map((coupon) => (
-                  <tr key={coupon.id} style={{ borderBottom: '1px solid #f1f1f1' }}>
-                    <td style={{ padding: '1rem' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <Ticket size={16} color="var(--color-primary)" />
-                        <strong style={{ letterSpacing: '1px' }}>{coupon.code}</strong>
-                      </div>
-                    </td>
-                    <td style={{ padding: '1rem' }}>
-                      {coupon.discount_type === 'percentage' ? `%${coupon.discount_value}` : `${coupon.discount_value} TL`}
-                    </td>
-                    <td style={{ padding: '1rem', color: '#666' }}>{coupon.min_amount} TL</td>
-                    <td style={{ padding: '1rem', color: '#666' }}>
-                      <span style={{ fontWeight: 600, color: (coupon.usage_limit && coupon.used_count >= coupon.usage_limit) ? '#ef4444' : '#111' }}>
-                        {coupon.used_count}
-                      </span>
-                      {coupon.usage_limit ? ` / ${coupon.usage_limit}` : ' / ∞'}
-                    </td>
-                    <td style={{ padding: '1rem' }}>
-                      <button 
-                        onClick={() => handleDeleteCoupon(coupon.id)}
-                        style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '0.5rem' }}
-                      >
-                        <Trash2 size={18} />
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+        <div>
+          {/* MASAÜSTÜ: Tablo */}
+          <div className="coupons-table-wrap" style={{ backgroundColor: 'white', borderRadius: '16px', border: '1px solid #eee', overflow: 'hidden' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr style={{ backgroundColor: '#fafafa', borderBottom: '1px solid #eee', textAlign: 'left' }}>
+                  <th style={{ padding: '1rem' }}>Kod</th>
+                  <th style={{ padding: '1rem' }}>İndirim</th>
+                  <th style={{ padding: '1rem' }}>Min. Tutar</th>
+                  <th style={{ padding: '1rem' }}>Kullanım</th>
+                  <th style={{ padding: '1rem' }}>İşlem</th>
+                </tr>
+              </thead>
+              <tbody>
+                {loading ? (
+                  <tr><td colSpan={5} style={{ padding: '2rem', textAlign: 'center' }}>Yükleniyor...</td></tr>
+                ) : coupons.length === 0 ? (
+                  <tr><td colSpan={5} style={{ padding: '2rem', textAlign: 'center', color: '#999' }}>Kupon bulunamadı.</td></tr>
+                ) : (
+                  coupons.map((coupon) => (
+                    <tr key={coupon.id} style={{ borderBottom: '1px solid #f1f1f1' }}>
+                      <td style={{ padding: '1rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                          <Ticket size={16} color="var(--color-primary)" />
+                          <strong style={{ letterSpacing: '1px' }}>{coupon.code}</strong>
+                        </div>
+                      </td>
+                      <td style={{ padding: '1rem' }}>{coupon.discount_type === 'percentage' ? `%${coupon.discount_value}` : `${coupon.discount_value} TL`}</td>
+                      <td style={{ padding: '1rem', color: '#666' }}>{coupon.min_amount} TL</td>
+                      <td style={{ padding: '1rem', color: '#666' }}>
+                        <span style={{ fontWeight: 600, color: (coupon.usage_limit && coupon.used_count >= coupon.usage_limit) ? '#ef4444' : '#111' }}>
+                          {coupon.used_count}
+                        </span>
+                        {coupon.usage_limit ? ` / ${coupon.usage_limit}` : ' / ∞'}
+                      </td>
+                      <td style={{ padding: '1rem' }}>
+                        <button onClick={() => handleDeleteCoupon(coupon.id)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '0.5rem' }}>
+                          <Trash2 size={18} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* MOBİL: Kartlar */}
+          <div className="coupons-cards-wrap">
+            {coupons.length === 0 ? (
+              <p style={{ textAlign: 'center', color: '#999', padding: '2rem' }}>Kupon bulunamadı.</p>
+            ) : coupons.map((coupon) => (
+              <div key={coupon.id} style={{ backgroundColor: 'white', borderRadius: '14px', padding: '1rem', border: '1px solid #eee' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <Ticket size={18} color="var(--color-primary)" />
+                    <strong style={{ letterSpacing: '2px', fontSize: '1rem' }}>{coupon.code}</strong>
+                  </div>
+                  <button onClick={() => handleDeleteCoupon(coupon.id)} style={{ background: '#fff1f2', border: '1px solid #fecdd3', color: '#ef4444', cursor: 'pointer', padding: '0.4rem 0.7rem', borderRadius: '8px' }}>
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.5rem', fontSize: '0.8rem' }}>
+                  <div style={{ backgroundColor: '#f9fafb', padding: '0.5rem', borderRadius: '8px', textAlign: 'center' }}>
+                    <p style={{ margin: 0, color: '#888', fontSize: '0.7rem' }}>İndirim</p>
+                    <p style={{ margin: 0, fontWeight: 700, color: '#111' }}>{coupon.discount_type === 'percentage' ? `%${coupon.discount_value}` : `${coupon.discount_value}TL`}</p>
+                  </div>
+                  <div style={{ backgroundColor: '#f9fafb', padding: '0.5rem', borderRadius: '8px', textAlign: 'center' }}>
+                    <p style={{ margin: 0, color: '#888', fontSize: '0.7rem' }}>Min. Tutar</p>
+                    <p style={{ margin: 0, fontWeight: 700, color: '#111' }}>{coupon.min_amount}TL</p>
+                  </div>
+                  <div style={{ backgroundColor: '#f9fafb', padding: '0.5rem', borderRadius: '8px', textAlign: 'center' }}>
+                    <p style={{ margin: 0, color: '#888', fontSize: '0.7rem' }}>Kullanım</p>
+                    <p style={{ margin: 0, fontWeight: 700, color: (coupon.usage_limit && coupon.used_count >= coupon.usage_limit) ? '#ef4444' : '#111' }}>
+                      {coupon.used_count}{coupon.usage_limit ? `/${coupon.usage_limit}` : '/∞'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
+      </div>
       </div>
     </div>
   );
