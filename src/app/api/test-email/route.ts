@@ -1,4 +1,6 @@
+export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server';
+
 import { resend } from '@/lib/resend';
 
 export async function GET() {
