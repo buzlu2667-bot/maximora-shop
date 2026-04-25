@@ -15,37 +15,13 @@ type Slide = {
   textPosition: string;
 };
 
-const DEFAULT_SLIDES: Slide[] = [
-  {
-    id: "1",
-    image: 'https://images.unsplash.com/photo-1584916201218-f4242ceb4809?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80',
-    title: 'Yeni Sezon Çantalar',
-    subtitle: 'Stilinizi tamamlayacak en zarif dokunuş.',
-    link: '/categories/new',
-    textPosition: 'center'
-  },
-  {
-    id: "2",
-    image: 'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80',
-    title: 'Deri Şıklığı',
-    subtitle: 'El yapımı özel koleksiyon deri çantalar.',
-    link: '/categories/leather',
-    textPosition: 'center'
-  },
-  {
-    id: "3",
-    image: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80',
-    title: 'Minimal ve Lüks',
-    subtitle: 'Günlük karmaşadan uzak, sadece gerekenleri taşıyın.',
-    link: '/categories/minimal',
-    textPosition: 'center'
-  }
-];
+const DEFAULT_SLIDES: Slide[] = [];
 
 export default function HeroSlider() {
   const [current, setCurrent] = useState(0);
-  const [slides, setSlides] = useState<Slide[]>(DEFAULT_SLIDES); // Start with defaults
+  const [slides, setSlides] = useState<Slide[]>(DEFAULT_SLIDES);
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchSlides = async () => {
@@ -59,6 +35,8 @@ export default function HeroSlider() {
         }
       } catch (e) {
         console.error("Slider fetch error:", e);
+      } finally {
+        setLoading(false);
       }
     };
     fetchSlides();
@@ -74,6 +52,14 @@ export default function HeroSlider() {
     }, 5000);
     return () => clearInterval(timer);
   }, [current, slides.length]);
+
+  if (loading) {
+    return (
+      <div className={styles.slider} style={{ backgroundColor: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className={styles.skeletonPulse}></div>
+      </div>
+    );
+  }
 
   if (slides.length === 0) return null;
 
