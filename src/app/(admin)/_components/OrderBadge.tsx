@@ -18,8 +18,9 @@ export default function OrderBadge() {
 
     fetchNewOrderCount();
 
+    const channelId = Math.random().toString(36).substring(7);
     const channel = supabase
-      .channel('admin_orders_realtime')
+      .channel(`orders_realtime_${channelId}`)
       .on(
         'postgres_changes',
         { event: '*', table: 'orders', schema: 'public' },

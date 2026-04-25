@@ -19,8 +19,9 @@ export default function MessageBadge() {
     fetchUnreadCount();
 
     // Canlı bağlantı kanalı
+    const channelId = Math.random().toString(36).substring(7);
     const channel = supabase
-      .channel('admin_messages_realtime')
+      .channel(`messages_realtime_${channelId}`)
       .on(
         'postgres_changes',
         { event: '*', table: 'contact_messages', schema: 'public' },
