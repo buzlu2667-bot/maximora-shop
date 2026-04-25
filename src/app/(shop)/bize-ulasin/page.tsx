@@ -23,29 +23,23 @@ export default function ContactUsPage() {
 
     setIsSubmitting(true);
     try {
-      const { data, error } = await supabase
-        .from('contact_messages')
-        .insert([
-          {
-            name: formData.name,
-            email: formData.email,
-            phone: formData.phone,
-            message: formData.message,
-            is_read: false
-          }
-        ]);
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
 
-      if (error) {
-        console.error('Detaylı Supabase Hatası:', error);
-        toast.error(`Mesaj gitmedi: ${error.message} (Kod: ${error.code})`);
-        return;
+      const result = await res.json();
+
+      if (!res.ok) {
+        throw new Error(result.error || 'Mesaj gönderilemedi');
       }
 
       toast.success('Mesajınız başarıyla iletildi!');
       setFormData({ name: '', email: '', phone: '', message: '' });
     } catch (err: any) {
-      console.error('Beklenmedik Hata:', err);
-      toast.error('Bağlantı hatası oluştu, lütfen internetinizi kontrol edin.');
+      console.error('Hata:', err);
+      toast.error(err.message || 'Bir hata oluştu, lütfen tekrar deneyin.');
     } finally {
       setIsSubmitting(false);
     }
