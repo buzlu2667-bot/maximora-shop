@@ -30,15 +30,19 @@ export async function POST(request: Request) {
     const body = await request.json();
     const showcases = Array.isArray(body) ? body : [body];
     
-    const rows = showcases.map((item, index) => ({
-      id: item.id || undefined,
-      title: item.title,
-      category: item.category || null,
-      brand: item.brand || null,
-      limit_count: item.limit || 4,
-      layout: item.layout || 'grid',
-      display_order: index
-    }));
+    const rows = showcases.map((item, index) => {
+      const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(item.id);
+      return {
+        id: isUUID ? item.id : undefined,
+        title: item.title,
+        category: item.category || null,
+        brand: item.brand || null,
+        limit_count: item.limit || 4,
+        layout: item.layout || 'grid',
+        display_order: index
+      };
+    });
+
 
     // Önce hepsini silip yeniden ekle (sync)
     await supabaseAdmin.from('showcases').delete().neq('id', '00000000-0000-0000-0000-000000000000');
