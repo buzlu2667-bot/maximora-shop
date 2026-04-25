@@ -261,7 +261,9 @@ export default function PopupSettingsPage() {
                 border: '1px solid #eee'
               }}>
                 {settings.image && (
-                  <img src={settings.image} alt="Preview" style={{ width: '100%', height: '180px', objectFit: 'cover' }} />
+                  <div style={{ width: '100%', maxHeight: '250px', backgroundColor: '#f9f9f9', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                    <img src={settings.image} alt="Preview" style={{ width: '100%', height: 'auto', maxHeight: '250px', objectFit: 'contain' }} />
+                  </div>
                 )}
                 <div style={{ padding: '2rem', textAlign: 'center' }}>
                   <h4 style={{ margin: '0 0 0.75rem 0', fontSize: '1.5rem', fontWeight: 800 }}>{settings.title || 'BAŞLIK'}</h4>
