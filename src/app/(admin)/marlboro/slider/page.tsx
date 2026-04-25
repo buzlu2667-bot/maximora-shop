@@ -112,12 +112,22 @@ export default function AdminSliderPage() {
 
   return (
     <div style={{ paddingBottom: '4rem' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .sl-header { flex-direction: column !important; align-items: flex-start !important; }
+          .sl-header h1 { font-size: 1.4rem !important; }
+          .sl-header button { width: 100% !important; }
+          .sl-slide-row { flex-direction: column !important; }
+          .sl-slide-actions { flex-wrap: wrap !important; }
+          .sl-inline-row { flex-direction: column !important; }
+        }
+      `}</style>
+      <div className="sl-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', gap: '1rem' }}>
         <div>
           <h1 style={{ fontSize: '2rem', color: '#111', marginBottom: '0.5rem' }}>Ana Sayfa Slider Yönetimi</h1>
           <p style={{ color: '#555' }}>Ana sayfadaki büyük kayan görselleri, üzerine yazılacak yazıları ve linkleri yönetin.</p>
         </div>
-        <button onClick={handleSave} disabled={saving} className="btn btn-primary" style={{ padding: '0.75rem 2rem' }}>
+        <button onClick={handleSave} disabled={saving} className="btn btn-primary" style={{ padding: '0.75rem 2rem', whiteSpace: 'nowrap' }}>
           {saving ? 'Kaydediliyor...' : 'Ayarları Kaydet'}
         </button>
       </div>
@@ -129,16 +139,16 @@ export default function AdminSliderPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
             {slides.map((slide, idx) => (
               <div key={slide.id} style={{ border: '1px solid #ddd', padding: '1.5rem', borderRadius: '8px', position: 'relative', backgroundColor: '#fafafa' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', borderBottom: '1px solid #eee', paddingBottom: '1rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', borderBottom: '1px solid #eee', paddingBottom: '1rem', flexWrap: 'wrap', gap: '0.75rem' }}>
                   <h3 style={{ margin: 0, fontSize: '1.2rem' }}>Slayt {idx + 1}</h3>
-                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <div className="sl-slide-actions" style={{ display: 'flex', gap: '0.5rem' }}>
                     <button onClick={() => handleMove(idx, 'up')} disabled={idx === 0} style={{ padding: '0.3rem', cursor: idx === 0 ? 'not-allowed' : 'pointer', background: 'white', border: '1px solid #ddd', borderRadius: '4px' }}>⬆️ Yukarı</button>
                     <button onClick={() => handleMove(idx, 'down')} disabled={idx === slides.length - 1} style={{ padding: '0.3rem', cursor: idx === slides.length - 1 ? 'not-allowed' : 'pointer', background: 'white', border: '1px solid #ddd', borderRadius: '4px' }}>⬇️ Aşağı</button>
                     <button onClick={() => handleRemoveSlide(slide.id)} style={{ color: 'white', backgroundColor: '#ef4444', border: 'none', borderRadius: '4px', padding: '0.3rem 0.8rem', cursor: 'pointer', marginLeft: '1rem' }}>Sil</button>
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', gap: '2rem' }}>
+                <div className="sl-slide-row" style={{ display: 'flex', gap: '2rem' }}>
                   {/* Görsel Yükleme Alanı */}
                   <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                     <label style={{ display: 'block', fontWeight: 600, color: '#333' }}>Görsel Seç</label>
@@ -207,7 +217,7 @@ export default function AdminSliderPage() {
                       />
                     </div>
 
-                    <div style={{ display: 'flex', gap: '1rem' }}>
+                    <div className="sl-inline-row" style={{ display: 'flex', gap: '1rem' }}>
                       <div style={{ flex: '1' }}>
                         <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: '#333' }}>Bağlantı (Link)</label>
                         <input 

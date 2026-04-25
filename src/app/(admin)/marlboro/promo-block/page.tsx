@@ -121,12 +121,22 @@ export default function AdminPromoBlockPage() {
 
   return (
     <div style={{ paddingBottom: '4rem' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .pb-header { flex-direction: column !important; align-items: flex-start !important; }
+          .pb-header h1 { font-size: 1.4rem !important; }
+          .pb-header button { width: 100% !important; }
+          .pb-block-header { flex-wrap: wrap !important; }
+          .pb-row { flex-direction: column !important; }
+          .pb-inline { flex-direction: column !important; }
+        }
+      `}</style>
+      <div className="pb-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', gap: '1rem' }}>
         <div>
           <h1 style={{ fontSize: '2rem', color: '#111', marginBottom: '0.5rem' }}>Tanıtım Blokları (Bannerlar)</h1>
           <p style={{ color: '#555' }}>Ana sayfada istediğiniz kadar "Lüksü Yeniden Tanımlıyoruz" tarzında blok ekleyebilirsiniz.</p>
         </div>
-        <button onClick={handleSave} disabled={saving} className="btn btn-primary" style={{ padding: '0.75rem 2rem' }}>
+        <button onClick={handleSave} disabled={saving} className="btn btn-primary" style={{ padding: '0.75rem 2rem', whiteSpace: 'nowrap' }}>
           {saving ? 'Kaydediliyor...' : 'Tüm Ayarları Kaydet'}
         </button>
       </div>
@@ -140,7 +150,7 @@ export default function AdminPromoBlockPage() {
             {promos.map((promo, idx) => (
               <div key={promo.id} style={{ border: '1px solid #ddd', padding: '1.5rem', borderRadius: '8px', position: 'relative', backgroundColor: promo.enabled ? '#fff' : '#f9f9f9', opacity: promo.enabled ? 1 : 0.6 }}>
                 
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', borderBottom: '1px solid #eee', paddingBottom: '1rem' }}>
+                <div className="pb-block-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', borderBottom: '1px solid #eee', paddingBottom: '1rem' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                     <h3 style={{ margin: 0, fontSize: '1.2rem' }}>Blok {idx + 1}</h3>
                     <label className="switch" style={{ transform: 'scale(0.8)' }}>
@@ -160,7 +170,7 @@ export default function AdminPromoBlockPage() {
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', gap: '3rem' }}>
+                <div className="pb-row" style={{ display: 'flex', gap: '3rem' }}>
                   {/* Sol: Ayarlar */}
                   <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                     <div>
@@ -185,7 +195,7 @@ export default function AdminPromoBlockPage() {
                       />
                     </div>
 
-                    <div style={{ display: 'flex', gap: '1rem' }}>
+                    <div className="pb-inline" style={{ display: 'flex', gap: '1rem' }}>
                       <div style={{ flex: '1' }}>
                         <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: '#333' }}>Buton Yazısı (İsteğe Bağlı)</label>
                         <input 

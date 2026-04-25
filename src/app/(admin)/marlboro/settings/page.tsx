@@ -83,7 +83,16 @@ export default function AdminSettingsPage() {
 
   return (
     <div style={{ maxWidth: '800px', paddingBottom: '5rem' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .settings-header { flex-direction: column !important; align-items: flex-start !important; gap: 1rem; }
+          .settings-header h1 { font-size: 1.5rem !important; }
+          .settings-header button { width: 100% !important; }
+          .settings-grid-2 { grid-template-columns: 1fr !important; }
+          .settings-toggle-row { flex-wrap: wrap !important; gap: 0.75rem !important; }
+        }
+      `}</style>
+      <div className="settings-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <h1 style={{ fontSize: '2rem', color: '#111' }}>Site Ayarları</h1>
         <button 
           onClick={handleSave} 
@@ -98,7 +107,8 @@ export default function AdminSettingsPage() {
             borderRadius: '8px',
             border: 'none',
             cursor: 'pointer',
-            opacity: saving ? 0.7 : 1
+            opacity: saving ? 0.7 : 1,
+            whiteSpace: 'nowrap'
           }}
         >
           <Save size={20} />
@@ -141,7 +151,7 @@ export default function AdminSettingsPage() {
                 />
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
+              <div className="settings-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
                 <div>
                   <label style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.5rem', fontWeight: 'bold', fontSize: '0.9rem' }}>Yazı Rengi</label>
                   <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
@@ -158,7 +168,7 @@ export default function AdminSettingsPage() {
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
+              <div className="settings-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
                 <div>
                   <label style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.5rem', fontWeight: 'bold', fontSize: '0.9rem' }}>
                     <Zap size={16} />
@@ -246,7 +256,7 @@ export default function AdminSettingsPage() {
                 />
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
+              <div className="settings-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
                 <div>
                   <label style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.5rem', fontWeight: 'bold', fontSize: '0.9rem' }}>Yazı Rengi</label>
                   <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>

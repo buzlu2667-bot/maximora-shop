@@ -111,12 +111,20 @@ export default function AdminShowcasesPage() {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .sc-header { flex-direction: column !important; align-items: flex-start !important; }
+          .sc-header h1 { font-size: 1.4rem !important; }
+          .sc-header button { width: 100% !important; }
+          .sc-grid-2 { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
+      <div className="sc-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', gap: '1rem' }}>
         <div>
           <h1 style={{ fontSize: '2rem', color: '#111', marginBottom: '0.5rem' }}>Ana Sayfa Vitrin Yönetimi</h1>
           <p style={{ color: '#555' }}>Ana sayfada görünecek özel kategorileri ve markaları buradan yönetebilirsiniz.</p>
         </div>
-        <button onClick={handleSave} className="btn btn-primary" style={{ padding: '0.75rem 2rem' }}>
+        <button onClick={handleSave} className="btn btn-primary" style={{ padding: '0.75rem 2rem', whiteSpace: 'nowrap' }}>
           Ayarları Kaydet
         </button>
       </div>
@@ -138,7 +146,7 @@ export default function AdminShowcasesPage() {
         </div>
 
         {newestSettings.enabled && (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', padding: '1.5rem', backgroundColor: '#f9f9f9', borderRadius: '8px', border: '1px solid #eee' }}>
+          <div className="sc-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', padding: '1.5rem', backgroundColor: '#f9f9f9', borderRadius: '8px', border: '1px solid #eee' }}>
             <div>
               <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem', color: '#666' }}>Vitrin Başlığı</label>
               <input 
@@ -188,7 +196,7 @@ export default function AdminShowcasesPage() {
                   </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div className="sc-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                   <div>
                     <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem', color: '#666' }}>Vitrin Başlığı</label>
                     <input 

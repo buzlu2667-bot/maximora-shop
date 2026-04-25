@@ -106,10 +106,19 @@ export default function PopupSettingsPage() {
 
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '1rem' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .popup-header { flex-direction: column !important; align-items: flex-start !important; gap: 1rem; }
+          .popup-header h1 { font-size: 1.5rem !important; }
+          .popup-header button { width: 100% !important; }
+          .popup-grid { grid-template-columns: 1fr !important; }
+          .popup-btn-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
+      <div className="popup-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
           <h1 style={{ fontSize: '2.2rem', fontWeight: 800, color: '#111', margin: 0 }}>Duyuru Popup Yönetimi</h1>
-          <p style={{ color: '#666', marginTop: '0.5rem' }}>Müşterilerini şık bir duyuru ile karşıla.</p>
+          <p style={{ color: '#666', marginTop: '0.5rem' }}>Müşterilerini şik bir duyuru ile karşıla.</p>
         </div>
         <button
           onClick={handleSave}
@@ -123,14 +132,14 @@ export default function PopupSettingsPage() {
             border: 'none', 
             cursor: 'pointer',
             boxShadow: '0 4px 15px rgba(212, 175, 55, 0.3)',
-            transition: 'all 0.3s ease'
+            whiteSpace: 'nowrap'
           }}
         >
           {saving ? 'KAYDEDİLİYOR...' : 'YAYINLA'}
         </button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+      <div className="popup-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
         
         {/* Ayarlar Formu */}
         <div style={{ backgroundColor: 'white', padding: '2.5rem', borderRadius: '20px', boxShadow: '0 10px 30px rgba(0,0,0,0.05)' }}>
@@ -213,7 +222,7 @@ export default function PopupSettingsPage() {
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+          <div className="popup-btn-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
             <div>
               <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#444', marginBottom: '0.5rem' }}>Buton Yazısı</label>
               <input
