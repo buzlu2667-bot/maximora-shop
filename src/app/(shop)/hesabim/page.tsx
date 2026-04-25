@@ -123,6 +123,9 @@ export default function AccountPage() {
               {tab === 'orders' ? <Package size={20} /> : <Ticket size={20} />}
             </div>
             <span>{tab === 'orders' ? 'Siparişlerim' : 'Mağaza Kredisi'}</span>
+            <span style={{ fontSize: '0.8rem', opacity: 0.6, marginLeft: '4px' }}>
+               ({tab === 'orders' ? orders.length : profile?.credit_balance > 0 ? '1' : '0'})
+            </span>
             
             {tab === 'credit' && profile?.credit_balance > 0 && (
               <div className={styles.tabBadge}></div>
@@ -148,7 +151,7 @@ export default function AccountPage() {
                 <div key={order.id} style={{ border: '1px solid var(--color-border)', borderRadius: '20px', padding: '1.5rem', backgroundColor: 'white', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1.25rem' }}>
                     <div>
-                      <span style={{ fontFamily: 'monospace', fontSize: '0.85rem', color: '#999', fontWeight: 600 }}>#{order.id.slice(0,10)}...</span>
+                      <span style={{ fontFamily: 'monospace', fontSize: '0.9rem', color: '#666', fontWeight: 800 }}>#{order.id}</span>
                       <div style={{ display: 'flex', gap: '0.6rem', marginTop: '0.25rem', alignItems: 'center', flexWrap: 'wrap' }}>
                         <span style={{ backgroundColor: sc.bg, color: sc.color, padding: '0.25rem 0.75rem', borderRadius: '50px', fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase' }}>{sc.label}</span>
                         <span style={{ fontSize: '0.8rem', color: '#888', fontWeight: 500 }}>{new Date(order.created_at).toLocaleDateString('tr-TR')}</span>
