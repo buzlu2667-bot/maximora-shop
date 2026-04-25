@@ -1,0 +1,264 @@
+.hero {
+  position: relative;
+  height: 85vh;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.heroBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.heroOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.2) 100%);
+}
+
+.heroContent {
+  color: white;
+  max-width: 600px;
+}
+
+.heroContent h1 {
+  color: white;
+  margin-bottom: 1.5rem;
+}
+
+.heroSubtitle {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
+  opacity: 0.9;
+  animation-delay: 0.2s;
+}
+
+.heroActions {
+  display: flex;
+  gap: 1rem;
+  animation-delay: 0.4s;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 3rem;
+}
+
+.viewAll {
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  letter-spacing: 1px;
+  position: relative;
+  padding-bottom: 4px;
+}
+
+.viewAll::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-primary);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--transition-normal);
+}
+
+.viewAll:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+@media (max-width: 768px) {
+  .sectionHeader {
+    margin-bottom: 1.5rem;
+    align-items: center;
+  }
+  .sectionHeader h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+  }
+  .viewAll {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: #888;
+    letter-spacing: 0.5px;
+  }
+  .viewAll::after {
+    background-color: #888;
+  }
+}
+
+/* Featured Product Responsive Typography */
+.featuredTitle {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #111;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  letter-spacing: -1px;
+}
+
+.featuredPrice {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #111;
+}
+
+.featuredOldPrice {
+  font-size: 1rem;
+  color: #999;
+  text-decoration: line-through;
+  font-weight: 500;
+}
+
+.featuredDiscount {
+  background-color: #ef4444;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.featuredAction {
+  padding: 1.25rem 4rem;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .featuredTitle {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+  }
+  .featuredPrice {
+    font-size: 1.5rem;
+  }
+  .featuredOldPrice {
+    font-size: 0.85rem;
+  }
+  .featuredDiscount {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.75rem;
+  }
+  .featuredAction {
+    padding: 1rem 2.5rem;
+    font-size: 1rem;
+    width: 100% !important;
+  }
+}
+
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem 0.5rem; /* Yan boşluğu 1rem'den 0.5rem'e düşürdük ki kartlar daha büyük olsun */
+}
+
+@media (min-width: 768px) {
+  .productGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .productGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.bannerSection {
+  padding: var(--spacing-lg) 0;
+  background-color: var(--color-background-alt);
+}
+
+.banner {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .banner {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 3rem;
+  }
+}
+
+.bannerText {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.bannerText p {
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 767px) {
+  .bannerImage {
+    order: -1; /* Mobilde görsel her zaman üstte olsun */
+    width: 100%;
+  }
+  .bannerText {
+    align-items: center;
+    text-align: center;
+  }
+}
+
+.bannerImage {
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background-color: #f5f5f5; /* Boşluklar için hafif bir gri */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bannerImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Ürünün tamamının görünmesi için */
+  transition: transform var(--transition-slow);
+}
+
+.banner:hover .bannerImage img {
+  transform: scale(1.05);
+}
+
+/* Öne Çıkan Ürün - Responsive Grid */
+.featuredGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .featuredGrid {
+    grid-template-columns: 1.5fr 1fr;
+    gap: 5rem;
+  }
+}

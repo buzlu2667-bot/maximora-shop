@@ -1,0 +1,287 @@
+.cartContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .cartContainer {
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+  }
+}
+
+@media (min-width: 1025px) {
+  .cartContainer {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(300px, 1fr);
+    gap: 3.5rem;
+    align-items: start;
+  }
+}
+
+/* Mobil Başlık (Accordion) */
+.mobileSummaryHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem;
+  background-color: #fff;
+  border: 1px solid #eee;
+  border-radius: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  order: 1;
+}
+
+@media (min-width: 1025px) {
+  .mobileSummaryHeader {
+    display: none;
+  }
+}
+
+.cartItemsList {
+  display: flex;
+  flex-direction: column;
+  order: 3; /* Mobilde özetin altında */
+}
+
+@media (min-width: 1025px) {
+  .cartItemsList {
+    order: 1; /* PC'de solda */
+  }
+}
+
+/* Summary Box */
+.summaryBox {
+  display: none; /* Mobilde varsayılan kapalı */
+  background-color: #fafafa;
+  padding: 1.5rem;
+  border-radius: 20px;
+  border: 1px solid #f0f0f0;
+  order: 2; /* Mobilde header'ın hemen altında */
+}
+
+.summaryExpanded {
+  display: block !important;
+}
+
+@media (min-width: 1025px) {
+  .summaryBox {
+    display: block !important;
+    order: 2; /* PC'de sağda */
+    position: sticky;
+    top: 100px;
+  }
+}
+
+/* Geri kalan stiller aynı kalıyor... */
+
+.cartItem {
+  display: flex;
+  gap: 1rem;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.itemImage {
+  width: 90px;
+  aspect-ratio: 1 / 1;
+  background-color: transparent;
+  overflow: hidden;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.itemImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.itemInfo {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.itemHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.itemTitle {
+  font-size: 0.95rem;
+  margin: 0;
+  line-height: 1.4;
+  font-weight: 600;
+  color: #111;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.itemTitle a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.itemPriceInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+
+.priceDiscounted {
+  font-weight: 800;
+  font-size: 1rem;
+  color: #10b981;
+}
+
+.priceOriginal {
+  font-size: 0.75rem;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.discountBadge {
+  font-size: 0.6rem;
+  background-color: #10b981;
+  color: white;
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+  font-weight: 700;
+  margin-top: 0.2rem;
+}
+
+.variantBadge {
+  display: inline-block;
+  background-color: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  padding: 0.1rem 0.5rem;
+  font-size: 0.7rem;
+  color: #666;
+  margin-right: 0.4rem;
+  margin-bottom: 0.4rem;
+}
+
+.itemActions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+.quantityControl {
+  display: inline-flex;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  align-items: center;
+}
+
+.quantityControl button {
+  padding: 0.3rem 0.7rem;
+  font-weight: 700;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #111;
+}
+
+.quantityValue {
+  padding: 0 0.5rem;
+  font-weight: 600;
+  min-width: 20px;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+.removeButton {
+  color: #bbb;
+  font-size: 0.7rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.removeButton:hover {
+  color: #ef4444;
+}
+
+.summaryTitle {
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+  font-weight: 800;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.totalDivider {
+  height: 1px;
+  background-color: #eee;
+  margin: 1rem 0;
+}
+
+.totalPrice {
+  color: var(--color-primary);
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+
+.couponContainer {
+  margin-top: 1.5rem;
+}
+
+.couponInputWrapper {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.couponInput {
+  flex: 1;
+  padding: 0.75rem;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 0.85rem;
+}
+
+.couponApplied {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background-color: #f0fdf4;
+  border-radius: 10px;
+  border: 1px solid #dcfce7;
+  color: #166534;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 640px) {
+  .itemHeader {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .itemPriceInfo {
+    align-items: flex-start;
+  }
+  .itemImage {
+    width: 100px;
+  }
+}

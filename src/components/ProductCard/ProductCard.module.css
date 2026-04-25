@@ -1,0 +1,321 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: transform 0.3s ease;
+}
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+  border-radius: 8px;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.imageContainer {
+  width: 100%;
+  height: 100%;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.5s ease;
+}
+
+/* Favori Butonu */
+.favoriteBtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 36px;
+  height: 36px;
+  background-color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  color: #666;
+  z-index: 10;
+  transition: all 0.2s ease;
+}
+
+.favoriteBtn:hover {
+  transform: scale(1.1);
+  color: #e11d48;
+}
+
+.isFavorite {
+  color: #e11d48;
+}
+
+/* Rozetler */
+.badges {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 10;
+}
+
+.newBadge {
+  font-family: inherit;
+  color: #2563eb;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 3px 8px;
+  border-radius: 2px;
+  border-left: 3px solid #2563eb;
+}
+
+.customBadge {
+  font-family: inherit;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 3px 8px;
+  border-radius: 2px;
+  border-left: 3px solid currentColor;
+}
+
+.soldOutBadge {
+  font-family: inherit;
+  position: absolute;
+  bottom: 40px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.85);
+  color: white;
+  padding: 4px 12px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: 2px;
+  z-index: 10;
+}
+
+/* Galeri Noktaları */
+.galleryDots {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  z-index: 10;
+  padding: 6px 10px;
+  background-color: rgba(255,255,255,0.4);
+  backdrop-filter: blur(4px);
+  border-radius: 20px;
+  max-width: 90%;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: rgba(0,0,0,0.2);
+  transition: all 0.2s ease;
+}
+
+.activeDot {
+  width: 18px;
+  background-color: #111;
+  border-radius: 3px;
+}
+
+/* Renk Paletleri (Sol Alt) - Modern Yuvarlak Tasarım */
+.colorPalettes {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  z-index: 15;
+  padding: 4px 8px;
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(8px);
+  border-radius: 20px;
+}
+
+.colorDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  cursor: default;
+}
+
+.moreColors {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .colorPalettes {
+    bottom: 4px;
+    left: 4px;
+    padding: 2px 4px;
+  }
+  .colorDot {
+    width: 8px;
+    height: 8px;
+  }
+  .galleryDots {
+    bottom: 18px;
+    gap: 3px;
+    padding: 4px 8px;
+    max-width: 95%;
+  }
+  .dot {
+    width: 4px;
+    height: 4px;
+  }
+  .activeDot {
+    width: 12px;
+  }
+}
+
+/* Ürün Bilgileri - Normal Boyutlara Dönüş */
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.brand {
+  font-family: inherit;
+  font-size: 0.75rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  margin: 0;
+}
+
+.name {
+  font-family: inherit;
+  font-size: 1.05rem; /* Boyutu normalleştirdik */
+  font-weight: 400;
+  color: #111;
+  margin: 0;
+  line-height: 1.3;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.priceContainer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.3rem;
+  flex-wrap: wrap;
+}
+
+.price {
+  font-family: inherit;
+  font-size: 1.15rem; /* Boyutu normalleştirdik */
+  font-weight: 500;
+  color: #111;
+}
+
+.discountedPrice {
+  font-family: inherit;
+  font-size: 1.15rem; /* Boyutu normalleştirdik */
+  font-weight: 500;
+  color: #cc3333;
+}
+
+.oldPrice {
+  font-family: inherit;
+  font-size: 0.95rem; /* Boyutu normalleştirdik */
+  color: #999;
+  text-decoration: line-through;
+  font-weight: 400;
+}
+
+/* Hover Efektleri */
+.card:hover .image {
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .name {
+    font-size: 0.95rem;
+  }
+  .priceContainer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.1rem;
+    margin-top: 0.3rem;
+  }
+  .price, .discountedPrice {
+    font-size: 1rem;
+  }
+  .oldPrice {
+    font-size: 0.85rem;
+  }
+  .badges {
+    top: 8px;
+    left: 8px;
+    gap: 3px;
+  }
+  .newBadge, .customBadge {
+    font-size: 0.55rem;
+    padding: 2px 5px;
+    border-left-width: 2px;
+  }
+  .soldOutBadge {
+    font-size: 0.6rem;
+    padding: 3px 8px;
+    bottom: 30px;
+  }
+}
+
+.mainPriceRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap; /* Küçük ekranlarda taşmayı önlemek için sarmayı aç */
+}
+
+.startingPrice {
+  font-size: 0.85rem;
+  color: var(--color-primary);
+  font-weight: 600;
+  width: 100%;
+  margin-top: -2px;
+}
+
+@media (max-width: 768px) {
+  .startingPrice {
+    font-size: 0.75rem;
+  }
+}
+
+/* iPhone 5S ve çok dar ekranlar için özel ayar */
+@media (max-width: 360px) {
+  .mainPriceRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.1rem;
+  }
+}

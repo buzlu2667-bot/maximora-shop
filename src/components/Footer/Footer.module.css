@@ -1,0 +1,206 @@
+.footer {
+  background-color: #000;
+  color: #fff;
+  padding: 60px 0 30px;
+  border-top: 1px solid #222;
+  margin-top: 4rem;
+}
+
+.brandHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Ortada grupla */
+  gap: 50px;
+  margin-bottom: 50px;
+}
+
+.logoWrapper {
+  flex-shrink: 0;
+}
+
+.footerLogo {
+  width: 140px; /* Logo büyük kalsın */
+  height: auto;
+  display: block;
+}
+
+.brandText {
+  color: #fff;
+  font-size: 1.15rem;
+  line-height: 1.7;
+  max-width: 700px;
+  text-align: left; /* Yazılar sola yaslı (logonun yanında) */
+}
+
+.brandText p {
+  margin-bottom: 8px;
+}
+
+.brandText strong {
+  font-weight: 700;
+  font-size: 1.3rem;
+  display: inline-block;
+  margin-bottom: 5px;
+}
+
+.separator {
+  width: 100%;
+  height: 1px;
+  background-color: #222;
+  margin-bottom: 50px;
+}
+
+.footerGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  margin-bottom: 50px;
+  padding-left: 10%; /* Sütunları biraz sağa çektik */
+}
+
+.navCol {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.colTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.link {
+  color: #999;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.2s ease;
+}
+
+.link:hover {
+  color: #fff;
+}
+
+.bottomSection {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  gap: 80px;
+  margin-bottom: 50px;
+}
+
+.bottomCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.bottomTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  letter-spacing: 0.05em;
+}
+
+.methodLogos {
+  max-width: 220px;
+  height: auto;
+  opacity: 0.8;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.methodLogos:hover {
+  opacity: 1;
+  transform: translateY(-2px);
+}
+
+.bottomBar {
+  padding-top: 30px;
+  border-top: 1px solid #222;
+}
+
+.bottomBarContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.copy {
+  color: #555;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  margin: 0;
+}
+
+.socialLinks {
+  display: flex;
+  gap: 15px; /* Araları biraz daha daralttık */
+}
+
+.socialIcon {
+  color: #fff;
+  opacity: 0.4; /* Silik, modern bir hava */
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.socialIcon svg {
+  display: block;
+}
+
+.socialIcon:hover {
+  opacity: 1; /* Üzerine gelince canlı */
+  transform: translateY(-2px);
+}
+
+@media (max-width: 992px) {
+  .brandHeader {
+    flex-direction: column;
+    text-align: center;
+    gap: 25px;
+  }
+
+  .brandText {
+    text-align: center;
+    font-size: 1.05rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .footerGrid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    text-align: center;
+    padding-left: 0; /* Mobilde sıfırladık */
+  }
+  
+  .navCol {
+    align-items: center;
+  }
+
+  .bottomSection {
+    flex-direction: column;
+    gap: 50px;
+  }
+
+  .methodLogos {
+    max-width: 180px;
+  }
+
+  .bottomBarContent {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+
+  .socialLinks {
+    justify-content: center;
+  }
+}

@@ -1,0 +1,12 @@
+[
+  {
+    "id": "default-1",
+    "enabled": true,
+    "title": "Öne Çıkanlar",
+    "description": "Müşterilerimiz tarafından özenle ve koşulsuz sevgiyle sevilen bu ürün her bekletiyi karşılıyor",
+    "buttonText": "Keşfet",
+    "buttonLink": "/product/beymen-siyah-kapitone-zincir-detayl-omuz-antas",
+    "image": "/uploads/1777082703408-135530138-1.png",
+    "imagePosition": "right"
+  }
+]

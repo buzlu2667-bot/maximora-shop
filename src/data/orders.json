@@ -1,0 +1,350 @@
+[
+  {
+    "id": "ORD-695673",
+    "userId": "guest",
+    "items": [
+      {
+        "cartItemId": "1776742938303",
+        "product": {
+          "id": "p_1776742139838",
+          "slug": "longchamp-mavi-su-ge-irmez-para-t-kuma-kad-n-antas",
+          "name": "Longchamp Mavi Su Geçirmez Paraşüt Kumaş Kadın Çantası",
+          "price": 1049,
+          "category": "Kadın Aksesuar",
+          "brand": "Maximora",
+          "description": "Şıklık + dayanıklılık bir arada!\nLongchamp mavi kadın çantası, su geçirmez paraşüt kumaşı sayesinde yağmurda bile eşyalarını korur. Hafif yapısı ve katlanabilir tasarımı ile gün boyu rahat kullanım sağlar.\n\n•  Su geçirmez paraşüt kumaş\n•  Ultra hafif ve dayanıklı yapı\n•  El ve omuzda kullanım\n•  Çıkarılabilir uzun askı\n•  Geniş iç hacim\n•  Katlanabilir – seyahat dostu\n\nGünlük kullanım, okul, seyahat ve şehir hayatı için ideal!",
+          "images": [
+            "/uploads/1776742139801-436070319-1.png",
+            "/uploads/1776742139808-511648352-3.png",
+            "/uploads/1776742139811-833225276-6.png"
+          ],
+          "inStock": true,
+          "stockCount": 5,
+          "shopierUrl": "https://www.shopier.com/maximora/46053765",
+          "features": [
+            "paraşüt kumaş",
+            "Su geçirmez"
+          ],
+          "variants": [
+            {
+              "id": "color",
+              "name": "Renk",
+              "options": [
+                "Lacivert"
+              ]
+            }
+          ],
+          "isNew": true
+        },
+        "quantity": 2
+      }
+    ],
+    "totalAmount": 2098,
+    "shippingAddress": "Shopier Address",
+    "paymentMethod": "shopier",
+    "status": "pending",
+    "createdAt": "2026-04-21T03:53:27.480Z"
+  },
+  {
+    "id": "ORD-833589",
+    "userId": "guest",
+    "items": [
+      {
+        "cartItemId": "1776750595504",
+        "product": {
+          "id": "p_1776747763784",
+          "slug": "longchamp-mavi-su-ge-irmez-para-t-kuma-kad-n-antas",
+          "createdAt": "2026-04-21T05:02:43.784Z",
+          "name": "Longchamp Mavi Su Geçirmez Paraşüt Kumaş Kadın Çantası",
+          "price": 1100,
+          "category": "Kadın Aksesuar",
+          "brand": "Maximora",
+          "description": "sdsd",
+          "images": [
+            "/uploads/1776747763667-172799933-2.png",
+            "/uploads/1776747763672-153848847-4.png",
+            "/uploads/1776747763676-12080316-5.png",
+            "/uploads/1776747763678-314267570-7.png",
+            "/uploads/1776747763743-100978648-3.png",
+            "/uploads/1776747763755-235293801-1.png",
+            "/uploads/1776747763761-748000575-6.png",
+            "/uploads/1776747763764-66938230-7.png"
+          ],
+          "inStock": true,
+          "stockCount": 10,
+          "features": [
+            "sdsd"
+          ],
+          "variants": [
+            {
+              "id": "color",
+              "name": "Renk",
+              "options": [
+                "siyah",
+                "lacivert"
+              ],
+              "imageGroups": {
+                "siyah": [
+                  "/uploads/1776747763667-172799933-2.png",
+                  "/uploads/1776747763672-153848847-4.png",
+                  "/uploads/1776747763676-12080316-5.png",
+                  "/uploads/1776747763678-314267570-7.png"
+                ],
+                "lacivert": [
+                  "/uploads/1776747763743-100978648-3.png",
+                  "/uploads/1776747763755-235293801-1.png",
+                  "/uploads/1776747763761-748000575-6.png",
+                  "/uploads/1776747763764-66938230-7.png"
+                ]
+              },
+              "shopierLinks": {
+                "siyah": "https://www.shopier.com/maximora/46053831",
+                "lacivert": "https://www.shopier.com/maximora/46053765"
+              }
+            }
+          ],
+          "badgeColor": "#111111",
+          "oldPrice": 1500,
+          "isFeatured": false,
+          "isNew": true
+        },
+        "quantity": 1,
+        "selectedVariants": {
+          "color": "lacivert"
+        }
+      }
+    ],
+    "totalAmount": 1100,
+    "shippingAddress": "Shopier Address",
+    "paymentMethod": "shopier",
+    "status": "pending",
+    "createdAt": "2026-04-21T05:52:28.963Z"
+  },
+  {
+    "id": "ORD-596645",
+    "userId": "guest",
+    "items": [
+      {
+        "cartItemId": "1776751841535",
+        "product": {
+          "id": "p_1776747763784",
+          "slug": "longchamp-mavi-su-ge-irmez-para-t-kuma-kad-n-antas",
+          "createdAt": "2026-04-21T05:02:43.784Z",
+          "name": "Longchamp Mavi Su Geçirmez Paraşüt Kumaş Kadın Çantası",
+          "price": 1100,
+          "category": "Kadın Aksesuar",
+          "brand": "Maximora",
+          "description": "sdsd",
+          "images": [
+            "/uploads/1776747763667-172799933-2.png",
+            "/uploads/1776747763672-153848847-4.png",
+            "/uploads/1776747763676-12080316-5.png",
+            "/uploads/1776747763678-314267570-7.png",
+            "/uploads/1776747763743-100978648-3.png",
+            "/uploads/1776747763755-235293801-1.png",
+            "/uploads/1776747763761-748000575-6.png",
+            "/uploads/1776747763764-66938230-7.png"
+          ],
+          "inStock": true,
+          "stockCount": 10,
+          "features": [
+            "sdsd"
+          ],
+          "variants": [
+            {
+              "id": "color",
+              "name": "Renk",
+              "options": [
+                "siyah",
+                "lacivert"
+              ],
+              "imageGroups": {
+                "siyah": [
+                  "/uploads/1776747763667-172799933-2.png",
+                  "/uploads/1776747763672-153848847-4.png",
+                  "/uploads/1776747763676-12080316-5.png",
+                  "/uploads/1776747763678-314267570-7.png"
+                ],
+                "lacivert": [
+                  "/uploads/1776747763743-100978648-3.png",
+                  "/uploads/1776747763755-235293801-1.png",
+                  "/uploads/1776747763761-748000575-6.png",
+                  "/uploads/1776747763764-66938230-7.png"
+                ]
+              },
+              "shopierLinks": {
+                "siyah": "https://www.shopier.com/maximora/46053831",
+                "lacivert": "https://www.shopier.com/maximora/46053765"
+              }
+            }
+          ],
+          "badgeColor": "#111111",
+          "oldPrice": 1500,
+          "isFeatured": false,
+          "isNew": true
+        },
+        "quantity": 1,
+        "selectedVariants": {
+          "color": "siyah"
+        }
+      }
+    ],
+    "totalAmount": 1100,
+    "shippingAddress": "Shopier Address",
+    "paymentMethod": "shopier",
+    "status": "pending",
+    "createdAt": "2026-04-21T06:10:58.391Z"
+  },
+  {
+    "id": "ORD-989999",
+    "userId": "guest",
+    "items": [
+      {
+        "cartItemId": "1776752215695",
+        "product": {
+          "id": "p_1776747763784",
+          "slug": "longchamp-mavi-su-ge-irmez-para-t-kuma-kad-n-antas",
+          "createdAt": "2026-04-21T05:02:43.784Z",
+          "name": "Longchamp Mavi Su Geçirmez Paraşüt Kumaş Kadın Çantası",
+          "price": 1100,
+          "category": "Kadın Aksesuar",
+          "brand": "Maximora",
+          "description": "sdsd",
+          "images": [
+            "/uploads/1776747763667-172799933-2.png",
+            "/uploads/1776747763672-153848847-4.png",
+            "/uploads/1776747763676-12080316-5.png",
+            "/uploads/1776747763678-314267570-7.png",
+            "/uploads/1776747763743-100978648-3.png",
+            "/uploads/1776747763755-235293801-1.png",
+            "/uploads/1776747763761-748000575-6.png",
+            "/uploads/1776747763764-66938230-7.png"
+          ],
+          "inStock": true,
+          "stockCount": 10,
+          "features": [
+            "sdsd"
+          ],
+          "variants": [
+            {
+              "id": "color",
+              "name": "Renk",
+              "options": [
+                "siyah",
+                "lacivert"
+              ],
+              "imageGroups": {
+                "siyah": [
+                  "/uploads/1776747763667-172799933-2.png",
+                  "/uploads/1776747763672-153848847-4.png",
+                  "/uploads/1776747763676-12080316-5.png",
+                  "/uploads/1776747763678-314267570-7.png"
+                ],
+                "lacivert": [
+                  "/uploads/1776747763743-100978648-3.png",
+                  "/uploads/1776747763755-235293801-1.png",
+                  "/uploads/1776747763761-748000575-6.png",
+                  "/uploads/1776747763764-66938230-7.png"
+                ]
+              },
+              "shopierLinks": {
+                "siyah": "https://www.shopier.com/maximora/46053831",
+                "lacivert": "https://www.shopier.com/maximora/46053765"
+              }
+            }
+          ],
+          "badgeColor": "#111111",
+          "oldPrice": 1500,
+          "isFeatured": false,
+          "isNew": true
+        },
+        "quantity": 1,
+        "selectedVariants": {
+          "color": "lacivert"
+        }
+      }
+    ],
+    "totalAmount": 1100,
+    "shippingAddress": "Shopier Address",
+    "paymentMethod": "shopier",
+    "status": "pending",
+    "createdAt": "2026-04-21T06:17:03.392Z"
+  },
+  {
+    "id": "ORD-834772",
+    "userId": "guest",
+    "items": [
+      {
+        "cartItemId": "1776752263692",
+        "product": {
+          "id": "p_1776747763784",
+          "slug": "longchamp-mavi-su-ge-irmez-para-t-kuma-kad-n-antas",
+          "createdAt": "2026-04-21T05:02:43.784Z",
+          "name": "Longchamp Mavi Su Geçirmez Paraşüt Kumaş Kadın Çantası",
+          "price": 1100,
+          "category": "Kadın Aksesuar",
+          "brand": "Maximora",
+          "description": "sdsd",
+          "images": [
+            "/uploads/1776747763667-172799933-2.png",
+            "/uploads/1776747763672-153848847-4.png",
+            "/uploads/1776747763676-12080316-5.png",
+            "/uploads/1776747763678-314267570-7.png",
+            "/uploads/1776747763743-100978648-3.png",
+            "/uploads/1776747763755-235293801-1.png",
+            "/uploads/1776747763761-748000575-6.png",
+            "/uploads/1776747763764-66938230-7.png"
+          ],
+          "inStock": true,
+          "stockCount": 10,
+          "features": [
+            "sdsd"
+          ],
+          "variants": [
+            {
+              "id": "color",
+              "name": "Renk",
+              "options": [
+                "siyah",
+                "lacivert"
+              ],
+              "imageGroups": {
+                "siyah": [
+                  "/uploads/1776747763667-172799933-2.png",
+                  "/uploads/1776747763672-153848847-4.png",
+                  "/uploads/1776747763676-12080316-5.png",
+                  "/uploads/1776747763678-314267570-7.png"
+                ],
+                "lacivert": [
+                  "/uploads/1776747763743-100978648-3.png",
+                  "/uploads/1776747763755-235293801-1.png",
+                  "/uploads/1776747763761-748000575-6.png",
+                  "/uploads/1776747763764-66938230-7.png"
+                ]
+              },
+              "shopierLinks": {
+                "siyah": "https://www.shopier.com/maximora/46053831",
+                "lacivert": "https://www.shopier.com/maximora/46053765"
+              }
+            }
+          ],
+          "badgeColor": "#111111",
+          "oldPrice": 1500,
+          "isFeatured": false,
+          "isNew": true
+        },
+        "quantity": 1,
+        "selectedVariants": {
+          "color": "lacivert"
+        }
+      }
+    ],
+    "totalAmount": 1100,
+    "shippingAddress": "burak agarak\nesentepe\ntepebaşı / eskişehir ",
+    "customerEmail": "buzlu2667@gmail.com",
+    "customerPhone": "5384657526",
+    "paymentMethod": "iban",
+    "status": "pending",
+    "createdAt": "2026-04-21T06:18:35.858Z"
+  }
+]

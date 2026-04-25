@@ -1,0 +1,224 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+}
+
+.searchBarArea {
+  background: #fff;
+  padding: 25px 0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 10001;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.inputWrapper {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 15px 60px 15px 30px;
+  border: 1px solid #eee;
+  border-radius: 50px; /* Eski sevdiğimiz geniş yuvarlak yapı */
+  font-size: 1.1rem;
+  color: #111;
+  outline: none;
+  transition: all 0.3s ease;
+  background: #f9f9f9;
+}
+
+.searchInput:focus {
+  border-color: #d4af37;
+  background: #fff;
+  box-shadow: 0 0 0 5px rgba(212, 175, 55, 0.05);
+}
+
+.searchIconGroup {
+  position: absolute;
+  right: 25px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #999;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  padding: 8px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+}
+
+.closeBtn:hover {
+  color: #000;
+  transform: rotate(90deg);
+}
+
+/* Dropdown Results Box */
+.dropdown {
+  position: absolute;
+  top: calc(100% + 15px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 1000px;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+  display: flex;
+  max-height: 65vh;
+  overflow: hidden;
+  border: 1px solid #f0f0f0;
+  animation: dropdownSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes dropdownSlideUp {
+  from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.suggestionsCol {
+  width: 280px;
+  background: #fafafa;
+  border-right: 1px solid #f0f0f0;
+  padding: 30px;
+}
+
+.productsCol {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto;
+}
+
+.colTitle {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #bbb;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 25px;
+  display: block;
+}
+
+.suggestionItem {
+  display: block;
+  padding: 12px 0;
+  color: #444;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.suggestionItem:hover {
+  color: #d4af37;
+  padding-left: 5px;
+}
+
+.productList {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.productCard {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  text-decoration: none;
+  padding: 15px;
+  border-radius: 16px;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.productCard:hover {
+  background: #fff;
+  border-color: #eee;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.productImg {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  border-radius: 12px;
+  background: transparent;
+}
+
+.productInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.productName {
+  font-weight: 600;
+  color: #111;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.priceWrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.oldPrice {
+  text-decoration: line-through;
+  color: #999; /* Bir tık daha koyu yaptık ki iyice belli olsun */
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.newPrice {
+  color: #d4af37; /* Gold renk daha asil durur */
+  font-weight: 800;
+  font-size: 1.05rem;
+}
+
+.noResults {
+  text-align: center;
+  color: #999;
+  padding: 60px 0;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 850px) {
+  .dropdown {
+    flex-direction: column;
+    max-height: 75vh;
+    width: 95%;
+  }
+  .suggestionsCol {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #f0f0f0;
+    padding: 20px;
+  }
+}

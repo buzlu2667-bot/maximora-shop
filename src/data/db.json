@@ -1,0 +1,194 @@
+[
+  {
+    "id": "p_1",
+    "name": "Hakiki Deri Omuz Çantası",
+    "slug": "hakiki-deri-omuz-cantasi",
+    "description": "Günlük hayatınızda zarif bir dokunuş. En saf deri kalitesi ile üretildi. Uzun ömürlü, aşınmaya ekstra dayanıklı yapısıyla size yıllar boyu şıklık katar.",
+    "price": 3200,
+    "category": "Çanta",
+    "images": [
+      "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1584916201218-f4242ceb4809?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    ],
+    "inStock": true,
+    "stockCount": 15,
+    "isNew": true,
+    "shopierUrl": "https://shopier.com/123456"
+  },
+  {
+    "id": "p_2",
+    "name": "Minimalist Çapraz Çanta",
+    "slug": "minimalist-capraz-canta",
+    "description": "Sadece ihtiyacınız olan mataryeller için minimalist form. Üst kalite kanvas ve deri karışımı.",
+    "price": 2400,
+    "discountedPrice": 1950,
+    "category": "Çanta",
+    "images": [
+      "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    ],
+    "inStock": true,
+    "stockCount": 12
+  },
+  {
+    "id": "p_3",
+    "name": "Vizon Deri Evrak Çantası",
+    "slug": "vizon-deri-evrak-cantasi",
+    "description": "Profesyoneller için özel dikim, laptop ve evraklar için lüks çözüm.",
+    "price": 4500,
+    "category": "Çanta",
+    "images": [
+      "https://images.unsplash.com/photo-1584916201218-f4242ceb4809?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    ],
+    "inStock": true,
+    "stockCount": 5
+  },
+  {
+    "id": "p_1776740799831",
+    "slug": "test-canta",
+    "name": "test canta",
+    "price": 1500,
+    "category": "Kadın Aksesuar",
+    "brand": "Maximora",
+    "description": "Admin panelinden yeni eklenen lüks ürün tasarımı.",
+    "images": [
+      "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+    ],
+    "inStock": true,
+    "stockCount": 10,
+    "isNew": true
+  },
+  {
+    "id": "p_1776741486669",
+    "slug": "tes-5-anta",
+    "name": "tes 5 çanta ",
+    "price": 2000,
+    "category": "Kadın Aksesuar",
+    "brand": "Beymen",
+    "description": "seni seviyorum",
+    "images": [
+      "/uploads/1776741486576-316500801-1.png",
+      "/uploads/1776741486583-612649771-2.png",
+      "/uploads/1776741486621-184837447-3.png",
+      "/uploads/1776741486632-11844121-4.png",
+      "/uploads/1776741486637-44254202-5.png"
+    ],
+    "inStock": true,
+    "stockCount": 5,
+    "features": [
+      "hakiki deri",
+      "süper"
+    ],
+    "variants": [
+      {
+        "id": "color",
+        "name": "Renk",
+        "options": [
+          "siyah",
+          "kırmızı"
+        ]
+      }
+    ],
+    "isNew": true,
+    "shopierUrl": "https://www.shopier.com/maximora/45973291",
+    "badgeColor": "#111111",
+    "isFeatured": false
+  },
+  {
+    "id": "p_1776745117979",
+    "slug": "vakko-anta",
+    "createdAt": "2026-04-21T04:18:37.979Z",
+    "name": "vakko çanta",
+    "price": 2000,
+    "category": "Kadın Aksesuar",
+    "brand": "Vakko",
+    "description": "sada",
+    "images": [
+      "/uploads/1776745117936-395941497-2.png",
+      "/uploads/1776745117945-947002115-5.png",
+      "/uploads/1776745117948-132502760-3.png",
+      "/uploads/1776745117952-181596278-4.png",
+      "/uploads/1776745117957-760144091-1.png",
+      "/uploads/1776745117961-109094973-6.png"
+    ],
+    "inStock": false,
+    "stockCount": 0,
+    "shopierUrl": "https://www.shopier.com/maximora/45973512",
+    "features": [
+      "asdsad"
+    ],
+    "variants": [
+      {
+        "id": "color",
+        "name": "Renk",
+        "options": [
+          "krem"
+        ]
+      }
+    ],
+    "badgeColor": "#d701f4",
+    "oldPrice": 2500,
+    "isFeatured": true,
+    "isNew": true,
+    "badgeText": "Özel "
+  },
+  {
+    "id": "p_1776747763784",
+    "slug": "longchamp-mavi-su-ge-irmez-para-t-kuma-kad-n-antas",
+    "createdAt": "2026-04-21T05:02:43.784Z",
+    "name": "Longchamp Mavi Su Geçirmez Paraşüt Kumaş Kadın Çantası",
+    "price": 1100,
+    "category": "Kadın Aksesuar",
+    "brand": "Maximora",
+    "description": "sdsd",
+    "images": [
+      "/uploads/1776747763667-172799933-2.png",
+      "/uploads/1776747763672-153848847-4.png",
+      "/uploads/1776747763676-12080316-5.png",
+      "/uploads/1776747763678-314267570-7.png",
+      "/uploads/1776747763743-100978648-3.png",
+      "/uploads/1776747763755-235293801-1.png",
+      "/uploads/1776747763761-748000575-6.png",
+      "/uploads/1776747763764-66938230-7.png"
+    ],
+    "inStock": true,
+    "stockCount": 10,
+    "features": [
+      "sdsd"
+    ],
+    "variants": [
+      {
+        "id": "color",
+        "name": "Renk",
+        "options": [
+          "siyah",
+          "lacivert"
+        ],
+        "imageGroups": {
+          "siyah": [
+            "/uploads/1776747763667-172799933-2.png",
+            "/uploads/1776747763672-153848847-4.png",
+            "/uploads/1776747763676-12080316-5.png",
+            "/uploads/1776747763678-314267570-7.png"
+          ],
+          "lacivert": [
+            "/uploads/1776747763743-100978648-3.png",
+            "/uploads/1776747763755-235293801-1.png",
+            "/uploads/1776747763761-748000575-6.png",
+            "/uploads/1776747763764-66938230-7.png"
+          ]
+        },
+        "shopierLinks": {
+          "siyah": "https://www.shopier.com/maximora/46053831",
+          "lacivert": "https://www.shopier.com/maximora/46053765"
+        }
+      }
+    ],
+    "badgeColor": "#111111",
+    "oldPrice": 1500,
+    "isFeatured": false,
+    "isNew": true
+  }
+]
