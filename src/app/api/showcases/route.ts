@@ -44,26 +44,34 @@ export async function POST(request: Request) {
     });
 
 
-    // Önce hepsini silip yeniden ekle (sync)
-    const { error: delError } = await supabaseAdmin.from('showcases').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+    // Önce hepsini sil (sync için en temizi bu)
+    // .gt('display_order', -1) her zaman doğru olacağı için tüm satırları siler
+    const { error: delError } = await supabaseAdmin
+      .from('showcases')
+      .delete()
+      .gt('display_order', -1);
+
     if (delError) {
       console.error('Delete error:', delError.message);
-      throw delError;
+      return NextResponse.json({ error: `Silme hatası: ${delError.message}` }, { status: 500 });
     }
 
-    const { error } = await supabaseAdmin
-      .from('showcases')
-      .insert(rows);
+    if (rows.length > 0) {
+      const { error: insError } = await supabaseAdmin
+        .from('showcases')
+        .insert(rows);
 
-    if (error) {
-      console.error('Insert error:', error.message);
-      throw error;
+      if (insError) {
+        console.error('Insert error:', insError.message);
+        return NextResponse.json({ error: `Ekleme hatası: ${insError.message}` }, { status: 500 });
+      }
     }
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
     console.error('Showcases API Catch:', error.message);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: `Beklenmedik hata: ${error.message}` }, { status: 500 });
   }
+
 
 }
