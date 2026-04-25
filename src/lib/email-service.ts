@@ -1,4 +1,6 @@
 import { resend } from './resend';
+// Deployment trigger for environment variables sync
+
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'info@maximora.store';
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'MAXIMORA <onboarding@resend.dev>';
