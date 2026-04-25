@@ -39,16 +39,22 @@ export function rowToProduct(row: any): Product {
   };
 }
 
-export async function getProducts() {
-  const { data, error } = await supabaseAdmin
-    .from('products')
-    .select('*')
-    .order('in_stock', { ascending: false })
-    .order('created_at', { ascending: false });
+import { unstable_cache } from 'next/cache';
 
-  if (error) throw error;
-  return (data || []).map(rowToProduct);
-}
+export const getProducts = unstable_cache(
+  async () => {
+    const { data, error } = await supabaseAdmin
+      .from('products')
+      .select('*')
+      .order('in_stock', { ascending: false })
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return (data || []).map(rowToProduct);
+  },
+  ['all-products'],
+  { revalidate: 60, tags: ['products'] }
+);
 
 export async function getProductBySlug(slug: string) {
   const { data, error } = await supabaseAdmin

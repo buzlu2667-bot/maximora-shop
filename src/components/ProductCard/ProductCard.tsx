@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Product } from '@/types';
 import styles from './ProductCard.module.css';
 import { Heart } from 'lucide-react';
@@ -85,12 +86,15 @@ export default function ProductCard({ product, inSlider = false }: ProductCardPr
         <Link href={`/product/${product.slug}`}>
           <div className={styles.imageContainer}>
             {images.map((img, idx) => (
-              <img 
+              <Image 
                 key={idx}
                 src={img} 
                 alt={`${product.name} - ${idx + 1}`} 
                 className={`${styles.image} ${idx === currentImageIndex ? styles.activeImage : ''}`}
-                loading={idx === 0 ? "eager" : "lazy"}
+                fill
+                sizes="(max-width: 768px) 50vw, 33vw"
+                priority={idx === 0}
+                style={{ objectFit: 'cover' }}
               />
             ))}
           </div>
