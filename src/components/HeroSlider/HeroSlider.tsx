@@ -44,8 +44,7 @@ const DEFAULT_SLIDES: Slide[] = [
 
 export default function HeroSlider() {
   const [current, setCurrent] = useState(0);
-  const [slides, setSlides] = useState<Slide[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [slides, setSlides] = useState<Slide[]>(DEFAULT_SLIDES); // Start with defaults
   const router = useRouter();
 
   useEffect(() => {
@@ -56,16 +55,10 @@ export default function HeroSlider() {
           const data = await res.json();
           if (data && data.length > 0) {
             setSlides(data);
-          } else {
-            setSlides(DEFAULT_SLIDES);
           }
-        } else {
-          setSlides(DEFAULT_SLIDES);
         }
       } catch (e) {
-        setSlides(DEFAULT_SLIDES);
-      } finally {
-        setLoading(false);
+        console.error("Slider fetch error:", e);
       }
     };
     fetchSlides();
@@ -82,7 +75,6 @@ export default function HeroSlider() {
     return () => clearInterval(timer);
   }, [current, slides.length]);
 
-  if (loading) return <div className={styles.slider} style={{ backgroundColor: '#111' }}></div>;
   if (slides.length === 0) return null;
 
   return (
@@ -95,14 +87,23 @@ export default function HeroSlider() {
           <div
             key={slide.id || index}
             className={`${styles.slide} ${index === current ? styles.active : ''}`}
-            style={{ backgroundImage: `url(${slide.image})`, cursor: (!hasText && slide.link) ? 'pointer' : 'default' }}
             onClick={() => {
               if (!hasText && slide.link) {
                 router.push(slide.link);
               }
             }}
+            style={{ cursor: (!hasText && slide.link) ? 'pointer' : 'default' }}
           >
-            {/* Yazı yoksa karartmayı daha az tut */}
+            {/* Optimized Image Component/Tag */}
+            <img 
+              src={slide.image} 
+              alt={slide.title || "Slider Image"} 
+              className={styles.slideImage}
+              style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+              fetchPriority={index === 0 ? "high" : "auto"}
+              loading={index === 0 ? "eager" : "lazy"}
+            />
+
             <div className={styles.overlay} style={{ opacity: hasText ? 1 : 0.2 }}></div>
 
             {hasText && (
@@ -122,7 +123,6 @@ export default function HeroSlider() {
 
       {slides.length > 1 && (
         <>
-          {/* Ok Yönlendirmeleri */}
           <button className={`${styles.arrow} ${styles.arrowLeft}`} onClick={prevSlide} aria-label="Önceki Slayt">
             <ChevronLeft size={36} />
           </button>
@@ -145,3 +145,4 @@ export default function HeroSlider() {
     </div>
   );
 }
+
