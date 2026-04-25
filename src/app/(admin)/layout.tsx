@@ -106,6 +106,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link href="/marlboro/showcases" style={{ color: '#d4af37', textDecoration: 'none', fontWeight: 'bold' }}>Vitrin Yönetimi</Link>
           <Link href="/marlboro/slider" style={{ color: '#d4af37', textDecoration: 'none', fontWeight: 'bold' }}>Slider Yönetimi</Link>
           <Link href="/marlboro/promo-block" style={{ color: '#d4af37', textDecoration: 'none', fontWeight: 'bold' }}>Tanıtım Bloğu (Banner)</Link>
+          <Link href="/marlboro/popup" style={{ color: '#d4af37', textDecoration: 'none', fontWeight: 'bold' }}>Duyuru Popup</Link>
           <Link href="/marlboro/users" style={{ color: '#ccc', textDecoration: 'none' }}>Kullanıcılar</Link>
           <Link href="/marlboro/messages" style={{ color: '#ccc', textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
             Gelen Mesajlar <MessageBadge />
