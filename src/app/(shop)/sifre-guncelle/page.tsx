@@ -42,9 +42,13 @@ export default function UpdatePasswordPage() {
     try {
       const { error } = await supabase.auth.updateUser({ password });
       if (error) throw error;
+
+      toast.success('Şifreniz başarıyla güncellendi! Giriş yapıldı, yönlendiriliyorsunuz... ✨');
       
-      toast.success('Şifreniz başarıyla güncellendi.');
-      router.push('/login');
+      // Mesajın görülmesi için kısa bir gecikme
+      setTimeout(() => {
+        router.push('/');
+      }, 1500);
     } catch (err: any) {
       toast.error(err.message || 'Bir hata oluştu.');
     } finally {
