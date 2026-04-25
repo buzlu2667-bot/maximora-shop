@@ -7,13 +7,26 @@ import MessageBadge from './_components/MessageBadge';
 import OrderBadge from './_components/OrderBadge';
 import { useStore } from '@/store/useStore';
 
+const SIDEBAR_LINKS = [
+  { href: '/marlboro', label: 'Panel Özeti', color: '#ccc', bold: false },
+  { href: '/marlboro/products', label: 'Ürünler Listesi', color: '#ccc', bold: false },
+  { href: '/marlboro/products/new', label: 'Yeni Ürün Ekle', color: '#ccc', bold: false },
+  { href: '/marlboro/coupons', label: 'Kuponlar', color: '#ccc', bold: false },
+  { href: '/marlboro/showcases', label: 'Vitrin Yönetimi', color: '#d4af37', bold: true },
+  { href: '/marlboro/slider', label: 'Slider Yönetimi', color: '#d4af37', bold: true },
+  { href: '/marlboro/promo-block', label: 'Tanıtım Bloğu (Banner)', color: '#d4af37', bold: true },
+  { href: '/marlboro/popup', label: 'Duyuru Popup', color: '#d4af37', bold: true },
+  { href: '/marlboro/users', label: 'Kullanıcılar', color: '#ccc', bold: false },
+  { href: '/marlboro/settings', label: 'Site Ayarları', color: '#ccc', bold: false },
+];
+
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const { user } = useStore();
   const [password, setPassword] = useState('');
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [error, setError] = useState('');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Eğer kullanıcı zaten admin ise direkt geçiş ver
   const isAdmin = user?.role === 'admin';
 
   const handleLogin = (e: React.FormEvent) => {
@@ -26,17 +39,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     }
   };
 
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  // Admin değilse ve henüz şifre girmemişse şifre ekranını göster
   if (!isAdmin && !isAuthorized) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        minHeight: '100vh', 
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        backgroundColor: '#111', 
+      <div style={{
+        display: 'flex',
+        minHeight: '100vh',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#111',
         color: 'white',
         flexDirection: 'column',
         gap: '2rem',
@@ -48,18 +58,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <h2 style={{ fontSize: '1.8rem', marginBottom: '0.5rem' }}>Gizli Bölge</h2>
           <p style={{ color: '#888' }}>Devam etmek için şifre gerekli</p>
         </div>
-        
         <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%', maxWidth: '320px' }}>
-          <input 
-            type="password" 
-            placeholder="Şifreyi gir kanka..." 
+          <input
+            type="password"
+            placeholder="Şifreyi gir kanka..."
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            style={{ 
-              padding: '14px', 
-              borderRadius: '10px', 
-              border: '1px solid #333', 
-              backgroundColor: '#1a1a1a', 
+            style={{
+              padding: '14px',
+              borderRadius: '10px',
+              border: '1px solid #333',
+              backgroundColor: '#1a1a1a',
               color: 'white',
               fontSize: '1rem',
               outline: 'none',
@@ -69,24 +78,22 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             autoFocus
           />
           {error && <p style={{ color: '#ef4444', fontSize: '0.9rem', textAlign: 'center' }}>{error}</p>}
-          <button 
+          <button
             type="submit"
-            style={{ 
-              padding: '14px', 
-              borderRadius: '10px', 
-              backgroundColor: '#d4af37', 
-              color: 'black', 
+            style={{
+              padding: '14px',
+              borderRadius: '10px',
+              backgroundColor: '#d4af37',
+              color: 'black',
               fontWeight: 'bold',
               cursor: 'pointer',
               border: 'none',
               fontSize: '1rem',
-              transition: 'opacity 0.2s'
             }}
           >
             Giriş Yap
           </button>
         </form>
-        
         <Link href="/" style={{ color: '#888', fontSize: '0.9rem', textDecoration: 'none', marginTop: '1rem' }}>
           ← Ana Sayfaya Dön
         </Link>
@@ -94,116 +101,198 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     );
   }
 
+  const SidebarContent = ({ onLinkClick }: { onLinkClick?: () => void }) => (
+    <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+      {SIDEBAR_LINKS.slice(0, 4).map(link => (
+        <Link key={link.href} href={link.href} onClick={onLinkClick}
+          style={{ color: link.color, textDecoration: 'none', fontWeight: link.bold ? 'bold' : 'normal', padding: '0.6rem 0.4rem' }}>
+          {link.label}
+        </Link>
+      ))}
+
+      <Link href="/marlboro/orders" onClick={onLinkClick}
+        style={{ color: '#ccc', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 0.4rem' }}>
+        Siparişler <OrderBadge />
+      </Link>
+
+      <div style={{ margin: '0.75rem 0', height: '1px', backgroundColor: '#333' }} />
+
+      {SIDEBAR_LINKS.slice(4, 8).map(link => (
+        <Link key={link.href} href={link.href} onClick={onLinkClick}
+          style={{ color: link.color, textDecoration: 'none', fontWeight: link.bold ? 'bold' : 'normal', padding: '0.6rem 0.4rem' }}>
+          {link.label}
+        </Link>
+      ))}
+
+      <div style={{ margin: '0.75rem 0', height: '1px', backgroundColor: '#333' }} />
+
+      {SIDEBAR_LINKS.slice(8).map(link => (
+        <Link key={link.href} href={link.href} onClick={onLinkClick}
+          style={{ color: link.color, textDecoration: 'none', fontWeight: link.bold ? 'bold' : 'normal', padding: '0.6rem 0.4rem' }}>
+          {link.label}
+        </Link>
+      ))}
+
+      <Link href="/marlboro/messages" onClick={onLinkClick}
+        style={{ color: '#ccc', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 0.4rem' }}>
+        Gelen Mesajlar <MessageBadge />
+      </Link>
+
+      <Link href="/marlboro/send-email" onClick={onLinkClick}
+        style={{ color: '#d4af37', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.6rem', fontWeight: 'bold', padding: '0.6rem 0.4rem' }}>
+        <Mail size={16} /> E-posta Gönder
+      </Link>
+
+      <div style={{ marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid #333' }}>
+        <Link href="/" style={{ color: '#d4af37', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.9rem' }}>
+          <ArrowLeft size={16} /> Siteye Dön
+        </Link>
+      </div>
+    </nav>
+  );
+
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f4f4f4', flexDirection: 'column' }}>
-      
-      {/* Mobil Header */}
-      <header style={{ 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'space-between', 
-        padding: '1rem 1.5rem', 
-        backgroundColor: '#111', 
-        color: 'white',
-        position: 'sticky',
-        top: 0,
-        zIndex: 1000,
-        borderBottom: '1px solid #222'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <button 
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', padding: 0, display: 'flex' }}
-          >
-            {isSidebarOpen ? <ArrowLeft size={24} /> : <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-              <div style={{ width: '20px', height: '2px', backgroundColor: '#d4af37' }}></div>
-              <div style={{ width: '15px', height: '2px', backgroundColor: '#d4af37' }}></div>
-              <div style={{ width: '20px', height: '2px', backgroundColor: '#d4af37' }}></div>
-            </div>}
-          </button>
-          <h1 style={{ fontSize: '1.1rem', fontWeight: 800, margin: 0, letterSpacing: '1px' }}>MAXIMORA <span style={{ color: '#d4af37' }}>ADM</span></h1>
-        </div>
-        
-        <div style={{ display: 'flex', gap: '1rem' }}>
-          <Link href="/marlboro/messages" style={{ color: 'white' }}><MessageBadge /></Link>
-          <Link href="/marlboro/orders" style={{ color: 'white' }}><OrderBadge /></Link>
-        </div>
-      </header>
+    <>
+      <style>{`
+        /* PC: klasik sidebar düzeni */
+        .admin-wrapper {
+          display: flex;
+          min-height: 100vh;
+          background-color: #f4f4f4;
+        }
+        .admin-mobile-header { display: none; }
+        .admin-sidebar-desktop {
+          width: 250px;
+          background-color: #111;
+          color: white;
+          padding: 2rem;
+          flex-shrink: 0;
+          min-height: 100vh;
+        }
+        .admin-sidebar-desktop h2 {
+          color: white;
+          margin-bottom: 2rem;
+          font-size: 1.5rem;
+          border-bottom: 1px solid #333;
+          padding-bottom: 1rem;
+        }
+        .admin-main {
+          flex: 1;
+          padding: 2rem;
+          overflow-y: auto;
+          overflow-x: hidden;
+        }
+        /* Mobil drawer - sadece mobilde görünür */
+        .admin-mobile-overlay { display: none; }
+        .admin-sidebar-mobile { display: none; }
 
-      <div style={{ display: 'flex', flex: 1, position: 'relative' }}>
-        {/* Admin Sidebar (Drawer on mobile, fixed on large screens via CSS logic) */}
-        <aside style={{ 
-          width: '280px', 
-          backgroundColor: '#111', 
-          color: 'white', 
-          padding: '2rem 1.5rem', 
-          flexShrink: 0,
-          position: 'fixed',
-          top: '60px',
-          bottom: 0,
-          left: isSidebarOpen ? '0' : '-280px',
-          zIndex: 999,
-          transition: 'left 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-          overflowY: 'auto',
-          boxShadow: isSidebarOpen ? '20px 0 50px rgba(0,0,0,0.5)' : 'none'
-        }}>
-          <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            <Link href="/marlboro" onClick={() => setIsSidebarOpen(false)} style={{ color: '#ccc', textDecoration: 'none', padding: '0.8rem', borderRadius: '8px', backgroundColor: 'rgba(255,255,255,0.05)' }}>Panel Özeti</Link>
-            <Link href="/marlboro/products" onClick={() => setIsSidebarOpen(false)} style={{ color: '#ccc', textDecoration: 'none', padding: '0.8rem' }}>Ürünler Listesi</Link>
-            <Link href="/marlboro/products/new" onClick={() => setIsSidebarOpen(false)} style={{ color: '#ccc', textDecoration: 'none', padding: '0.8rem' }}>Yeni Ürün Ekle</Link>
-            <Link href="/marlboro/orders" onClick={() => setIsSidebarOpen(false)} style={{ color: '#ccc', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.8rem' }}>
-              <span>Siparişler</span> <OrderBadge />
-            </Link>
-            <Link href="/marlboro/coupons" onClick={() => setIsSidebarOpen(false)} style={{ color: '#ccc', textDecoration: 'none', padding: '0.8rem' }}>Kuponlar</Link>
-            
-            <div style={{ margin: '1rem 0', height: '1px', backgroundColor: '#222' }}></div>
-            
-            <Link href="/marlboro/showcases" onClick={() => setIsSidebarOpen(false)} style={{ color: '#d4af37', textDecoration: 'none', fontWeight: 'bold', padding: '0.8rem' }}>Vitrin Yönetimi</Link>
-            <Link href="/marlboro/slider" onClick={() => setIsSidebarOpen(false)} style={{ color: '#d4af37', textDecoration: 'none', fontWeight: 'bold', padding: '0.8rem' }}>Slider Yönetimi</Link>
-            <Link href="/marlboro/promo-block" onClick={() => setIsSidebarOpen(false)} style={{ color: '#d4af37', textDecoration: 'none', fontWeight: 'bold', padding: '0.8rem' }}>Tanıtım Bloğu</Link>
-            <Link href="/marlboro/popup" onClick={() => setIsSidebarOpen(false)} style={{ color: '#d4af37', textDecoration: 'none', fontWeight: 'bold', padding: '0.8rem' }}>Duyuru Popup</Link>
-            
-            <div style={{ margin: '1rem 0', height: '1px', backgroundColor: '#222' }}></div>
+        /* MOBİL */
+        @media (max-width: 768px) {
+          .admin-wrapper { flex-direction: column; }
 
-            <Link href="/marlboro/users" onClick={() => setIsSidebarOpen(false)} style={{ color: '#ccc', textDecoration: 'none', padding: '0.8rem' }}>Kullanıcılar</Link>
-            <Link href="/marlboro/messages" onClick={() => setIsSidebarOpen(false)} style={{ color: '#ccc', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.8rem' }}>
-              <span>Gelen Mesajlar</span> <MessageBadge />
-            </Link>
-            <Link href="/marlboro/send-email" onClick={() => setIsSidebarOpen(false)} style={{ color: '#d4af37', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '0.8rem' }}>
-              <Mail size={16} /> E-posta Gönder
-            </Link>
-            <Link href="/marlboro/settings" onClick={() => setIsSidebarOpen(false)} style={{ color: '#ccc', textDecoration: 'none', padding: '0.8rem' }}>Site Ayarları</Link>
-            
-            <div style={{ marginTop: '2rem', paddingTop: '1rem', borderTop: '1px solid #222' }}>
-              <Link href="/" style={{ color: '#d4af37', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.9rem', padding: '0.8rem' }}>
-                <ArrowLeft size={16} /> Siteye Dön
-              </Link>
-            </div>
-          </nav>
+          /* Masaüstü sidebar gizle */
+          .admin-sidebar-desktop { display: none; }
+
+          /* Mobil header göster */
+          .admin-mobile-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.25rem;
+            background-color: #111;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #222;
+          }
+
+          .admin-main {
+            padding: 1rem;
+          }
+
+          /* Mobil drawer sidebar */
+          .admin-sidebar-mobile {
+            display: block;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: -280px;
+            width: 280px;
+            background-color: #111;
+            color: white;
+            padding: 1.5rem;
+            z-index: 1001;
+            overflow-y: auto;
+            transition: left 0.3s ease;
+          }
+          .admin-sidebar-mobile.open {
+            left: 0;
+            box-shadow: 5px 0 30px rgba(0,0,0,0.5);
+          }
+
+          .admin-mobile-overlay {
+            display: block;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 1000;
+            backdrop-filter: blur(2px);
+          }
+        }
+      `}</style>
+
+      <div className="admin-wrapper">
+
+        {/* MOBİL HEADER - sadece mobilde görünür */}
+        <header className="admin-mobile-header">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <button
+              onClick={() => setIsMobileMenuOpen(true)}
+              style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', padding: 0, display: 'flex', flexDirection: 'column', gap: '5px' }}
+              aria-label="Menüyü Aç"
+            >
+              <div style={{ width: '22px', height: '2px', backgroundColor: '#d4af37' }} />
+              <div style={{ width: '16px', height: '2px', backgroundColor: '#d4af37' }} />
+              <div style={{ width: '22px', height: '2px', backgroundColor: '#d4af37' }} />
+            </button>
+            <span style={{ fontWeight: 800, fontSize: '1rem', letterSpacing: '1px' }}>
+              MAXIMORA <span style={{ color: '#d4af37' }}>YÖNETİM</span>
+            </span>
+          </div>
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            <Link href="/marlboro/messages" style={{ color: 'white' }}><MessageBadge /></Link>
+            <Link href="/marlboro/orders" style={{ color: 'white' }}><OrderBadge /></Link>
+          </div>
+        </header>
+
+        {/* MOBİL DRAWER */}
+        {isMobileMenuOpen && (
+          <div className="admin-mobile-overlay" onClick={() => setIsMobileMenuOpen(false)} />
+        )}
+        <aside className={`admin-sidebar-mobile ${isMobileMenuOpen ? 'open' : ''}`}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', paddingBottom: '1rem', borderBottom: '1px solid #333' }}>
+            <span style={{ color: 'white', fontWeight: 800, fontSize: '1rem' }}>MAXIMORA YÖNETİM</span>
+            <button onClick={() => setIsMobileMenuOpen(false)}
+              style={{ background: 'none', border: 'none', color: '#d4af37', cursor: 'pointer', fontSize: '1.5rem', lineHeight: 1 }}>
+              ✕
+            </button>
+          </div>
+          <SidebarContent onLinkClick={() => setIsMobileMenuOpen(false)} />
         </aside>
 
-        {/* Overlay for mobile sidebar */}
-        {isSidebarOpen && (
-          <div 
-            onClick={() => setIsSidebarOpen(false)}
-            style={{ 
-              position: 'fixed', 
-              top: '60px', 
-              left: 0, 
-              right: 0, 
-              bottom: 0, 
-              backgroundColor: 'rgba(0,0,0,0.5)', 
-              zIndex: 998,
-              backdropFilter: 'blur(2px)'
-            }}
-          />
-        )}
+        {/* MASAÜSTÜ SIDEBAR - sadece PC'de görünür */}
+        <aside className="admin-sidebar-desktop">
+          <h2>MAXIMORA Yönetim</h2>
+          <SidebarContent />
+        </aside>
 
-        {/* Admin Content */}
-        <main style={{ flex: 1, padding: '1.5rem', width: '100%', overflowX: 'hidden' }}>
+        {/* ANA İÇERİK */}
+        <main className="admin-main">
           {children}
         </main>
+
       </div>
-    </div>
+    </>
   );
 }
