@@ -25,7 +25,9 @@ export async function GET() {
 
     return NextResponse.json({ 
       success: true, 
-      message: 'Test maili denendi! Aşağıdaki bilgilere bak kanka.',
+      version: '2.0.0',
+      timestamp: new Date().toISOString(),
+      message: 'Test maili denendi! (Versiyon 2) Aşağıdaki bilgilere bak kanka.',
       config: {
         using_from: from,
         using_to: to,
@@ -33,6 +35,7 @@ export async function GET() {
       },
       data 
     });
+
   } catch (error: any) {
     console.error('Test Email Error:', error);
     const from = process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev';
