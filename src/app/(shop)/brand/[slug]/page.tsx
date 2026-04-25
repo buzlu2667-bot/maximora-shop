@@ -4,6 +4,8 @@ import { Product } from '@/types';
 import Link from 'next/link';
 import { getProducts } from '@/lib/data';
 
+export const revalidate = 60; // 60 saniyede bir sayfayı arka planda tazele (ISR)
+
 // Component receives the dynamic route segment [slug]
 export default async function BrandPage(props: { params: Promise<{ slug: string }> }) {
   const params = await props.params;

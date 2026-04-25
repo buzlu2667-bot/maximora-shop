@@ -117,16 +117,24 @@ export default function ClientProductDetails({ product }: Props) {
   };
 
   const handleAddToCart = () => {
-    addToCart(product, quantity, selectedVariants);
-    toast.success(`${product.name} — ${quantity} adet sepete eklendi!`, {
-      icon: '🛍️',
-      style: { borderRadius: '10px', background: '#333', color: '#fff' }
-    });
+    try {
+      addToCart(product, quantity, selectedVariants);
+      toast.success(`${product.name} — ${quantity} adet sepete eklendi!`, {
+        icon: '🛍️',
+        style: { borderRadius: '10px', background: '#333', color: '#fff' }
+      });
+    } catch (err: any) {
+      toast.error(err.message || "Stok yetersiz.");
+    }
   };
 
   const handleBuyNow = () => {
-    addToCart(product, quantity, selectedVariants);
-    router.push('/checkout');
+    try {
+      addToCart(product, quantity, selectedVariants);
+      router.push('/checkout');
+    } catch (err: any) {
+      toast.error(err.message || "Stok yetersiz.");
+    }
   };
 
   const handleToggleFavorite = () => {
@@ -393,7 +401,18 @@ export default function ClientProductDetails({ product }: Props) {
               <button
                 type="button"
                 onClick={() => setQuantity(q => q + 1)}
-                style={{ width: '40px', height: '40px', fontSize: '1.3rem', fontWeight: 700, color: '#111', background: '#f9f9f9', border: 'none', borderLeft: '1px solid #d1d5db', cursor: 'pointer' }}
+                disabled={quantity >= currentStock.count}
+                style={{ 
+                  width: '40px', 
+                  height: '40px', 
+                  fontSize: '1.3rem', 
+                  fontWeight: 700, 
+                  color: quantity >= currentStock.count ? '#ccc' : '#111', 
+                  background: '#f9f9f9', 
+                  border: 'none', 
+                  borderLeft: '1px solid #d1d5db', 
+                  cursor: quantity >= currentStock.count ? 'not-allowed' : 'pointer' 
+                }}
               >+</button>
             </div>
             {/* Shopier uyarısı kaldırıldı */}

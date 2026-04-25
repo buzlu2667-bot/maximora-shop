@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+export const revalidate = 60; // 60 saniyede bir sayfayı arka planda tazele (ISR)
 
 import React from 'react';
 import ProductCard from '@/components/ProductCard/ProductCard';

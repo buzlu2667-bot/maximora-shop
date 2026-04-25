@@ -195,9 +195,21 @@ export default function CartPage() {
 
                     <div className={styles.itemActions}>
                       <div className={styles.quantityControl}>
-                        <button onClick={() => updateQuantity(item.cartItemId, Math.max(1, item.quantity - 1))}>-</button>
+                        <button onClick={() => {
+                          try {
+                            updateQuantity(item.cartItemId, Math.max(1, item.quantity - 1));
+                          } catch (err: any) {
+                            toast.error(err.message);
+                          }
+                        }}>-</button>
                         <span className={styles.quantityValue}>{item.quantity}</span>
-                        <button onClick={() => updateQuantity(item.cartItemId, item.quantity + 1)}>+</button>
+                        <button onClick={() => {
+                          try {
+                            updateQuantity(item.cartItemId, item.quantity + 1);
+                          } catch (err: any) {
+                            toast.error(err.message);
+                          }
+                        }}>+</button>
                       </div>
                       <button onClick={() => handleRemove(item.cartItemId, item.product.name)} className={styles.removeButton}>SİL</button>
                     </div>

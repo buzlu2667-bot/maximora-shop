@@ -116,10 +116,35 @@ export const useStore = create<StoreState>()(
       cart: [],
 
       addToCart: (product, quantity, selectedVariants) => {
+        const state = get();
+        
+        // 1. Stok Belirleme (Varyant veya Genel)
+        const colorVariant = product.variants?.find(v => v.id === 'color');
+        const selectedColor = selectedVariants?.['color'];
+        let availableStock = product.stockCount;
+
+        if (colorVariant?.stockCounts && selectedColor) {
+          const normalized = Object.fromEntries(
+            Object.entries(colorVariant.stockCounts).map(([k, v]) => [k.toLowerCase().trim(), v])
+          );
+          const vStock = normalized[selectedColor.toLowerCase().trim()];
+          if (vStock !== undefined) availableStock = vStock;
+        }
+
+        // 2. Mevcut Sepet Miktarını Bul
+        const existingItem = state.cart.find((item) =>
+          item.product.id === product.id &&
+          JSON.stringify(item.selectedVariants) === JSON.stringify(selectedVariants)
+        );
+        const currentInCart = existingItem ? existingItem.quantity : 0;
+
+        // 3. Stok Kontrolü
+        if (currentInCart + quantity > availableStock) {
+          throw new Error(`Üzgünüz, bu üründen stokta sadece ${availableStock} adet bulunmaktadır.`);
+        }
+
         set((state) => {
           // Renge özel fiyatı hesapla
-          const colorVariant = product.variants?.find(v => v.id === 'color');
-          const selectedColor = selectedVariants?.['color'];
           let overridePrice = undefined;
           let overrideOldPrice = undefined;
 
@@ -130,10 +155,6 @@ export const useStore = create<StoreState>()(
             overrideOldPrice = colorVariant.variantOldPrices[selectedColor];
           }
 
-          const existingItem = state.cart.find((item) =>
-            item.product.id === product.id &&
-            JSON.stringify(item.selectedVariants) === JSON.stringify(selectedVariants)
-          );
           if (existingItem) {
             return {
               cart: state.cart.map((item) =>
@@ -163,6 +184,27 @@ export const useStore = create<StoreState>()(
       },
 
       updateQuantity: (cartItemId, quantity) => {
+        const state = get();
+        const item = state.cart.find(i => i.cartItemId === cartItemId);
+        if (!item) return;
+
+        // Stok Kontrolü
+        const colorVariant = item.product.variants?.find(v => v.id === 'color');
+        const selectedColor = item.selectedVariants?.['color'];
+        let availableStock = item.product.stockCount;
+
+        if (colorVariant?.stockCounts && selectedColor) {
+          const normalized = Object.fromEntries(
+            Object.entries(colorVariant.stockCounts).map(([k, v]) => [k.toLowerCase().trim(), v])
+          );
+          const vStock = normalized[selectedColor.toLowerCase().trim()];
+          if (vStock !== undefined) availableStock = vStock;
+        }
+
+        if (quantity > availableStock) {
+          throw new Error(`Stok sınırına ulaşıldı (${availableStock} adet).`);
+        }
+
         set((state) => ({
           cart: state.cart.map((item) =>
             item.cartItemId === cartItemId ? { ...item, quantity } : item
