@@ -10,6 +10,7 @@ import { usePathname } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import SearchOverlay from './SearchOverlay';
 import TopBar from '../TopBar/TopBar';
+import toast from 'react-hot-toast';
 
 export default function Header() {
   const { cart, favorites, user, setUser, syncUserData, logout } = useStore();
@@ -55,17 +56,17 @@ export default function Header() {
     setMobileCategoryOpen(prev => prev === cat ? null : cat);
   };
 
-  const handleUserLogout = async () => {
-    try {
-      await supabase.auth.signOut();
-    } catch (e) {
-      console.error(e);
-    } finally {
+  const handleUserLogout = () => {
+    toast.success('Çıkış yapıldı! Görüşürüz 👋', { duration: 2000 });
+    setUserMenuOpen(false);
+    setIsMobileMenuOpen(false);
+    
+    supabase.auth.signOut().catch(() => {});
+    
+    setTimeout(() => {
       logout();
-      setUserMenuOpen(false);
-      setIsMobileMenuOpen(false);
-      router.push('/');
-    }
+      window.location.href = '/';
+    }, 1200);
   };
 
   return (

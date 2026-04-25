@@ -46,8 +46,17 @@ export default function CheckoutPage() {
   };
 
   const fetchProfile = async () => {
-    const { data } = await supabase.from('profiles').select('*').eq('id', user?.id).single();
-    if (data) setProfile(data);
+    try {
+      const res = await fetch(`/api/profile?userId=${user?.id}&_t=${Date.now()}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data && !data.error) {
+          setProfile(data);
+        }
+      }
+    } catch (e) {
+      // sessiz kal
+    }
   };
 
   if (!mounted) return null;

@@ -143,12 +143,12 @@
 .priceDiscounted {
   font-weight: 800;
   font-size: 1rem;
-  color: #10b981;
+  color: #dc2626;
 }
 
 .priceOriginal {
   font-size: 0.75rem;
-  color: #999;
+  color: #111;
   text-decoration: line-through;
 }
 

@@ -32,6 +32,9 @@ export default function AccountPage() {
 
     if (!user?.id) {
       const t = setTimeout(() => {
+        // Eğer kullanıcı çıkış yapıyorsa yönlendirmeyi iptal et
+        if (window.location.pathname !== '/hesabim' && window.location.pathname !== '/login') return;
+        
         if (!useStore.getState().user && isMounted) {
            router.push('/login');
         }
@@ -83,19 +86,14 @@ export default function AccountPage() {
   };
 
   const handleLogout = () => {
-    // Toastı hemen göster (async bekleme olmadan)
-    toast.success('Çıkış yapıldı! Görüşürüz 👋', { duration: 2500 });
+    toast.success('Çıkış yapıldı! Görüşürüz 👋', { duration: 2000 });
 
-    // signOut arka planda ateşle, bekleme (await) = kilitlenme riski)
     supabase.auth.signOut().catch(() => {});
 
-    // Zustand'ı temizle
-    logout();
-
-    // Toastın görünmesi için bekle, sonra yönlendir
     setTimeout(() => {
+      logout();
       window.location.href = '/';
-    }, 1800);
+    }, 1200);
   };
 
   if (checkingAuth || !user) {
@@ -134,9 +132,9 @@ export default function AccountPage() {
             <div className={styles.tabIcon}>
               {tab === 'orders' ? <Package size={20} /> : <Ticket size={20} />}
             </div>
-            <span>{tab === 'orders' ? 'Siparişlerim' : 'Mağaza Kredisi'}</span>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <span style={{ fontSize: '0.8rem', opacity: 0.6, marginLeft: '4px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <span>{tab === 'orders' ? 'Siparişlerim' : 'Mağaza Kredisi'}</span>
+              <span style={{ fontSize: '0.8rem', opacity: 0.6 }}>
                  ({tab === 'orders' ? orders.length : creditBalance > 0 ? '1' : '0'})
               </span>
               
@@ -147,8 +145,8 @@ export default function AccountPage() {
                   backgroundColor: '#e11d48', 
                   borderRadius: '50%', 
                   display: 'inline-block',
-                  marginLeft: '6px',
-                  transform: 'translateY(-6px)'
+                  marginLeft: '2px',
+                  transform: 'translateY(-4px)'
                 }} />
               )}
             </div>
