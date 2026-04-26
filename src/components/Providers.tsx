@@ -21,7 +21,8 @@ export function Providers() {
         s.includes('was released because') ||
         s.includes('released because another') ||
         s.includes('steal') ||
-        s.includes('Lock "lock:')
+        s.includes('Lock "lock:') ||
+        s.includes('Invalid Refresh Token')
       );
     };
 

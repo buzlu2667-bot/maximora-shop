@@ -23,7 +23,8 @@ export default async function BrandPage(props: { params: Promise<{ slug: string 
   const brandNameMapping: Record<string, string> = {
     'beymen': 'Beymen Koleksiyonu',
     'vakko': 'Vakko Koleksiyonu',
-    'maximora': 'Maximora Özel Tasarımlar'
+    'maximora': 'Maximora Özel Tasarımlar',
+    'canta': 'Çanta Ürünleri'
   };
 
   const pageTitle = brandNameMapping[brandSlug.toLowerCase()] || `${brandSlug.charAt(0).toUpperCase() + brandSlug.slice(1)} Ürünleri`;
