@@ -11,6 +11,7 @@ import styles from './page.module.css';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import ClientFeaturedProduct from '@/components/FeaturedProduct/ClientFeaturedProduct';
+import ShowcaseGrid from '@/components/ShowcaseGrid/ShowcaseGrid';
 
 import { getProducts, getShowcases, getPromoBlocks, getNewestSettings } from '@/lib/data';
 
@@ -21,7 +22,7 @@ export default async function Home() {
   const newestSettings = await getNewestSettings();
   
   const featuredProducts = products.filter(p => p.isFeatured);
-  const featuredCollection = products.filter(p => !p.isFeatured); // Diğer ürünler (limit aşağıda ayarlanıyor)
+  const featuredCollection = products.filter(p => !p.isFeatured); 
 
   return (
     <>
@@ -37,17 +38,12 @@ export default async function Home() {
             </div>
             
             {newestSettings.layout === 'slider' ? (
-              <ProductSlider products={featuredCollection.length > 0 ? featuredCollection.slice(0, newestSettings.limit) : products.slice(0, newestSettings.limit)} />
+              <ProductSlider products={(featuredCollection.length > 0 ? featuredCollection : products).slice(0, newestSettings.limit)} />
             ) : (
-              <div className={styles.productGrid}>
-                {products.length > 0 ? (
-                  (featuredCollection.length > 0 ? featuredCollection : products).slice(0, newestSettings.limit).map(product => (
-                    <ProductCard key={product.id} product={product} />
-                  ))
-                ) : (
-                  <p>Henüz ürün eklenmemiş.</p>
-                )}
-              </div>
+              <ShowcaseGrid 
+                products={featuredCollection.length > 0 ? featuredCollection : products} 
+                initialLimit={newestSettings.limit} 
+              />
             )}
           </div>
         </section>
@@ -59,7 +55,7 @@ export default async function Home() {
           if (showcase.category) match = match && p.category === showcase.category;
           if (showcase.brand) match = match && p.brand === showcase.brand;
           return match;
-        }).slice(0, showcase.limit || 4);
+        });
 
         if (filteredProducts.length === 0) return null;
 
@@ -72,13 +68,12 @@ export default async function Home() {
               </div>
               
               {showcase.layout === 'slider' ? (
-                <ProductSlider products={filteredProducts} />
+                <ProductSlider products={filteredProducts.slice(0, showcase.limit || 4)} />
               ) : (
-                <div className={styles.productGrid}>
-                  {filteredProducts.map(product => (
-                     <ProductCard key={product.id} product={product} />
-                  ))}
-                </div>
+                <ShowcaseGrid 
+                  products={filteredProducts} 
+                  initialLimit={showcase.limit || 4} 
+                />
               )}
             </div>
           </section>
