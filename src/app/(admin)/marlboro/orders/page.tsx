@@ -324,7 +324,7 @@ export default function AdminOrdersPage() {
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
                            {order.items?.map((item: any, i: number) => (
                              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '1rem', backgroundColor: '#fff', borderRadius: '14px', padding: '0.75rem', border: '1px solid #f3f3f3' }}>
-                                <div style={{ width: '45px', height: '60px', borderRadius: '10px', overflow: 'hidden' }}><img src={item.product?.images?.[0]} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" /></div>
+                                <div style={{ width: '45px', height: '60px' }}><img src={item.product?.images?.[0]} style={{ width: '100%', height: '100%', objectFit: 'contain' }} alt="" /></div>
                                 <div style={{ flex: 1 }}><p style={{ margin: 0, fontWeight: 700, fontSize: '0.85rem' }}>{item.quantity}× {item.product?.name}</p><p style={{ margin: 0, fontSize: '0.8rem', color: '#e11d48', fontWeight: 800 }}>{item.product?.price?.toFixed(2)} TL</p></div>
                              </div>
                            ))}
