@@ -69,6 +69,25 @@ export default function AdminUsersPage() {
     }
   };
 
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredUsers = users.filter(user => 
+    (user.full_name?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
+    (user.email?.toLowerCase() || "").includes(searchTerm.toLowerCase())
+  );
+
+  const formatDate = (dateString: string) => {
+    if (!dateString) return "-";
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('tr-TR', { 
+      day: '2-digit', 
+      month: '2-digit', 
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    }).format(date);
+  };
+
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -120,8 +139,29 @@ export default function AdminUsersPage() {
 
   return (
     <div style={{ padding: '1rem' }}>
-      <h1 style={{ fontSize: '2rem', color: '#111', marginBottom: '1rem', fontWeight: 800 }}>Kayıtlı Kullanıcılar</h1>
-      <p style={{ color: '#666', marginBottom: '2rem' }}>Müşterilerinize Mağaza Kredisi tanımlayabilir ve yönetebilirsiniz.</p>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
+        <div>
+          <h1 style={{ fontSize: '2rem', color: '#111', marginBottom: '0.5rem', fontWeight: 800 }}>Kayıtlı Kullanıcılar</h1>
+          <p style={{ color: '#666' }}>Müşterilerinize Mağaza Kredisi tanımlayabilir ve yönetebilirsiniz.</p>
+        </div>
+        <div style={{ position: 'relative', minWidth: '300px' }}>
+          <input 
+            type="text" 
+            placeholder="İsim veya e-posta ile ara..." 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{ 
+              width: '100%', 
+              padding: '0.875rem 1rem', 
+              borderRadius: '12px', 
+              border: '1px solid #ddd', 
+              fontSize: '0.95rem',
+              outline: 'none',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
+            }}
+          />
+        </div>
+      </div>
 
       {loading ? (
         <p>Yükleniyor...</p>
@@ -130,7 +170,7 @@ export default function AdminUsersPage() {
           <style>{`
             .users-table { display: block; }
             .users-cards { display: none; }
-            @media (max-width: 768px) {
+            @media (max-width: 1024px) {
               .users-table { display: none; }
               .users-cards { display: flex; flex-direction: column; gap: 0.875rem; }
             }
@@ -143,12 +183,13 @@ export default function AdminUsersPage() {
                 <tr style={{ backgroundColor: '#fafafa', borderBottom: '1px solid #eee' }}>
                   <th style={{ padding: '1.25rem', fontWeight: 600, color: '#333' }}>Kullanıcı</th>
                   <th style={{ padding: '1.25rem', fontWeight: 600, color: '#333' }}>E-posta</th>
-                  <th style={{ padding: '1.25rem', fontWeight: 600, color: '#333' }}>Mağaza Kredisi</th>
+                  <th style={{ padding: '1.25rem', fontWeight: 600, color: '#333' }}>Kayıt Tarihi</th>
+                  <th style={{ padding: '1.25rem', fontWeight: 600, color: '#333' }}>Kredi</th>
                   <th style={{ padding: '1.25rem', fontWeight: 600, color: '#333' }}>İşlem</th>
                 </tr>
               </thead>
               <tbody>
-                {users.map((user) => (
+                {filteredUsers.map((user) => (
                   <tr key={user.id} style={{ borderBottom: '1px solid #f1f1f1' }}>
                     <td style={{ padding: '1.25rem' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -162,45 +203,47 @@ export default function AdminUsersPage() {
                       </div>
                     </td>
                     <td style={{ padding: '1.25rem', color: '#555' }}>{user.email}</td>
+                    <td style={{ padding: '1.25rem', color: '#777', fontSize: '0.85rem' }}>{formatDate(user.created_at)}</td>
                     <td style={{ padding: '1.25rem' }}>
                       <span style={{ fontWeight: 800, color: user.credit_balance > 0 ? '#10b981' : '#333', fontSize: '1.1rem' }}>
                         {Number(user.credit_balance || 0).toFixed(2)} TL
                       </span>
                     </td>
                     <td style={{ padding: '1.25rem' }}>
-                      <div style={{ display: 'flex', gap: '0.5rem' }}>
+                      <div style={{ display: 'flex', gap: '0.4rem' }}>
                         <button onClick={() => openCreditModal(user)}
-                          style={{ padding: '0.5rem 0.8rem', backgroundColor: '#111', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600 }}>
+                          title="Kredi Düzenle"
+                          style={{ padding: '0.5rem 0.7rem', backgroundColor: '#111', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 600 }}>
                           Kredi
                         </button>
                         <button 
                           onClick={() => handleBanUser(user)}
                           disabled={actionLoading === `ban-${user.id}`}
                           style={{ 
-                            padding: '0.5rem 0.8rem', 
+                            padding: '0.5rem 0.7rem', 
                             backgroundColor: user.is_banned ? '#10b981' : '#f59e0b', 
                             color: '#fff', 
                             border: 'none', 
                             borderRadius: '6px', 
                             cursor: 'pointer', 
-                            fontSize: '0.8rem', 
+                            fontSize: '0.75rem', 
                             fontWeight: 600,
                             opacity: actionLoading === `ban-${user.id}` ? 0.7 : 1
                           }}
                         >
-                          {user.is_banned ? 'Yasağı Kaldır' : 'Banla'}
+                          {user.is_banned ? 'Kaldır' : 'Ban'}
                         </button>
                         <button 
                           onClick={() => handleDeleteUser(user)}
                           disabled={actionLoading === `delete-${user.id}`}
                           style={{ 
-                            padding: '0.5rem 0.8rem', 
+                            padding: '0.5rem 0.7rem', 
                             backgroundColor: '#ef4444', 
                             color: '#fff', 
                             border: 'none', 
                             borderRadius: '6px', 
                             cursor: 'pointer', 
-                            fontSize: '0.8rem', 
+                            fontSize: '0.75rem', 
                             fontWeight: 600,
                             opacity: actionLoading === `delete-${user.id}` ? 0.7 : 1
                           }}
@@ -211,13 +254,18 @@ export default function AdminUsersPage() {
                     </td>
                   </tr>
                 ))}
+                {filteredUsers.length === 0 && (
+                  <tr>
+                    <td colSpan={5} style={{ padding: '3rem', textAlign: 'center', color: '#999' }}>Kullanıcı bulunamadı.</td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
 
           {/* MOBİL: Kartlar */}
           <div className="users-cards">
-            {users.map((user) => (
+            {filteredUsers.map((user) => (
               <div key={user.id} style={{ backgroundColor: 'white', borderRadius: '16px', padding: '1rem', border: '1px solid #eee', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
                   <div style={{ width: '44px', height: '44px', borderRadius: '50%', backgroundColor: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', color: '#fff', fontSize: '1rem', flexShrink: 0 }}>
@@ -232,14 +280,14 @@ export default function AdminUsersPage() {
                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', paddingTop: '0.75rem', borderTop: '1px solid #f1f1f1' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div>
-                      <p style={{ margin: 0, fontSize: '0.75rem', color: '#888' }}>Mağaza Kredisi</p>
-                      <span style={{ fontWeight: 800, color: user.credit_balance > 0 ? '#10b981' : '#333', fontSize: '1.1rem' }}>
+                      <p style={{ margin: 0, fontSize: '0.7rem', color: '#888' }}>Kayıt: {formatDate(user.created_at)}</p>
+                      <span style={{ fontWeight: 800, color: user.credit_balance > 0 ? '#10b981' : '#333', fontSize: '1rem' }}>
                         {Number(user.credit_balance || 0).toFixed(2)} TL
                       </span>
                     </div>
                     <button onClick={() => openCreditModal(user)}
-                      style={{ padding: '0.6rem 1.2rem', backgroundColor: '#111', color: '#fff', border: 'none', borderRadius: '10px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600 }}>
-                      Kredi Yönet
+                      style={{ padding: '0.5rem 1rem', backgroundColor: '#111', color: '#fff', border: 'none', borderRadius: '10px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600 }}>
+                      Kredi
                     </button>
                   </div>
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
@@ -261,6 +309,9 @@ export default function AdminUsersPage() {
                 </div>
               </div>
             ))}
+            {filteredUsers.length === 0 && (
+              <div style={{ padding: '2rem', textAlign: 'center', color: '#999' }}>Kullanıcı bulunamadı.</div>
+            )}
           </div>
         </>
       )}

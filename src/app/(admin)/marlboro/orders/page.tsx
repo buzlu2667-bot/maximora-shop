@@ -17,13 +17,14 @@ export default function AdminOrdersPage() {
   const [cargoData, setCargoData] = useState({ company: '', tracking: '' });
   const [cancelReason, setCancelReason] = useState('');
   
+  const [searchTerm, setSearchTerm] = useState("");
+  
   // Email state
   const [emailContent, setEmailContent] = useState({ subject: '', message: '' });
   const [sendingEmail, setSendingEmail] = useState(false);
 
   const fetchOrders = async () => {
     try {
-      // /api/orders → supabaseAdmin kullanır → RLS bypass → tüm siparişleri görebilir
       const res = await fetch('/api/orders?_t=' + Date.now());
       if (!res.ok) throw new Error('API hatası');
       const data = await res.json();
@@ -152,28 +153,61 @@ export default function AdminOrdersPage() {
     cancelled:  { bg: '#fee2e2', color: '#991b1b', label: 'İptal' },
   };
 
-  const filteredOrders = orders.filter(o => !!o.is_archived === showArchived);
+  const filteredOrders = orders
+    .filter(o => !!o.is_archived === showArchived)
+    .filter(o => {
+      if (!searchTerm) return true;
+      const s = searchTerm.toLowerCase();
+      return (
+        o.id?.toLowerCase().includes(s) ||
+        o.customer_email?.toLowerCase().includes(s) ||
+        o.payment_method?.toLowerCase().includes(s) ||
+        o.shipping_address?.toLowerCase().includes(s)
+      );
+    });
 
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: 'clamp(0.5rem, 3vw, 1.5rem)' }}>
       {/* Header Area */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
           <h1 style={{ fontSize: 'clamp(1.4rem, 5vw, 2.2rem)', color: '#111', margin: 0, fontWeight: 800 }}>{showArchived ? 'Arşivlenmiş Siparişler' : 'Gelen Siparişler'}</h1>
           <p style={{ color: '#666', marginTop: '0.4rem', fontSize: '0.9rem' }}>Toplam {filteredOrders.length} sipariş listeleniyor.</p>
         </div>
-        <button 
-          onClick={() => setShowArchived(!showArchived)}
-          className="btn"
-          style={{ 
-            backgroundColor: showArchived ? '#111' : '#f3f4f6', 
-            color: showArchived ? 'white' : '#111',
-            display: 'flex', alignItems: 'center', gap: '0.5rem', borderRadius: '12px', padding: '0.7rem 1.2rem', fontSize: '0.85rem', fontWeight: 600
-          }}
-        >
-          {showArchived ? <ArchiveRestore size={18} /> : <Archive size={18} />}
-          {showArchived ? 'Aktiflere Dön' : 'Arşivi Aç'}
-        </button>
+        
+        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
+          <div style={{ position: 'relative', minWidth: '280px' }}>
+            <input 
+              type="text" 
+              placeholder="Sipariş No, E-posta veya Ödeme Tipi..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{ 
+                width: '100%', 
+                padding: '0.75rem 1rem 0.75rem 2.5rem', 
+                borderRadius: '12px', 
+                border: '1px solid #ddd', 
+                fontSize: '0.9rem',
+                outline: 'none',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
+              }}
+            />
+            <Search size={18} color="#999" style={{ position: 'absolute', left: '0.8rem', top: '50%', transform: 'translateY(-50%)' }} />
+          </div>
+
+          <button 
+            onClick={() => setShowArchived(!showArchived)}
+            className="btn"
+            style={{ 
+              backgroundColor: showArchived ? '#111' : '#f3f4f6', 
+              color: showArchived ? 'white' : '#111',
+              display: 'flex', alignItems: 'center', gap: '0.5rem', borderRadius: '12px', padding: '0.75rem 1.2rem', fontSize: '0.85rem', fontWeight: 600
+            }}
+          >
+            {showArchived ? <ArchiveRestore size={18} /> : <Archive size={18} />}
+            {showArchived ? 'Aktiflere Dön' : 'Arşivi Aç'}
+          </button>
+        </div>
       </div>
 
       {loading ? (
