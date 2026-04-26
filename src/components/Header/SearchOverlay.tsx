@@ -41,16 +41,13 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
     const delayDebounce = setTimeout(async () => {
       setLoading(true);
       try {
-        const { data, error } = await supabase
-          .from('products')
-          .select('*')
-          .or(`name.ilike.%${query}%,description.ilike.%${query}%,category.ilike.%${query}%`)
-          .limit(8);
+        const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+        const result = await response.json();
 
-        if (error) throw error;
+        if (result.error) throw new Error(result.error);
 
-        if (data) {
-          const mappedProducts: Product[] = data.map((row: any) => ({
+        if (result.products) {
+          const mappedProducts: Product[] = result.products.map((row: any) => ({
             id: row.id,
             name: row.name,
             slug: row.slug,
@@ -61,7 +58,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
             category: row.category,
             images: row.images || [],
             inStock: row.in_stock,
-            stockCount: row.stock_count,
+            stock_count: row.stock_count,
             variants: row.variants || [],
             features: row.features || [],
             shopierUrl: row.shopier_url || undefined,
