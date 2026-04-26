@@ -16,32 +16,35 @@ export default function AdminNewsletterPage() {
 
   const fetchSubscribers = async () => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from('newsletter_subscribers')
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      toast.error('Aboneler yüklenemedi.');
-    } else {
-      setSubscribers(data || []);
+    try {
+      const res = await fetch('/api/newsletter');
+      const data = await res.json();
+      if (res.ok) {
+        setSubscribers(data || []);
+      } else {
+        toast.error(data.error || 'Aboneler yüklenemedi.');
+      }
+    } catch (err) {
+      toast.error('Bağlantı hatası.');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleDelete = async (id: string) => {
     if (!confirm('Bu aboneyi listeden çıkarmak istediğinize emin misiniz?')) return;
 
-    const { error } = await supabase
-      .from('newsletter_subscribers')
-      .delete()
-      .eq('id', id);
-
-    if (error) {
-      toast.error('Silme işlemi başarısız.');
-    } else {
-      toast.success('Abone silindi.');
-      setSubscribers(subscribers.filter(s => s.id !== id));
+    try {
+      const res = await fetch(`/api/newsletter?id=${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (res.ok) {
+        toast.success('Abone silindi.');
+        setSubscribers(subscribers.filter(s => s.id !== id));
+      } else {
+        toast.error(data.error || 'Silme işlemi başarısız.');
+      }
+    } catch (err) {
+      toast.error('Bağlantı hatası.');
     }
   };
 
