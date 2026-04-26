@@ -12,7 +12,6 @@ export function Providers() {
   // Bu yüzden biz de hidrasyon sonrası tekrar sarmalıyoruz → Lock hatası overlay'e ulaşamaz.
   useEffect(() => {
     const isSbLockErr = (v: any) => {
-      // AbortError tipindeki hatalar (Supabase lock hatası) her zaman susturulur
       if (v && (v.name === 'AbortError' || v instanceof DOMException)) return true;
       const s = typeof v === 'string' ? v : (v?.message ?? '');
       return (
@@ -26,14 +25,22 @@ export function Providers() {
       );
     };
 
-    const original = console.error.bind(console);
+    const originalError = console.error.bind(console);
     console.error = (...args: any[]) => {
       if (isSbLockErr(args[0])) return;
-      original(...args);
+      originalError(...args);
+    };
+
+    const originalWarn = console.warn.bind(console);
+    console.warn = (...args: any[]) => {
+      const s = typeof args[0] === 'string' ? args[0] : (args[0]?.message ?? '');
+      if (s.includes('was preloaded using link preload but not used')) return;
+      originalWarn(...args);
     };
 
     return () => {
-      console.error = original;
+      console.error = originalError;
+      console.warn = originalWarn;
     };
   }, []);
 

@@ -105,8 +105,15 @@ export default function AdminSendEmailPage() {
   }, []);
 
   const fetchSubscriberCount = async () => {
-    const { count } = await supabase.from('newsletter_subscribers').select('*', { count: 'exact', head: true });
-    setSubscriberCount(count || 0);
+    try {
+      const res = await fetch('/api/newsletter');
+      const data = await res.json();
+      if (res.ok) {
+        setSubscriberCount(data.length || 0);
+      }
+    } catch (err) {
+      console.error('Failed to fetch subscriber count');
+    }
   };
 
   const selectedTemplate = TEMPLATES.find(t => t.id === selectedTemplateId)!;
@@ -178,12 +185,15 @@ export default function AdminSendEmailPage() {
       }
       recipients = [emailData.to];
     } else {
-      const { data, error } = await supabase.from('newsletter_subscribers').select('email');
-      if (error || !data) {
+      try {
+        const res = await fetch('/api/newsletter');
+        const data = await res.json();
+        if (!res.ok) throw new Error('Aboneler çekilemedi.');
+        recipients = data.map((d: any) => d.email);
+      } catch (err) {
         toast.error("Aboneler çekilemedi.");
         return;
       }
-      recipients = data.map(d => d.email);
     }
 
     if (recipients.length === 0) {
