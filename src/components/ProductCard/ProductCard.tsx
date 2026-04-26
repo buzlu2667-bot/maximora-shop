@@ -73,6 +73,8 @@ export default function ProductCard({ product, inSlider = false }: ProductCardPr
     }
   };
 
+  const activeImage = images[currentImageIndex] || images[0];
+
   return (
     <div className={styles.card}>
       <div 
@@ -85,18 +87,15 @@ export default function ProductCard({ product, inSlider = false }: ProductCardPr
 
         <Link href={`/product/${product.slug}`}>
           <div className={styles.imageContainer}>
-            {images.map((img, idx) => (
-              <Image 
-                key={idx}
-                src={img} 
-                alt={`${product.name} - ${idx + 1}`} 
-                className={`${styles.image} ${idx === currentImageIndex ? styles.activeImage : ''}`}
-                fill
-                sizes="(max-width: 768px) 50vw, 33vw"
-                priority={idx === 0}
-                style={{ objectFit: 'cover' }}
-              />
-            ))}
+            <Image 
+              src={activeImage} 
+              alt={product.name} 
+              className={`${styles.image} ${styles.activeImage}`}
+              fill
+              sizes="(max-width: 768px) 50vw, 33vw"
+              priority={currentImageIndex === 0}
+              style={{ objectFit: 'contain' }}
+            />
           </div>
         </Link>
 
