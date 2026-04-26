@@ -19,26 +19,52 @@ export default function LoginPage() {
   const [googleLoading, setGoogleLoading] = useState(false);
 
   const handleGoogleSuccess = async (credentialResponse: any) => {
+    if (googleLoading) return;
     setGoogleLoading(true);
+    
+    // Auth lock'a takılmaması için küçük bir bekleme ekliyoruz
+    await new Promise(resolve => setTimeout(resolve, 500));
+
     try {
       const { data, error } = await supabase.auth.signInWithIdToken({
         provider: 'google',
         token: credentialResponse.credential,
       });
-      if (error) throw error;
+
+      if (error) {
+        if (error.message.includes('Lock')) {
+          // Kilit hatası varsa bir kez daha dene
+          const retry = await supabase.auth.signInWithIdToken({
+            provider: 'google',
+            token: credentialResponse.credential,
+          });
+          if (retry.error) throw retry.error;
+          if (retry.data.user) {
+            await syncUserData(retry.data.user.id);
+            toast.success('Google ile giriş başarılı!');
+            router.push('/');
+          }
+        } else {
+          throw error;
+        }
+      }
+
       if (data.user) {
         await syncUserData(data.user.id);
         toast.success('Google ile giriş başarılı!');
         router.push('/');
       }
     } catch (err: any) {
-      toast.error('Google ile giriş yapılırken bir hata oluştu.');
+      console.error('Google login error:', err);
+      toast.error('Google ile giriş yapılırken bir uyuşmazlık oluştu. Lütfen sayfayı yenileyip tekrar deneyin.');
     } finally {
       setGoogleLoading(false);
     }
   };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (loading) return;
     setLoading(true);
     try {
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
@@ -62,30 +88,52 @@ export default function LoginPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem', backgroundColor: 'var(--color-background)' }}>
-      <div style={{ width: '100%', maxWidth: '420px' }}>
+    <div style={{ width: '100%', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4rem 2rem', backgroundColor: '#f8f9fa' }}>
+      <div style={{ 
+        width: '100%', 
+        maxWidth: '440px', 
+        backgroundColor: 'white', 
+        padding: '3rem 2.5rem', 
+        borderRadius: '24px', 
+        boxShadow: '0 20px 60px rgba(0,0,0,0.05)',
+        border: '1px solid #eee'
+      }}>
         <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-          <h1 style={{ fontSize: '1.75rem', fontWeight: 700, letterSpacing: '-0.5px', marginBottom: '0.5rem' }}>Maximora</h1>
-          <p style={{ color: 'var(--color-text-muted)', fontSize: '0.95rem' }}>Hesabınıza giriş yapın</p>
+          <img src="/logo-gold.png" alt="Maximora" style={{ height: '50px', marginBottom: '1.5rem' }} />
+          <h1 style={{ fontSize: '1.8rem', fontWeight: 800, letterSpacing: '-0.5px', marginBottom: '0.5rem', color: '#111' }}>Yeniden Hoş Geldin</h1>
+          <p style={{ color: '#666', fontSize: '0.95rem' }}>Lütfen hesap bilgilerini kullanarak giriş yap.</p>
         </div>
 
         <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           <div>
-            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, marginBottom: '0.4rem', color: 'var(--color-text-main)' }}>E-posta</label>
+            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.5rem', color: '#333', textTransform: 'uppercase', letterSpacing: '0.02em' }}>E-posta</label>
             <input
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
               placeholder="ornek@email.com"
               required
-              style={{ width: '100%', padding: '0.875rem 1rem', border: '1px solid var(--color-border)', borderRadius: '6px', fontSize: '1rem', outline: 'none', transition: 'border-color 0.2s', boxSizing: 'border-box' }}
-              onFocus={e => e.target.style.borderColor = '#111'}
-              onBlur={e => e.target.style.borderColor = 'var(--color-border)'}
+              style={{ width: '100%', padding: '1rem', border: '1px solid #ddd', borderRadius: '12px', fontSize: '1rem', outline: 'none', transition: 'all 0.2s', boxSizing: 'border-box', backgroundColor: '#fafafa' }}
+              onFocus={e => {
+                e.target.style.borderColor = '#d4af37';
+                e.target.style.backgroundColor = 'white';
+                e.target.style.boxShadow = '0 0 0 4px rgba(212, 175, 55, 0.1)';
+              }}
+              onBlur={e => {
+                e.target.style.borderColor = '#ddd';
+                e.target.style.backgroundColor = '#fafafa';
+                e.target.style.boxShadow = 'none';
+              }}
             />
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, marginBottom: '0.4rem', color: 'var(--color-text-main)' }}>Şifre</label>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+              <label style={{ fontSize: '0.8rem', fontWeight: 700, color: '#333', textTransform: 'uppercase', letterSpacing: '0.02em' }}>Şifre</label>
+              <Link href="/sifremi-unuttum" style={{ fontSize: '0.8rem', color: '#d4af37', textDecoration: 'none', fontWeight: 600 }}>
+                Şifremi Unuttum
+              </Link>
+            </div>
             <div style={{ position: 'relative' }}>
               <input
                 type={showPassword ? 'text' : 'password'}
@@ -93,64 +141,76 @@ export default function LoginPage() {
                 onChange={e => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
-                style={{ width: '100%', padding: '0.875rem 3rem 0.875rem 1rem', border: '1px solid var(--color-border)', borderRadius: '6px', fontSize: '1rem', outline: 'none', transition: 'border-color 0.2s', boxSizing: 'border-box' }}
-                onFocus={e => e.target.style.borderColor = '#111'}
-                onBlur={e => e.target.style.borderColor = 'var(--color-border)'}
+                style={{ width: '100%', padding: '1rem 3.5rem 1rem 1rem', border: '1px solid #ddd', borderRadius: '12px', fontSize: '1rem', outline: 'none', transition: 'all 0.2s', boxSizing: 'border-box', backgroundColor: '#fafafa' }}
+                onFocus={e => {
+                  e.target.style.borderColor = '#d4af37';
+                  e.target.style.backgroundColor = 'white';
+                  e.target.style.boxShadow = '0 0 0 4px rgba(212, 175, 55, 0.1)';
+                }}
+                onBlur={e => {
+                  e.target.style.borderColor = '#ddd';
+                  e.target.style.backgroundColor = '#fafafa';
+                  e.target.style.boxShadow = 'none';
+                }}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                style={{ position: 'absolute', right: '0.875rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center' }}
+                style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#999', display: 'flex', alignItems: 'center' }}
               >
-                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
-            </div>
-            <div style={{ textAlign: 'right', marginTop: '0.5rem' }}>
-              <Link href="/sifremi-unuttum" style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', textDecoration: 'none' }}>
-                Şifremi Unuttum
-              </Link>
             </div>
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="btn btn-primary"
-            style={{ width: '100%', padding: '1rem', fontSize: '1rem', fontWeight: 600, marginTop: '0.5rem', opacity: loading ? 0.7 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}
+            style={{ 
+              width: '100%', 
+              padding: '1.1rem', 
+              fontSize: '1rem', 
+              fontWeight: 700, 
+              marginTop: '0.5rem', 
+              backgroundColor: '#111', 
+              color: 'white', 
+              border: 'none', 
+              borderRadius: '14px', 
+              cursor: loading ? 'not-allowed' : 'pointer',
+              boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
+              transition: 'all 0.2s',
+              opacity: loading ? 0.7 : 1
+            }}
+            onMouseOver={e => !loading && (e.currentTarget.style.backgroundColor = '#000')}
+            onMouseOut={e => !loading && (e.currentTarget.style.backgroundColor = '#111')}
           >
             {loading ? 'Giriş yapılıyor...' : 'Giriş Yap'}
           </button>
         </form>
 
-        <div style={{ display: 'flex', alignItems: 'center', margin: '1.5rem 0', gap: '1rem' }}>
-          <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--color-border)' }}></div>
-          <span style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>veya</span>
-          <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--color-border)' }}></div>
+        <div style={{ display: 'flex', alignItems: 'center', margin: '2rem 0', gap: '1rem' }}>
+          <div style={{ flex: 1, height: '1px', backgroundColor: '#eee' }}></div>
+          <span style={{ fontSize: '0.8rem', color: '#999', fontWeight: 600, textTransform: 'uppercase' }}>veya</span>
+          <div style={{ flex: 1, height: '1px', backgroundColor: '#eee' }}></div>
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'center', pointerEvents: googleLoading ? 'none' : 'auto', opacity: googleLoading ? 0.7 : 1 }}>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
           <GoogleLogin
             onSuccess={handleGoogleSuccess}
             onError={() => {
-              toast.error('Google ile giriş iptal edildi veya başarısız oldu.');
+              toast.error('Google ile giriş iptal edildi.');
             }}
-            shape="rectangular"
+            shape="pill"
             theme="outline"
-            text="continue_with"
-            width="100%"
+            text="signin_with"
+            width="250"
           />
         </div>
 
-        <div style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
-          Hesabınız yok mu?{' '}
-          <Link href="/register" style={{ color: 'var(--color-primary)', fontWeight: 600, textDecoration: 'none' }}>
-            Kayıt Ol
-          </Link>
-        </div>
-
-        <div style={{ textAlign: 'center', marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid var(--color-border)' }}>
-          <Link href="/" style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', textDecoration: 'none' }}>
-            ← Alışverişe Devam Et
+        <div style={{ textAlign: 'center', marginTop: '2rem', fontSize: '0.95rem', color: '#666' }}>
+          Henüz hesabın yok mu?{' '}
+          <Link href="/register" style={{ color: '#d4af37', fontWeight: 700, textDecoration: 'none' }}>
+            Hemen Kayıt Ol
           </Link>
         </div>
       </div>

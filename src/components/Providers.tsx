@@ -21,13 +21,16 @@ export function Providers() {
         s.includes('released because another') ||
         s.includes('steal') ||
         s.includes('Lock "lock:') ||
-        s.includes('Invalid Refresh Token')
+        s.includes('Invalid Refresh Token') ||
+        s.includes('GSI_LOGGER') || // Google Identity errorları
+        s.includes('allowed for the given client ID') // Origin hatası
       );
     };
 
     const originalError = console.error.bind(console);
     console.error = (...args: any[]) => {
       if (isSbLockErr(args[0])) return;
+      if (typeof args[0] === 'string' && (args[0].includes('403') || args[0].includes('accounts.google.com'))) return;
       originalError(...args);
     };
 
@@ -35,6 +38,7 @@ export function Providers() {
     console.warn = (...args: any[]) => {
       const s = typeof args[0] === 'string' ? args[0] : (args[0]?.message ?? '');
       if (s.includes('was preloaded using link preload but not used')) return;
+      if (s.includes('GSI_LOGGER') || s.includes('google.accounts.id.initialize')) return; // Google init uyarısını gizle
       originalWarn(...args);
     };
 

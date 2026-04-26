@@ -56,17 +56,32 @@ export default function Header() {
     setMobileCategoryOpen(prev => prev === cat ? null : cat);
   };
 
-  const handleUserLogout = () => {
-    toast.success('Çıkış yapıldı! Görüşürüz 👋', { duration: 2000 });
+  const handleUserLogout = async () => {
+    toast.loading('Çıkış yapılıyor...', { id: 'logout-toast' });
+    
+    // Auth lock'a takılmaması için signOut işlemini timeout ile sarmalıyoruz
+    const signOutPromise = supabase.auth.signOut();
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('timeout')), 3000)
+    );
+
+    try {
+      await Promise.race([signOutPromise, timeoutPromise]);
+    } catch (err) {
+      console.warn('SignOut timed out or failed, forcing local cleanup.');
+    }
+
+    // Her durumda local temizliği yapıyoruz
+    localStorage.removeItem('sb-tlzumghdjzehomaocmsa-auth-token');
+    logout();
     setUserMenuOpen(false);
     setIsMobileMenuOpen(false);
     
-    supabase.auth.signOut().catch(() => {});
+    toast.success('Başarıyla çıkış yapıldı. Yine bekleriz! 👋', { id: 'logout-toast' });
     
     setTimeout(() => {
-      logout();
       window.location.href = '/';
-    }, 1200);
+    }, 1000);
   };
 
   return (
@@ -96,7 +111,6 @@ export default function Header() {
           
           {/* Masaüstü Navigation Menüsü (PC'de Görünür) */}
           <nav className={styles.nav}>
-            {/* ... navigation links ... */}
             <div className={styles.hasMegaMenu}>
                <div className={styles.navLink}>
                   Kadın Aksesuar <ChevronDown size={14} />
@@ -140,13 +154,12 @@ export default function Header() {
             </Link>
 
             <Link href="/orders/track" className={styles.navLink}>
-              Siparişinizi Takip Edin
+              Sipariş Takibi
             </Link>
           </nav>
 
           {/* Sağ İkonlar: Hesap, Favoriler, Sepet */}
           <div className={styles.actions}>
-            {/* Arama (Masaüstünde burada kalır) */}
             <button 
               className={`${styles.iconBtn} ${styles.desktopSearchBtn}`} 
               aria-label="Ara"
@@ -156,10 +169,10 @@ export default function Header() {
             </button>
 
             {/* Kullanıcı ikonu */}
-            <div style={{ position: 'relative' }}>
+            <div className={styles.userMenuWrapper}>
               <button
                 aria-label="Hesabım"
-                className={styles.iconBtn}
+                className={`${styles.iconBtn} ${userMenuOpen ? styles.iconBtnActive : ''}`}
                 onClick={() => {
                   if (window.innerWidth < 1025) {
                     router.push('/hesabim');
@@ -170,7 +183,7 @@ export default function Header() {
               >
                 <User size={22} />
                 {mounted && user && (
-                  <span style={{ position: 'absolute', top: -4, right: -4, width: 8, height: 8, borderRadius: '50%', backgroundColor: '#22c55e', border: '1.5px solid white' }} />
+                  <span className={styles.userActiveDot} />
                 )}
               </button>
               
@@ -180,33 +193,51 @@ export default function Header() {
                   {user ? (
                     <>
                       <div className={styles.dropdownHeader}>
-                        <span className={styles.userWelcome}>Hoş Geldin</span>
-                        <span className={styles.userMail}>{user.name || user.email}</span>
+                        <div className={styles.userAvatar}>
+                          {user.name ? user.name.charAt(0).toUpperCase() : user.email?.charAt(0).toUpperCase()}
+                        </div>
+                        <div className={styles.userInfo}>
+                          <span className={styles.userWelcome}>Hoş Geldin</span>
+                          <span className={styles.userMail}>{user.name || user.email}</span>
+                        </div>
                       </div>
-                      <Link href="/hesabim" className={styles.dropdownItem} onClick={() => setUserMenuOpen(false)}>
-                        <User size={18} /> Hesabım
-                      </Link>
-                      {user.role === 'admin' && (
-                        <Link href="/marlboro" className={styles.dropdownItem} style={{ color: '#d4af37' }} onClick={() => setUserMenuOpen(false)}>
-                          <ShieldCheck size={18} /> Admin Paneli
+                      <div className={styles.dropdownBody}>
+                        <Link href="/hesabim" className={styles.dropdownItem} onClick={() => setUserMenuOpen(false)}>
+                          <div className={styles.itemIcon}><User size={18} /></div>
+                          <span>Hesabım</span>
                         </Link>
-                      )}
-                      <Link href="/hesabim" className={styles.dropdownItem} onClick={() => setUserMenuOpen(false)}>
-                        <ShoppingBag size={18} /> Siparişlerim
-                      </Link>
-                      <button onClick={handleUserLogout} className={`${styles.dropdownItem} ${styles.dropdownLogout}`}>
-                        <LogOut size={18} /> Çıkış Yap
-                      </button>
+                        {user.role === 'admin' && (
+                          <Link href="/marlboro" className={`${styles.dropdownItem} ${styles.adminItem}`} onClick={() => setUserMenuOpen(false)}>
+                            <div className={styles.itemIcon}><ShieldCheck size={18} /></div>
+                            <span>Admin Paneli</span>
+                          </Link>
+                        )}
+                        <Link href="/hesabim" className={styles.dropdownItem} onClick={() => setUserMenuOpen(false)}>
+                          <div className={styles.itemIcon}><ShoppingBag size={18} /></div>
+                          <span>Siparişlerim</span>
+                        </Link>
+                        <div className={styles.dropdownDivider} />
+                        <button onClick={handleUserLogout} className={`${styles.dropdownItem} ${styles.dropdownLogout}`}>
+                          <div className={styles.itemIcon}><LogOut size={18} /></div>
+                          <span>Güvenli Çıkış</span>
+                        </button>
+                      </div>
                     </>
                   ) : (
-                    <>
-                      <Link href="/login" className={styles.dropdownItem} onClick={() => setUserMenuOpen(false)}>
-                        <LogIn size={18} /> Giriş Yap
-                      </Link>
-                      <Link href="/register" className={styles.dropdownItem} onClick={() => setUserMenuOpen(false)}>
-                        <UserPlus size={18} /> Kayıt Ol
-                      </Link>
-                    </>
+                    <div className={styles.guestDropdown}>
+                      <div className={styles.guestHeader}>
+                        <h4 className={styles.guestTitle}>Hesabınıza Giriş Yapın</h4>
+                        <p className={styles.guestSubtitle}>Fırsatları kaçırmamak için hemen giriş yapın veya kayıt olun.</p>
+                      </div>
+                      <div className={styles.guestActions}>
+                        <Link href="/login" className={styles.loginBtn} onClick={() => setUserMenuOpen(false)}>
+                          <LogIn size={18} /> Giriş Yap
+                        </Link>
+                        <Link href="/register" className={styles.registerBtn} onClick={() => setUserMenuOpen(false)}>
+                          Kayıt Ol
+                        </Link>
+                      </div>
+                    </div>
                   )}
                 </div>
               )}
