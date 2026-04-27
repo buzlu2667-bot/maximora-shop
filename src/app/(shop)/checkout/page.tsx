@@ -418,47 +418,47 @@ export default function CheckoutPage() {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', borderTop: '1px solid #ddd', paddingTop: '1.5rem' }}>
-               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+               <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem' }}>
                   <span style={{ color: '#666', fontWeight: 500 }}>Ara Toplam</span>
-                  <span style={{ fontWeight: 600, textDecoration: (originalSubTotal > grossSubTotal) ? 'line-through' : 'none', color: (originalSubTotal > grossSubTotal) ? '#999' : 'inherit' }}>
+                  <span style={{ fontWeight: 600, textDecoration: (originalSubTotal > grossSubTotal) ? 'line-through' : 'none', color: (originalSubTotal > grossSubTotal) ? '#999' : 'inherit', whiteSpace: 'nowrap', flexShrink: 0 }}>
                     {originalSubTotal.toFixed(2)} TL
                   </span>
                </div>
 
                {(originalSubTotal > grossSubTotal) && (
-                <div style={{ display: 'flex', justifyContent: 'space-between', color: '#666', fontSize: '0.85rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', color: '#666', fontSize: '0.85rem' }}>
                    <span>Ürün İndirimleri</span>
-                   <span>-{(originalSubTotal - grossSubTotal).toFixed(2)} TL</span>
+                   <span style={{ whiteSpace: 'nowrap', flexShrink: 0 }}>-{(originalSubTotal - grossSubTotal).toFixed(2)} TL</span>
                 </div>
                )}
 
                {totalCartDiscount > 0 && (
-                <div style={{ display: 'flex', justifyContent: 'space-between', color: '#16a34a', fontWeight: 700 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', color: '#16a34a', fontWeight: 700 }}>
                    <span>Sepet İndirimi</span>
-                   <span>-{totalCartDiscount.toFixed(2)} TL</span>
+                   <span style={{ whiteSpace: 'nowrap', flexShrink: 0 }}>-{totalCartDiscount.toFixed(2)} TL</span>
                 </div>
               )}
               {multiItemDiscountsDetail.map((discount, i) => (
-                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', color: '#16a34a', fontWeight: 700 }}>
+                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', color: '#16a34a', fontWeight: 700 }}>
                    <span>{discount.label}</span>
-                   <span>-{discount.amount.toFixed(2)} TL</span>
+                   <span style={{ whiteSpace: 'nowrap', flexShrink: 0 }}>-{discount.amount.toFixed(2)} TL</span>
                 </div>
               ))}
               {appliedCoupon && (
-                <div style={{ display: 'flex', justifyContent: 'space-between', color: '#16a34a', fontWeight: 700 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', color: '#16a34a', fontWeight: 700 }}>
                    <span>Kupon ({appliedCoupon.code})</span>
-                   <span>-{couponDiscount.toFixed(2)} TL</span>
+                   <span style={{ whiteSpace: 'nowrap', flexShrink: 0 }}>-{couponDiscount.toFixed(2)} TL</span>
                 </div>
               )}
               {useCredit && appliedCredit > 0 && (
-                <div style={{ display: 'flex', justifyContent: 'space-between', color: '#16a34a', fontWeight: 700 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', color: '#16a34a', fontWeight: 700 }}>
                    <span>Mağaza Kredisi</span>
-                   <span>-{appliedCredit.toFixed(2)} TL</span>
+                   <span style={{ whiteSpace: 'nowrap', flexShrink: 0 }}>-{appliedCredit.toFixed(2)} TL</span>
                 </div>
               )}
-              <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '1.5rem', borderTop: '2px solid #111', marginTop: '0.5rem', fontSize: '1.6rem', fontWeight: 900 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', paddingTop: '1.5rem', borderTop: '2px solid #111', marginTop: '0.5rem', fontSize: '1.6rem', fontWeight: 900 }}>
                  <span>Toplam</span>
-                 <span style={{ color: 'var(--color-primary)' }}>{total.toFixed(2)} TL</span>
+                 <span style={{ color: 'var(--color-primary)', whiteSpace: 'nowrap', flexShrink: 0 }}>{total.toFixed(2)} TL</span>
               </div>
             </div>
          </div>

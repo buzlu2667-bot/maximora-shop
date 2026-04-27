@@ -1,0 +1,224 @@
+.floatingBtn {
+  position: fixed;
+  bottom: 100px; /* LiveChat butonunun üzerinde kalması için yükseltildi */
+  right: 25px;
+  width: 60px;
+  height: 60px;
+  background-color: #10b981;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
+  z-index: 9999; /* En üstte görünmesi için */
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.floatingBtn:hover {
+  transform: scale(1.1) rotate(15deg);
+  background-color: #059669;
+}
+
+.pulse {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #10b981;
+  opacity: 0.6;
+  z-index: -1;
+  animation: pulseAnim 2s infinite;
+}
+
+@keyframes pulseAnim {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.popup {
+  background: white;
+  width: 100%;
+  max-width: 360px;
+  border-radius: 30px;
+  padding: 3rem 2rem 2.5rem 2rem;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+  animation: popupIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes popupIn {
+  from { transform: translateY(30px) scale(0.9); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.closeBtn {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  background: #f3f4f6;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.closeBtn:hover {
+  background: #e5e7eb;
+  color: #111;
+  transform: rotate(90deg);
+}
+
+.iconBox {
+  width: 80px;
+  height: 80px;
+  background-color: #ecfdf5;
+  color: #10b981;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem auto;
+}
+
+.title {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #111;
+  line-height: 1.2;
+}
+
+.content {
+  margin: 0 0 2rem 0;
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.5;
+}
+
+.couponCodeWrapper {
+  background-color: #f9fafb;
+  border: 2px dashed #10b981;
+  border-radius: 20px;
+  padding: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #9ca3af;
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+}
+
+.codeRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.code {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: #111;
+  letter-spacing: 2px;
+}
+
+.copyBtn {
+  background: #10b981;
+  color: white;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.copyBtn:hover {
+  background: #059669;
+  transform: scale(1.1);
+}
+
+.actionBtn {
+  width: 100%;
+  background: #111;
+  color: white;
+  border: none;
+  padding: 1.1rem;
+  border-radius: 15px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.actionBtn:hover {
+  background: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.amountBadge {
+  background-color: #10b981;
+  color: white;
+  display: inline-block;
+  padding: 0.5rem 1.25rem;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 800;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 5px 15px rgba(16, 185, 129, 0.2);
+}
+
+@media (max-width: 480px) {
+  .floatingBtn {
+    bottom: 160px; /* Mobilde çok daha yukarı taşıdık */
+    right: 15px;
+    width: 54px;
+    height: 54px;
+  }
+  
+  .popup {
+    padding: 2.5rem 1.5rem 2rem 1.5rem;
+    width: 90%;
+  }
+  
+  .title {
+    font-size: 1.35rem;
+  }
+}
