@@ -3,6 +3,7 @@ import { Product } from '@/types';
 import { notFound } from 'next/navigation';
 import ClientProductDetails from '@/components/ProductDetails/ClientProductDetails';
 import ProductCard from '@/components/ProductCard/ProductCard';
+import RecentlyViewed from '@/components/RecentlyViewed/RecentlyViewed';
 import sharedStyles from '@/app/(shop)/page.module.css';
 
 import { getProducts, getProductBySlug } from '@/lib/data';
@@ -65,6 +66,8 @@ export default async function ProductPage(props: { params: Promise<{ slug: strin
           </div>
         </div>
       )}
+
+      <RecentlyViewed currentProduct={product} />
     </div>
   );
 }

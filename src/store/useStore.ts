@@ -43,6 +43,10 @@ interface StoreState {
   // Coupons
   appliedCoupon: AppliedCoupon | null;
   setAppliedCoupon: (coupon: AppliedCoupon | null) => void;
+
+  // UI
+  isCartDrawerOpen: boolean;
+  setIsCartDrawerOpen: (open: boolean) => void;
 }
 
 export const useStore = create<StoreState>()(
@@ -272,6 +276,10 @@ export const useStore = create<StoreState>()(
       // ---- COUPONS ----
       appliedCoupon: null,
       setAppliedCoupon: (coupon) => set({ appliedCoupon: coupon }),
+
+      // ---- UI ----
+      isCartDrawerOpen: false,
+      setIsCartDrawerOpen: (open) => set({ isCartDrawerOpen: open }),
     }),
     {
       name: 'maximora-storage',

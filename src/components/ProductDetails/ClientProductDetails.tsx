@@ -38,7 +38,7 @@ export default function ClientProductDetails({ product }: Props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [openTabs, setOpenTabs] = useState<Record<string, boolean>>({ desc: true, feat: false });
 
-  const { addToCart, addToFavorites, removeFromFavorites, isFavorite } = useStore();
+  const { addToCart, addToFavorites, removeFromFavorites, isFavorite, setIsCartDrawerOpen } = useStore();
   const favorite = isFavorite(product.id);
 
   // Ürün değişince (sayfa geçişi) yeniden init et
@@ -119,6 +119,7 @@ export default function ClientProductDetails({ product }: Props) {
   const handleAddToCart = () => {
     try {
       addToCart(product, quantity, selectedVariants);
+      setIsCartDrawerOpen(true);
       toast.success(`${product.name} — ${quantity} adet sepete eklendi!`, {
         icon: '🛍️',
         style: { borderRadius: '10px', background: '#333', color: '#fff' }

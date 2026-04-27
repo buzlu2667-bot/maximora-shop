@@ -12,6 +12,7 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import ClientFeaturedProduct from '@/components/FeaturedProduct/ClientFeaturedProduct';
 import ShowcaseGrid from '@/components/ShowcaseGrid/ShowcaseGrid';
+import RecentlyViewed from '@/components/RecentlyViewed/RecentlyViewed';
 
 import { getProducts, getShowcases, getPromoBlocks, getNewestSettings } from '@/lib/data';
 
@@ -120,6 +121,10 @@ export default async function Home() {
           </section>
         );
       })}
+
+      <div className="container">
+        <RecentlyViewed />
+      </div>
     </>
   );
 }

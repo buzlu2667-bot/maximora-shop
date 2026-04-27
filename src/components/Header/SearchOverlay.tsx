@@ -6,6 +6,7 @@ import { X, Search as SearchIcon, Loader2, CircleX } from 'lucide-react';
 import styles from './SearchOverlay.module.css';
 import { supabase } from '@/lib/supabase';
 import { Product } from '@/types';
+import Skeleton from '../Skeleton/Skeleton';
 
 interface SearchOverlayProps {
   isOpen: boolean;
@@ -116,7 +117,19 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
 
             <div className={styles.productsCol}>
               <span className={styles.colTitle}>Ürünler</span>
-              {results.length > 0 ? (
+              {loading ? (
+                <div className={styles.productList}>
+                   {[1, 2, 3, 4].map(i => (
+                     <div key={i} style={{ display: 'flex', gap: '1rem', padding: '0.75rem' }}>
+                        <Skeleton width="60px" height="80px" borderRadius="8px" />
+                        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                           <Skeleton width="80%" height="16px" />
+                           <Skeleton width="40%" height="14px" />
+                        </div>
+                     </div>
+                   ))}
+                </div>
+              ) : results.length > 0 ? (
                 <div className={styles.productList}>
                   {results.map((product) => (
                     <Link key={product.id} href={`/product/${product.slug}`} className={styles.productCard} onClick={onClose}>

@@ -13,7 +13,7 @@ import TopBar from '../TopBar/TopBar';
 import toast from 'react-hot-toast';
 
 export default function Header() {
-  const { cart, favorites, user, setUser, syncUserData, logout } = useStore();
+  const { cart, favorites, user, setUser, syncUserData, logout, setIsCartDrawerOpen } = useStore();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -254,7 +254,12 @@ export default function Header() {
                </div>
             </Link>
 
-            <Link href="/cart" aria-label="Sepet" className={styles.iconBtn}>
+            <button 
+              aria-label="Sepet" 
+              className={styles.iconBtn}
+              onClick={() => setIsCartDrawerOpen(true)}
+              style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+            >
                <div style={{ position: 'relative' }}>
                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                    <circle cx="9" cy="21" r="1"></circle>
@@ -265,7 +270,7 @@ export default function Header() {
                    <span className={styles.cartBadge}>{cartItemCount}</span>
                  )}
                </div>
-            </Link>
+            </button>
           </div>
         </div>
       </header>
