@@ -362,6 +362,18 @@
   font-weight: 900;
   color: #16a34a;
   font-size: 1.1rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-left: 1rem;
+}
+
+@media (max-width: 480px) {
+  .savingsCardTitle {
+    font-size: 0.85rem;
+  }
+  .savingsCardValue {
+    font-size: 0.95rem;
+  }
 }
 
 @media (max-width: 768px) {
