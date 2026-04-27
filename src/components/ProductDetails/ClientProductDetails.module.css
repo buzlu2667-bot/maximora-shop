@@ -32,6 +32,7 @@
   overflow: hidden;
   position: relative;
   cursor: zoom-in;
+  touch-action: pan-y;
 }
 
 .mainImage {

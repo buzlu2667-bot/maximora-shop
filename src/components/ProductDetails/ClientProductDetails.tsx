@@ -37,6 +37,7 @@ export default function ClientProductDetails({ product }: Props) {
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [openTabs, setOpenTabs] = useState<Record<string, boolean>>({ desc: true, feat: false });
+  const touchStartPos = React.useRef({ x: 0, y: 0 });
 
   const { addToCart, addToFavorites, removeFromFavorites, isFavorite, setIsCartDrawerOpen } = useStore();
   const favorite = isFavorite(product.id);
@@ -105,15 +106,24 @@ export default function ClientProductDetails({ product }: Props) {
   };
 
   // Swipe desteği
-  const [touchStart, setTouchStart] = useState(0);
   const onTouchStart = (e: React.TouchEvent) => {
-    setTouchStart(e.touches[0].clientX);
+    touchStartPos.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY
+    };
   };
   const onTouchEnd = (e: React.TouchEvent) => {
-    const touchEnd = e.changedTouches[0].clientX;
-    const diff = touchStart - touchEnd;
-    if (diff > 50) handleNextImage(); // Sola kaydır -> Sonraki
-    if (diff < -50) handlePrevImage(); // Sağa kaydır -> Önceki
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    
+    const diffX = touchStartPos.current.x - touchEndX;
+    const diffY = touchStartPos.current.y - touchEndY;
+
+    // Sadece yatay hareket dikey hareketten daha fazlaysa ve eşik aşıldıysa tetikle
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+      if (diffX > 0) handleNextImage(); // Sola kaydır -> Sonraki
+      else handlePrevImage(); // Sağa kaydır -> Önceki
+    }
   };
 
   const handleAddToCart = () => {

@@ -17,6 +17,7 @@ interface ProductCardProps {
 export default function ProductCard({ product, inSlider = false }: ProductCardProps) {
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const touchStartPos = React.useRef({ x: 0, y: 0 });
   const { toggleFavorite, favorites } = useStore();
   const isFavorite = favorites.some(f => f.id === product.id);
   
@@ -52,18 +53,24 @@ export default function ProductCard({ product, inSlider = false }: ProductCardPr
   const handleMouseLeave = () => setCurrentImageIndex(0);
 
   // Mobil Swipe (Kaydırma) İşlemi
-  let touchStartX = 0;
   const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX = e.touches[0].clientX;
+    touchStartPos.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY
+    };
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
     if (!hasMultipleImages) return;
     const touchEndX = e.changedTouches[0].clientX;
-    const diff = touchStartX - touchEndX;
+    const touchEndY = e.changedTouches[0].clientY;
+    
+    const diffX = touchStartPos.current.x - touchEndX;
+    const diffY = touchStartPos.current.y - touchEndY;
 
-    if (Math.abs(diff) > 40) { // 40px'den fazla kaydırdıysa
-      if (diff > 0) {
+    // Sadece yatay hareket dikey hareketten daha fazlaysa ve eşik aşıldıysa tetikle
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 40) {
+      if (diffX > 0) {
         // Sola kaydırdı -> Sonraki görsel
         setCurrentImageIndex((prev) => (prev + 1) % images.length);
       } else {

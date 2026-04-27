@@ -4,6 +4,7 @@
   min-height: 500px;
   overflow: hidden;
   background-color: var(--color-background-alt);
+  touch-action: pan-y;
 }
 
 @media (max-width: 1024px) {

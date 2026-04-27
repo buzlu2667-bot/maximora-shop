@@ -22,6 +22,7 @@ export default function HeroSlider() {
   const [slides, setSlides] = useState<Slide[]>(DEFAULT_SLIDES);
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const touchStartPos = React.useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     const fetchSlides = async () => {
@@ -63,8 +64,32 @@ export default function HeroSlider() {
 
   if (slides.length === 0) return null;
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartPos.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY
+    };
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    
+    const diffX = touchStartPos.current.x - touchEndX;
+    const diffY = touchStartPos.current.y - touchEndY;
+
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+      if (diffX > 0) nextSlide();
+      else prevSlide();
+    }
+  };
+
   return (
-    <div className={styles.slider}>
+    <div 
+      className={styles.slider}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
       {slides.map((slide, index) => {
         const hasText = slide.title || slide.subtitle;
         const positionClass = slide.textPosition ? slide.textPosition.replace('-', '_') : 'center';
