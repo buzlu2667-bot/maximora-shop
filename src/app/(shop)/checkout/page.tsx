@@ -6,6 +6,7 @@ import { useStore } from '@/store/useStore';
 import { supabase } from '@/lib/supabase';
 import toast from 'react-hot-toast';
 import { AlertTriangle, MessageCircle, ArrowRight, X } from 'lucide-react';
+import { calculateCartTotals, DiscountSettings } from '@/lib/calculations';
 import styles from './Checkout.module.css';
 
 export default function CheckoutPage() {
@@ -23,7 +24,11 @@ export default function CheckoutPage() {
   const [warningModalOpen, setWarningModalOpen] = useState(false);
   const [ibanModalOpen, setIbanModalOpen] = useState(false);
   const [isSummaryExpanded, setIsSummaryExpanded] = useState(false);
-  const [globalDiscount, setGlobalDiscount] = useState(0);
+  const [paymentMethod, setPaymentMethod] = useState<'shopier' | 'iban'>('shopier');
+  const [settings, setSettings] = useState<DiscountSettings>({
+    global_discount_percent: 0,
+    multi_item_discounts: []
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0); // Sayfa açıldığında en üste at
@@ -35,12 +40,16 @@ export default function CheckoutPage() {
   }, [user]);
 
 
+
   const fetchSettings = async () => {
     try {
       const res = await fetch('/api/settings');
       if (res.ok) {
         const data = await res.json();
-        setGlobalDiscount(data.global_discount_percent || 0);
+        setSettings({
+          global_discount_percent: data.global_discount_percent || 0,
+          multi_item_discounts: data.multi_item_discounts || []
+        });
       }
     } catch (err) {}
   };
@@ -59,41 +68,6 @@ export default function CheckoutPage() {
     }
   };
 
-  if (!mounted) return null;
-
-  const subTotal = cart.reduce((sum, item) => {
-    const selectedColor = item.selectedVariants?.['color'];
-    const colorVariant = item.product.variants?.find((v: any) => v.id === 'color');
-    const variantDiscount = selectedColor && colorVariant?.discountRates?.[selectedColor];
-    
-    const itemDiscount = (variantDiscount !== undefined && Number(variantDiscount) > 0) 
-      ? Number(variantDiscount) 
-      : (Number(item.product.cart_discount_percent) || Number(globalDiscount));
-
-    const basePrice = item.overridePrice || item.product.price;
-
-    const price = Number(itemDiscount) > 0 
-      ? basePrice * (1 - Number(itemDiscount) / 100) 
-      : basePrice;
-    return sum + price * item.quantity;
-  }, 0);
-
-  const grossSubTotal = cart.reduce((sum, item) => {
-    return sum + (item.overridePrice || item.product.price) * item.quantity;
-  }, 0);
-
-  const totalCartDiscount = grossSubTotal - subTotal;
-  const originalSubTotal = cart.reduce((sum, item) => {
-    const baseOriginalPrice = item.overrideOldPrice || item.overridePrice || item.product.oldPrice || item.product.price;
-    return sum + baseOriginalPrice * item.quantity;
-  }, 0);
-  const couponDiscount = appliedCoupon ? appliedCoupon.discountAmount : 0;
-  const afterCoupon = Math.max(0, subTotal - couponDiscount);
-  const creditBalance = profile?.credit_balance || 0;
-  const appliedCredit = useCredit ? Math.min(afterCoupon, creditBalance) : 0;
-  const total = Math.max(0, afterCoupon - appliedCredit);
-  const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
-
   const getItemShopierLink = (item: any): string | null => {
     const selectedColor = item.selectedVariants?.['color'];
     const colorVariant = item.product.variants?.find((v: any) => v.id === 'color');
@@ -107,6 +81,40 @@ export default function CheckoutPage() {
   const hasMultipleShopierLinks = uniqueShopierLinks.length > 1;
   const hasShopierInCart = cart.some(item => !!getItemShopierLink(item));
   const shopierLink = cart.length > 0 ? (getItemShopierLink(cart[0]) || '#') : '#';
+
+  const creditBalance = profile?.credit_balance || 0;
+
+  // 1. Önce krediyi hesaplamadan sepet tutarını al
+  const {
+    total: totalBeforeCredit,
+    subTotalFinal,
+    grossSubTotal,
+    originalSubTotal,
+    totalCartDiscount,
+    totalMultiItemDiscount,
+    multiItemDiscountsDetail,
+    couponDiscount
+  } = calculateCartTotals(cart, settings, appliedCoupon);
+
+  // 2. Kredi kullanımını hesapla
+  const appliedCredit = useCredit ? Math.min(totalBeforeCredit, creditBalance) : 0;
+  
+  // 3. Nihai toplam
+  const total = Math.max(0, totalBeforeCredit - appliedCredit);
+
+  const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+  useEffect(() => {
+    if (mounted) {
+      if (!hasShopierInCart || total === 0) {
+        setPaymentMethod('iban');
+      } else {
+        setPaymentMethod('shopier');
+      }
+    }
+  }, [mounted, hasShopierInCart, total]);
+
+  if (!mounted) return null;
 
   const openLiveChat = () => {
     if ((window as any).LiveChatWidget) {
@@ -133,6 +141,7 @@ export default function CheckoutPage() {
             couponCode: appliedCoupon?.code || null,
             couponDiscount: couponDiscount,
             cartDiscount: totalCartDiscount,
+            multiItemDiscountAmount: totalMultiItemDiscount,
             shippingAddress,
             customerEmail: formValues.email,
             customerPhone: formValues.phone,
@@ -194,6 +203,7 @@ export default function CheckoutPage() {
             couponCode: appliedCoupon?.code || null,
             couponDiscount: couponDiscount,
             cartDiscount: totalCartDiscount,
+            multiItemDiscountAmount: totalMultiItemDiscount,
             shippingAddress: "Shopier Ödemesi",
             customerEmail: formValues.email || user?.email || null,
             customerPhone: formValues.phone || null,
@@ -269,63 +279,114 @@ export default function CheckoutPage() {
              )}
 
              {hasShopierInCart && total > 0 && (
-               <div className={styles.shopierBox}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-                     <input type="radio" id="shopier" name="payment" defaultChecked style={{ width: 'auto' }} />
-                     <label htmlFor="shopier" style={{ fontWeight: 800, color: '#1d4ed8', fontSize: '1.1rem' }}>Kredi veya Banka Kartı</label>
+               <div 
+                className={styles.shopierBox} 
+                onClick={() => setPaymentMethod('shopier')}
+                style={{ 
+                  cursor: 'pointer', 
+                  border: paymentMethod === 'shopier' ? '2px solid #1d4ed8' : '1px solid #eee',
+                  transition: 'all 0.3s ease',
+                  padding: '1.5rem',
+                  borderRadius: '16px'
+                }}
+               >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: paymentMethod === 'shopier' ? '1.5rem' : '0' }}>
+                     <input 
+                      type="radio" 
+                      id="shopier" 
+                      name="payment" 
+                      checked={paymentMethod === 'shopier'} 
+                      onChange={() => setPaymentMethod('shopier')}
+                      style={{ width: 'auto' }} 
+                     />
+                     <label htmlFor="shopier" style={{ fontWeight: 800, color: '#1d4ed8', fontSize: '1.1rem', cursor: 'pointer' }}>Kredi veya Banka Kartı</label>
                   </div>
                   
-                  {/* 1. KRİTİK HATA: FARKLI ÜRÜNLER */}
-                  {hasMultipleShopierLinks && (
-                    <div className={styles.shopierWarning} style={{ borderLeft: '4px solid #dc2626', backgroundColor: '#fef2f2', color: '#991b1b', marginBottom: '1rem' }}>
-                      <AlertTriangle size={20} />
-                      <p style={{ margin: 0 }}><strong>Hata:</strong> Sepetinizde farklı modeller var. Shopier ile sadece aynı modelden alım yapabilirsiniz. Lütfen sepeti teke düşürün.</p>
+                  {paymentMethod === 'shopier' && (
+                    <div style={{ marginTop: '1rem' }}>
+                      {/* 1. KRİTİK HATA: FARKLI ÜRÜNLER */}
+                      {hasMultipleShopierLinks && (
+                        <div className={styles.shopierWarning} style={{ borderLeft: '4px solid #dc2626', backgroundColor: '#fef2f2', color: '#991b1b', marginBottom: '1rem' }}>
+                          <AlertTriangle size={20} />
+                          <p style={{ margin: 0 }}><strong>Hata:</strong> Sepetinizde farklı modeller var. Shopier ile sadece aynı modelden alım yapabilirsiniz. Lütfen sepeti teke düşürün.</p>
+                        </div>
+                      )}
+
+                      {/* 2. ADET UYARISI */}
+                      {!hasMultipleShopierLinks && totalQuantity > 1 && (
+                        <div className={styles.shopierWarning} style={{ borderLeft: '4px solid #3b82f6', backgroundColor: '#eff6ff', color: '#1e40af', marginBottom: '1rem' }}>
+                          <ArrowRight size={20} />
+                          <p style={{ margin: 0 }}><strong>Adet Notu:</strong> Sepetinizde {totalQuantity} ürün var. Shopier sayfasında <strong>Adet</strong> kısmını <strong>{totalQuantity}</strong> yapmayı unutmayın.</p>
+                        </div>
+                      )}
+
+                      {/* 3. İNDİRİM/FİYAT UYARISI */}
+                      {!hasMultipleShopierLinks && (couponDiscount > 0 || appliedCredit > 0 || totalCartDiscount > 0 || totalMultiItemDiscount > 0) && (
+                        <div className={styles.shopierWarning} style={{ borderLeft: '4px solid #f59e0b', backgroundColor: '#fffbeb', color: '#92400e', marginBottom: '1rem' }}>
+                          <AlertTriangle size={20} />
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                            <p style={{ margin: 0 }}><strong>Fiyat Notu:</strong> İndirim kullandınız. Shopier fiyatı güncellenmemiş olabilir. Emin değilseniz desteğe yazın.</p>
+                            <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); openLiveChat(); }} style={{ background: '#f59e0b', color: 'white', border: 'none', padding: '0.4rem 0.8rem', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 700, width: 'fit-content', cursor: 'pointer' }}>Canlı Desteğe Sor</button>
+                          </div>
+                        </div>
+                      )}
+
+                       <button 
+                        onClick={(e) => { e.stopPropagation(); handleShopierPaymentTrigger(e); }} 
+                        disabled={hasMultipleShopierLinks} 
+                        className={`btn ${hasMultipleShopierLinks ? styles.shopierDisabled : 'btn-accent'}`} 
+                        style={{ width: '100%', padding: '1.25rem', borderRadius: '12px', fontWeight: 800 }}
+                       >
+                         {hasMultipleShopierLinks ? 'Kart ile Ödeme Devre Dışı' : `Kart ile Güvenli Ödeme (${total.toFixed(2)} TL)`}
+                      </button>
                     </div>
                   )}
-
-                  {/* 2. ADET UYARISI */}
-                  {!hasMultipleShopierLinks && totalQuantity > 1 && (
-                    <div className={styles.shopierWarning} style={{ borderLeft: '4px solid #3b82f6', backgroundColor: '#eff6ff', color: '#1e40af', marginBottom: '1rem' }}>
-                      <ArrowRight size={20} />
-                      <p style={{ margin: 0 }}><strong>Adet Notu:</strong> Sepetinizde {totalQuantity} ürün var. Shopier sayfasında <strong>Adet</strong> kısmını <strong>{totalQuantity}</strong> yapmayı unutmayın.</p>
-                    </div>
-                  )}
-
-                  {/* 3. İNDİRİM/FİYAT UYARISI */}
-                  {!hasMultipleShopierLinks && (couponDiscount > 0 || appliedCredit > 0 || totalCartDiscount > 0) && (
-                    <div className={styles.shopierWarning} style={{ borderLeft: '4px solid #f59e0b', backgroundColor: '#fffbeb', color: '#92400e', marginBottom: '1rem' }}>
-                      <AlertTriangle size={20} />
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                        <p style={{ margin: 0 }}><strong>Fiyat Notu:</strong> İndirim kullandınız. Shopier fiyatı güncellenmemiş olabilir. Emin değilseniz desteğe yazın.</p>
-                        <button onClick={(e) => { e.preventDefault(); openLiveChat(); }} style={{ background: '#f59e0b', color: 'white', border: 'none', padding: '0.4rem 0.8rem', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 700, width: 'fit-content', cursor: 'pointer' }}>Canlı Desteğe Sor</button>
-                      </div>
-                    </div>
-                  )}
-
-                   <button 
-                    onClick={handleShopierPaymentTrigger} 
-                    disabled={hasMultipleShopierLinks} 
-                    className={`btn ${hasMultipleShopierLinks ? styles.shopierDisabled : 'btn-accent'}`} 
-                    style={{ width: '100%', padding: '1.25rem', borderRadius: '12px', fontWeight: 800 }}
-                   >
-                     {hasMultipleShopierLinks ? 'Kart ile Ödeme Devre Dışı' : `Kart ile Güvenli Ödeme (${total.toFixed(2)} TL)`}
-                  </button>
                </div>
              )}
 
-             <div className={styles.paymentBox} style={{ opacity: (total === 0) ? 0.5 : 1 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-                   <input type="radio" id="iban" name="payment" defaultChecked={!hasShopierInCart || total === 0} style={{ width: 'auto' }} />
-                   <label htmlFor="iban" style={{ fontWeight: 600 }}>{total === 0 ? 'Tam Ödeme (Kupon/Kredi)' : 'EFT / Havale (IBAN)'}</label>
+             <div 
+              className={styles.paymentBox} 
+              onClick={() => setPaymentMethod('iban')}
+              style={{ 
+                opacity: (total === 0) ? 1 : (paymentMethod === 'iban' ? 1 : 0.7),
+                cursor: 'pointer',
+                border: paymentMethod === 'iban' ? '2px solid var(--color-primary)' : '1px solid #eee',
+                transition: 'all 0.3s ease',
+                marginTop: '1rem',
+                padding: '1.5rem',
+                borderRadius: '16px'
+              }}
+             >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: paymentMethod === 'iban' ? '1rem' : '0' }}>
+                   <input 
+                    type="radio" 
+                    id="iban" 
+                    name="payment" 
+                    checked={paymentMethod === 'iban'} 
+                    onChange={() => setPaymentMethod('iban')}
+                    style={{ width: 'auto' }} 
+                   />
+                   <label htmlFor="iban" style={{ fontWeight: 600, cursor: 'pointer' }}>{total === 0 ? 'Tam Ödeme (Kupon/Kredi)' : 'EFT / Havale (IBAN)'}</label>
                 </div>
-                {total > 0 && (
-                  <div style={{ padding: '1rem', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
-                     <p style={{ margin: 0, fontSize: '0.85rem' }}>EFT/Havale ile ödemeyi seçtiniz. <strong>Siparişi tamamla</strong> butonuna bastıktan sonra IBAN bilgilerini göreceksiniz.</p>
+                
+                {paymentMethod === 'iban' && (
+                  <div style={{ marginTop: '1rem' }}>
+                    {total > 0 && (
+                      <div style={{ padding: '1rem', backgroundColor: '#f9fafb', borderRadius: '8px', marginBottom: '1.5rem' }}>
+                         <p style={{ margin: 0, fontSize: '0.85rem' }}>EFT/Havale ile ödemeyi seçtiniz. <strong>Siparişi tamamla</strong> butonuna bastıktan sonra IBAN bilgilerini göreceksiniz.</p>
+                      </div>
+                    )}
+                    <button 
+                      type="submit" 
+                      disabled={isSubmitting} 
+                      className="btn btn-primary" 
+                      style={{ width: '100%', padding: '1.25rem', borderRadius: '12px' }}
+                      onClick={(e) => { e.stopPropagation(); }}
+                    >
+                      {isSubmitting ? 'İşleniyor...' : total === 0 ? 'Siparişi Tamamla' : 'Siparişi Tamamla (IBAN)'}
+                    </button>
                   </div>
                 )}
-                <button type="submit" disabled={isSubmitting} className="btn btn-primary" style={{ width: '100%', padding: '1.25rem', marginTop: '1.5rem', borderRadius: '12px' }}>
-                  {isSubmitting ? 'İşleniyor...' : total === 0 ? 'Siparişi Tamamla' : 'Siparişi Tamamla (IBAN)'}
-                </button>
              </div>
           </section>
         </form>
@@ -377,6 +438,12 @@ export default function CheckoutPage() {
                    <span>-{totalCartDiscount.toFixed(2)} TL</span>
                 </div>
               )}
+              {multiItemDiscountsDetail.map((discount, i) => (
+                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', color: '#16a34a', fontWeight: 700 }}>
+                   <span>{discount.label}</span>
+                   <span>-{discount.amount.toFixed(2)} TL</span>
+                </div>
+              ))}
               {appliedCoupon && (
                 <div style={{ display: 'flex', justifyContent: 'space-between', color: '#16a34a', fontWeight: 700 }}>
                    <span>Kupon ({appliedCoupon.code})</span>

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useStore } from '@/store/useStore';
 import toast from 'react-hot-toast';
 import { Ticket, ArrowRight } from 'lucide-react';
+import { calculateCartTotals, DiscountSettings } from '@/lib/calculations';
 
 import styles from './Cart.module.css';
 
@@ -13,7 +14,10 @@ export default function CartPage() {
   const [mounted, setMounted] = useState(false);
   const [couponCode, setCouponCode] = useState('');
   const [isValidating, setIsValidating] = useState(false);
-  const [globalDiscount, setGlobalDiscount] = useState(0);
+  const [settings, setSettings] = useState<DiscountSettings>({
+    global_discount_percent: 0,
+    multi_item_discounts: []
+  });
   const [isSummaryExpanded, setIsSummaryExpanded] = useState(false);
 
   useEffect(() => {
@@ -27,42 +31,26 @@ export default function CartPage() {
       const res = await fetch('/api/settings');
       if (res.ok) {
         const data = await res.json();
-        setGlobalDiscount(data.global_discount_percent || 0);
+        setSettings({
+          global_discount_percent: data.global_discount_percent || 0,
+          multi_item_discounts: data.multi_item_discounts || []
+        });
       }
     } catch (err) {
       console.error('Ayarlar yüklenemedi:', err);
     }
   };
 
-  const subTotal = cart.reduce((sum, item) => {
-    const selectedColor = item.selectedVariants?.['color'];
-    const colorVariant = item.product.variants?.find((v: any) => v.id === 'color');
-    const variantDiscount = selectedColor && colorVariant?.discountRates?.[selectedColor];
-
-    const itemDiscount = (variantDiscount !== undefined && Number(variantDiscount) > 0) 
-      ? Number(variantDiscount) 
-      : (Number(item.product.cart_discount_percent) || Number(globalDiscount));
-
-    const basePrice = item.overridePrice || item.product.price;
-
-    const price = Number(itemDiscount) > 0 
-      ? basePrice * (1 - Number(itemDiscount) / 100) 
-      : basePrice;
-    return sum + price * item.quantity;
-  }, 0);
-
-  const grossSubTotal = cart.reduce((sum, item) => {
-    return sum + (item.overridePrice || item.product.price) * item.quantity;
-  }, 0);
-
-  const totalCartDiscount = grossSubTotal - subTotal;
-  const originalSubTotal = cart.reduce((sum, item) => {
-    const baseOriginalPrice = item.overrideOldPrice || item.overridePrice || item.product.oldPrice || item.product.price;
-    return sum + (baseOriginalPrice * item.quantity);
-  }, 0);
-
-  const discountAmount = appliedCoupon ? appliedCoupon.discountAmount : 0;
-  const total = Math.max(0, subTotal - discountAmount);
+  const {
+    total,
+    subTotalFinal: subTotal,
+    grossSubTotal,
+    originalSubTotal,
+    totalCartDiscount,
+    totalMultiItemDiscount,
+    multiItemDiscountsDetail,
+    couponDiscount: discountAmount
+  } = calculateCartTotals(cart, settings, appliedCoupon);
 
   const handleRemove = (id: string, name: string) => {
     removeFromCart(id);
@@ -141,7 +129,7 @@ export default function CartPage() {
               const variantDiscount = selectedColor && colorVariant?.discountRates?.[selectedColor];
               const itemDiscount = (variantDiscount !== undefined && Number(variantDiscount) > 0) 
                 ? Number(variantDiscount) 
-                : (Number(item.product.cart_discount_percent) || Number(globalDiscount));
+                : (Number(item.product.cart_discount_percent) || Number(settings.global_discount_percent || 0));
 
               const basePrice = item.overridePrice || item.product.price;
               const baseOldPrice = item.overrideOldPrice || item.overridePrice || item.product.oldPrice || item.product.price;
@@ -244,6 +232,13 @@ export default function CartPage() {
               <span style={{ fontWeight: 700 }}>-{totalCartDiscount.toFixed(2)} TL</span>
             </div>
           )}
+
+          {multiItemDiscountsDetail.map((discount, i) => (
+            <div key={i} className={styles.summaryRow} style={{ color: '#10b981' }}>
+              <span style={{ fontWeight: 600 }}>{discount.label}</span>
+              <span style={{ fontWeight: 700 }}>-{discount.amount.toFixed(2)} TL</span>
+            </div>
+          ))}
 
           {appliedCoupon && (
             <div className={styles.summaryRow} style={{ color: '#16a34a' }}>

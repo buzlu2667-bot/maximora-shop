@@ -12,6 +12,7 @@ const SIDEBAR_LINKS = [
   { href: '/marlboro/products', label: 'Ürünler Listesi', color: '#ccc', bold: false },
   { href: '/marlboro/products/new', label: 'Yeni Ürün Ekle', color: '#ccc', bold: false },
   { href: '/marlboro/coupons', label: 'Kuponlar', color: '#ccc', bold: false },
+  { href: '/marlboro/campaigns', label: 'Kampanyalar', color: '#10b981', bold: true },
   { href: '/marlboro/showcases', label: 'Vitrin Yönetimi', color: '#d4af37', bold: true },
   { href: '/marlboro/slider', label: 'Slider Yönetimi', color: '#d4af37', bold: true },
   { href: '/marlboro/promo-block', label: 'Tanıtım Bloğu (Banner)', color: '#d4af37', bold: true },
