@@ -59,7 +59,7 @@ export default function AnnouncementPopup() {
 
   return (
     <div className={styles.overlay}>
-      <div className={styles.container}>
+      <div className={`${styles.container} ${(!popupData.title && !popupData.content) ? styles.minimalContainer : ''}`}>
         <button className={styles.closeBtn} onClick={handleClose} aria-label="Kapat">
           <X size={24} />
         </button>
@@ -70,9 +70,9 @@ export default function AnnouncementPopup() {
           </div>
         )}
 
-        <div className={styles.content}>
-          <h2 className={styles.title}>{popupData.title}</h2>
-          <p className={styles.text}>{popupData.content}</p>
+        <div className={`${styles.content} ${(!popupData.title && !popupData.content) ? styles.minimalContent : ''}`}>
+          {popupData.title && <h2 className={styles.title}>{popupData.title}</h2>}
+          {popupData.content && <p className={styles.text}>{popupData.content}</p>}
 
           {popupData.buttonText && popupData.buttonLink && (
             <Link 

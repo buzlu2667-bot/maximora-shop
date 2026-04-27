@@ -262,7 +262,8 @@ export default function PopupSettingsPage() {
           }}>
             {settings.enabled ? (
               <div style={{ 
-                backgroundColor: 'white', 
+                backgroundColor: (settings.title || settings.content) ? 'white' : 'rgba(255, 255, 255, 0.9)', 
+                backdropFilter: (settings.title || settings.content) ? 'none' : 'blur(12px)',
                 width: '320px', 
                 borderRadius: '25px', 
                 overflow: 'hidden', 
@@ -274,9 +275,18 @@ export default function PopupSettingsPage() {
                     <img src={settings.image} alt="Preview" style={{ width: '100%', height: 'auto', maxHeight: '250px', objectFit: 'contain' }} />
                   </div>
                 )}
-                <div style={{ padding: '2rem', textAlign: 'center' }}>
-                  <h4 style={{ margin: '0 0 0.75rem 0', fontSize: '1.5rem', fontWeight: 800 }}>{settings.title || 'BAŞLIK'}</h4>
-                  <p style={{ margin: '0 0 2rem 0', fontSize: '0.9rem', color: '#666', lineHeight: 1.5 }}>{settings.content || 'Duyuru metni burada görünecek...'}</p>
+                <div style={{ 
+                  padding: (!settings.title && !settings.content) ? '1.5rem 2rem 2rem 2rem' : '2.5rem 2rem 2rem 2rem', 
+                  textAlign: 'center' 
+                }}>
+                  {settings.title ? (
+                    <h4 style={{ margin: '0 0 0.75rem 0', fontSize: '1.5rem', fontWeight: 800 }}>{settings.title}</h4>
+                  ) : (
+                    settings.content && <div style={{ height: '0.5rem' }}></div>
+                  )}
+                  {settings.content && (
+                    <p style={{ margin: '0 0 2rem 0', fontSize: '0.9rem', color: '#666', lineHeight: 1.5 }}>{settings.content}</p>
+                  )}
                   <button style={{ width: '100%', backgroundColor: '#111', color: 'white', padding: '1rem', borderRadius: '12px', fontWeight: 700, border: 'none', cursor: 'default' }}>
                     {settings.buttonText || 'BUTON YAZISI'}
                   </button>
