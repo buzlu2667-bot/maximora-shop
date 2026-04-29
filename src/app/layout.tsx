@@ -24,9 +24,11 @@ export const metadata: Metadata = {
     icon: [
       { url: '/favicon.png' },
       { url: '/favicon.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon.png', sizes: '192x192', type: 'image/png' },
+      { url: '/favicon.png', sizes: '512x512', type: 'image/png' },
     ],
     apple: [
-      { url: '/favicon.png' },
+      { url: '/favicon.png', sizes: '180x180', type: 'image/png' },
     ],
   },
 };
@@ -50,7 +52,7 @@ const jsonLd = {
       '@id': 'https://maximorashop.com/#organization',
       name: 'Maximora',
       url: 'https://maximorashop.com/',
-      logo: 'https://maximorashop.com/logo.png',
+      logo: 'https://maximorashop.com/favicon.png',
       sameAs: [
         'https://www.instagram.com/maximorashop/'
       ]
@@ -66,60 +68,17 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <body>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              // Supabase'in "Lock" hatalarını tamamen susturur (siteyi etkilemez, sadece gürültü)
-              const _isSbLockErr = function(msg) {
-                if (!msg) return false;
-                var s = typeof msg === 'string' ? msg : (msg.message || msg.reason || msg.toString() || '');
-                return s.includes('Lock broken') || 
-                       s.includes('stole it') || 
-                       s.includes('steal') ||
-                       s.includes('Lock "lock:') || 
-                       s.includes('was released because') || 
-                       s.includes('auth-token') ||
-                       s.includes('another request stole it') ||
-                       s.includes('Lock broken by another request');
-              };
-
-              const originalError = console.error;
-              console.error = function(...args) {
-                if (args && args[0] && _isSbLockErr(args[0])) return;
-                originalError.apply(console, args);
-              };
-
-              window.addEventListener('unhandledrejection', function(event) {
-                if (event.reason && _isSbLockErr(event.reason)) {
-                  event.preventDefault();
-                  event.stopImmediatePropagation();
-                }
-              }, true);
-
-              window.addEventListener('error', function(event) {
-                if (event.message && _isSbLockErr(event.message)) {
-                  event.preventDefault();
-                  event.stopImmediatePropagation();
-                }
-                if (event.error && _isSbLockErr(event.error)) {
-                  event.preventDefault();
-                  event.stopImmediatePropagation();
-                }
-              }, true);
-            `
-          }}
-        />
-        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}>
-          <Providers />
-          {children}
-        </GoogleOAuthProvider>
-        
         {/* SEO Structured Data */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
 
+        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}>
+          <Providers />
+          {children}
+        </GoogleOAuthProvider>
+        
         {/* LiveChat Integration - Sayfa yüklendikten sonra çalışır */}
         <Script id="livechat-script" strategy="lazyOnload">
           {`

@@ -1,0 +1,283 @@
+.landing {
+  --emerald-dark: #0A3622;
+  --emerald-primary: #0F5132;
+  --emerald-light: #1A6B45;
+  --gold-primary: #D4AF37;
+  --gold-light: #F1D279;
+  --text-ivory: #FDFCF0;
+  
+  min-height: 100vh;
+  background-color: var(--emerald-dark);
+  color: var(--text-ivory);
+  font-family: 'Playfair Display', serif;
+  overflow-x: hidden;
+}
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4rem 2rem;
+  background: radial-gradient(circle at center, var(--emerald-primary) 0%, var(--emerald-dark) 100%);
+  border-bottom: 3px double var(--gold-primary);
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background-image: radial-gradient(circle at center, var(--gold-primary) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.3;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png'); /* Subtle texture */
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+.ornament {
+  width: 200px;
+  height: auto;
+  margin-bottom: 2rem;
+  filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.5));
+  animation: pulse 3s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.8; }
+}
+
+.goldLogo {
+  filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.4));
+  animation: pulse 4s infinite ease-in-out;
+}
+
+.topNav {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+}
+
+.backToShop {
+  color: var(--gold-primary);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  padding: 0.5rem 1.2rem;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+}
+
+.backToShop:hover {
+  background: var(--gold-primary);
+  color: var(--emerald-dark);
+}
+
+.seriesTag {
+  font-size: 1.2rem;
+  color: var(--gold-primary);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-top: -1rem;
+  margin-bottom: 2rem;
+  opacity: 0.8;
+}
+
+.title {
+  font-size: clamp(3.5rem, 10vw, 6rem);
+  margin-bottom: 1rem;
+  color: var(--gold-primary);
+  text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  font-weight: 700;
+}
+
+.subtitle {
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  max-width: 800px;
+  margin-bottom: 3rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  opacity: 0.9;
+}
+
+.downloadButtons {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.playButton {
+  background: #000;
+  border: 1px solid var(--gold-primary);
+  border-radius: 12px;
+  padding: 0.75rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+  color: white;
+}
+
+.playButton:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3), 0 0 15px rgba(212, 175, 55, 0.3);
+  border-color: var(--gold-light);
+}
+
+.playButtonText {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.getItOn {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  font-family: 'Inter', sans-serif;
+  opacity: 0.8;
+}
+
+.googlePlay {
+  font-size: 1.2rem;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+}
+
+.features {
+  padding: 6rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.featureGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 3rem;
+  margin-top: 4rem;
+}
+
+.featureCard {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  padding: 3rem 2rem;
+  border-radius: 24px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.featureCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--gold-primary);
+  transform: scaleX(0);
+  transition: transform 0.4s ease;
+  transform-origin: left;
+}
+
+.featureCard:hover::before {
+  transform: scaleX(1);
+}
+
+.featureCard:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--gold-primary);
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+.featureIcon {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  display: block;
+}
+
+.featureTitle {
+  color: var(--gold-primary);
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.featureDesc {
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+  opacity: 0.8;
+}
+
+.screenshots {
+  padding: 6rem 0;
+  background: rgba(0,0,0,0.2);
+  overflow: hidden;
+}
+
+.screenshotTrack {
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+  width: max-content;
+  animation: scroll 40s linear infinite;
+}
+
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.screenshotImg {
+  width: 300px;
+  height: 600px;
+  border-radius: 20px;
+  object-fit: contain;
+  background-color: #051a11; /* Uygulamanın koyu yeşili */
+  border: 2px solid var(--gold-primary);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  padding: 5px;
+}
+
+.footer {
+  padding: 4rem 2rem;
+  text-align: center;
+  border-top: 1px solid rgba(212, 175, 55, 0.2);
+  font-family: 'Inter', sans-serif;
+  opacity: 0.6;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    height: auto;
+    padding: 6rem 1.5rem;
+  }
+  .title {
+    font-size: 3rem;
+  }
+  .featureGrid {
+    grid-template-columns: 1fr;
+  }
+}
