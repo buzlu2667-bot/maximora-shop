@@ -85,11 +85,11 @@ export default function ProductCard({ product, inSlider = false }: ProductCardPr
   return (
     <div className={styles.card}>
       <div 
-        className={styles.imageWrapper}
+        className={`${styles.imageWrapper} ${hasMultipleImages ? styles.hasMulti : ''}`}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        onTouchStart={!inSlider ? handleTouchStart : undefined}
-        onTouchEnd={!inSlider ? handleTouchEnd : undefined}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
       >
 
         <Link href={`/product/${product.slug}`}>

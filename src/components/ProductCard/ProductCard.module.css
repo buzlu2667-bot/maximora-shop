@@ -13,6 +13,11 @@
   border-radius: 8px;
   background-color: transparent;
   cursor: pointer;
+  /* Tek resimse carousel kaysın diye touch-action: auto (default) bırakıyoruz */
+}
+
+.imageWrapper.hasMulti {
+  /* Çoklu resimse carousel kaymasın, biz scriptle resim değiştirelim */
   touch-action: pan-y;
 }
 
@@ -32,6 +37,11 @@
   transition: opacity 0.3s ease, transform 0.5s ease;
   opacity: 0;
   visibility: hidden;
+  /* Donanım ivmelendirmesi ve titreme önleme */
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 .activeImage {
