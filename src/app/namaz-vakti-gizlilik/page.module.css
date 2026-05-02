@@ -1,0 +1,183 @@
+.container {
+  min-height: 100vh;
+  background-color: #062116; /* Deep Emerald */
+  background-image: radial-gradient(circle at center, #0a3d28 0%, #062116 100%);
+  color: #e0e0e0;
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l15 30-15 30-15-30z' fill='%23D4AF37' fill-opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+  width: 100%;
+  max-width: 800px;
+  position: relative;
+}
+
+.backButton {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #D4AF37;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: transform 0.2s;
+}
+
+.backButton:hover {
+  transform: translateX(-5px);
+}
+
+.ornamentTop {
+  width: 200px;
+  height: 20px;
+  margin: 0 auto 1rem;
+  background: linear-gradient(90deg, transparent, #D4AF37, transparent);
+  mask-image: radial-gradient(circle, black 1px, transparent 1px);
+  mask-size: 10px 10px;
+}
+
+.title {
+  font-size: 2.5rem;
+  color: #D4AF37;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  opacity: 0.8;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.content {
+  width: 100%;
+  max-width: 800px;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 24px;
+  padding: 3rem;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+.section {
+  margin-bottom: 2.5rem;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.sectionHeader h2 {
+  color: #D4AF37;
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.icon {
+  flex-shrink: 0;
+}
+
+.section p {
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+.section ul {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.section li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+.section li::before {
+  content: "✦";
+  position: absolute;
+  left: 0;
+  color: #D4AF37;
+}
+
+.contactInfo {
+  background: rgba(212, 175, 55, 0.1);
+  padding: 1.5rem;
+  border-radius: 12px;
+  border-left: 4px solid #D4AF37;
+}
+
+.contactInfo p {
+  margin: 0.5rem 0;
+}
+
+.lastUpdate {
+  text-align: center;
+  margin-top: 4rem;
+  font-size: 0.8rem;
+  opacity: 0.5;
+}
+
+.footer {
+  margin-top: 4rem;
+  padding-bottom: 2rem;
+  text-align: center;
+  width: 100%;
+}
+
+.ornamentBottom {
+  width: 150px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #D4AF37, transparent);
+  margin: 0 auto 1.5rem;
+}
+
+.footer p {
+  font-size: 0.9rem;
+  opacity: 0.6;
+}
+
+@media (max-width: 768px) {
+  .content {
+    padding: 1.5rem;
+  }
+  
+  .title {
+    font-size: 2rem;
+  }
+  
+  .backButton {
+    position: static;
+    margin-bottom: 1rem;
+    justify-content: center;
+  }
+}

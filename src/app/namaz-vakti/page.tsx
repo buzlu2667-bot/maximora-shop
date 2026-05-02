@@ -167,7 +167,11 @@ export default function NamazLandingPage() {
 
       <footer className={styles.footer}>
         <p>&copy; 2026 Maximora Studio. Tüm Hakları Saklıdır.</p>
-        <p style={{ marginTop: '0.5rem', fontSize: '0.8rem' }}>Osmanlı Zümrüt Serisi - Namaz Vakti Uygulaması</p>
+        <p style={{ marginTop: '0.5rem', fontSize: '0.8rem' }}>
+          <a href="/namaz-vakti-gizlilik" style={{ color: '#D4AF37', textDecoration: 'none' }}>Gizlilik Politikası</a>
+          <span style={{ margin: '0 0.5rem', opacity: 0.5 }}>|</span>
+          Osmanlı Zümrüt Serisi - Namaz Vakti Uygulaması
+        </p>
       </footer>
     </div>
   );

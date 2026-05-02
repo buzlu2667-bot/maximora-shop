@@ -166,7 +166,9 @@ export default function ParaKontrolPage() {
       <footer className={styles.footer}>
         <div className={styles.footerText}>
           &copy; 2026 Maximora Studio. Bütün hakları saklıdır.<br/>
-          Para Kontrol - Akıllı Finans Asistanı
+          <a href="/para-kontrol-gizlilik" style={{ color: '#00E5FF', textDecoration: 'none', fontSize: '0.85rem', marginTop: '0.5rem', display: 'inline-block' }}>Gizlilik Politikası</a>
+          <span style={{ margin: '0 0.5rem', opacity: 0.3 }}>|</span>
+          <span style={{ fontSize: '0.85rem' }}>Para Kontrol - Akıllı Finans Asistanı</span>
         </div>
       </footer>
     </div>
