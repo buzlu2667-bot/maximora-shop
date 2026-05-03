@@ -93,7 +93,7 @@ export default function ParaKontrolGizlilikPage() {
             Gizlilikle ilgili her türlü sorunuz için teknik ekibimize ulaşabilirsiniz:
           </p>
           <div className={styles.contactInfo}>
-            <p><strong>E-posta:</strong> destek@maximorashop.com</p>
+            <p><strong>E-posta:</strong> <a href="mailto:destek@maximorashop.com" className={styles.emailLink}>destek@maximorashop.com</a></p>
           </div>
         </section>
 
