@@ -117,8 +117,8 @@ export default function CheckoutPage() {
   if (!mounted) return null;
 
   const openLiveChat = () => {
-    if ((window as any).LiveChatWidget) {
-      (window as any).LiveChatWidget.call('maximize');
+    if ((window as any).$zoho && (window as any).$zoho.salesiq) {
+      (window as any).$zoho.salesiq.floatwindow.visible('show');
     } else {
       toast("Canlı destek yükleniyor, lütfen biraz bekleyin...");
     }

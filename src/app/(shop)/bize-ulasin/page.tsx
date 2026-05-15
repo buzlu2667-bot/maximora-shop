@@ -94,8 +94,37 @@ export default function ContactUsPage() {
           
           {openSections.includes('support') && (
             <div style={{ padding: '0 0 1.5rem 2.5rem', color: '#555', lineHeight: '1.6', fontSize: '0.95rem' }}>
-              <p>Sağ alt köşedeki butonla ekibimize anında ulaşabilirsiniz.</p>
-              <p style={{ marginTop: '0.5rem' }}>Genelde 2-5 dakika içinde dönüş sağlıyoruz.</p>
+              <button 
+                onClick={(e) => {
+                  e.preventDefault();
+                  if ((window as any).$zoho && (window as any).$zoho.salesiq) {
+                    (window as any).$zoho.salesiq.floatwindow.visible('show');
+                  } else {
+                    toast("Canlı destek yükleniyor, lütfen biraz bekleyin...");
+                  }
+                }}
+                style={{
+                  background: '#111',
+                  color: '#fff',
+                  border: 'none',
+                  padding: '0.5rem 1rem',
+                  borderRadius: '6px',
+                  fontWeight: 500,
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  marginBottom: '0.8rem',
+                  fontSize: '0.85rem',
+                  transition: 'opacity 0.2s'
+                }}
+                onMouseOver={(e) => e.currentTarget.style.opacity = '0.8'}
+                onMouseOut={(e) => e.currentTarget.style.opacity = '1'}
+              >
+                <MessageCircle size={16} />
+                Canlı Desteğe Bağlan
+              </button>
+              <p>Genelde 2-5 dakika içinde dönüş sağlıyoruz.</p>
             </div>
           )}
         </div>
