@@ -51,8 +51,9 @@
 }
 
 .ornament {
-  width: 200px;
-  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-bottom: 2rem;
   filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.5));
   animation: pulse 3s infinite ease-in-out;
@@ -126,43 +127,26 @@
   justify-content: center;
 }
 
-.playButton {
-  background: #000;
-  border: 1px solid var(--gold-primary);
+.playButtonImageWrap {
+  display: inline-block;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.playButtonImageWrap:hover {
+  transform: translateY(-5px) scale(1.03);
+}
+
+.playButtonImage {
+  height: 64px;
+  width: auto;
+  object-fit: contain;
   border-radius: 12px;
-  padding: 0.75rem 2rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  text-decoration: none;
-  color: white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transition: box-shadow 0.3s ease;
 }
 
-.playButton:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.3), 0 0 15px rgba(212, 175, 55, 0.3);
-  border-color: var(--gold-light);
-}
-
-.playButtonText {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.getItOn {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  font-family: 'Inter', sans-serif;
-  opacity: 0.8;
-}
-
-.googlePlay {
-  font-size: 1.2rem;
-  font-weight: 600;
-  font-family: 'Inter', sans-serif;
+.playButtonImageWrap:hover .playButtonImage {
+  box-shadow: 0 15px 30px rgba(0,0,0,0.4), 0 0 20px rgba(255, 255, 255, 0.2);
 }
 
 .features {
@@ -278,6 +262,99 @@
     font-size: 3rem;
   }
   .featureGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-top: 2rem;
   }
+  .featureCard {
+    padding: 1rem 0.5rem;
+    border-radius: 16px;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .featureIcon {
+    width: 2rem;
+    height: 2rem;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0.5rem;
+  }
+  .featureTitle {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .featureDesc {
+    display: none;
+  }
+}
+
+/* Modal Styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+  padding: 1rem;
+}
+
+.modalContent {
+  background: var(--emerald-dark);
+  border: 1px solid var(--gold-primary);
+  border-radius: 20px;
+  padding: 3rem 2rem;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  animation: modalIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.9) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modalClose {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: var(--text-ivory);
+  font-size: 1.5rem;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.3s;
+}
+
+.modalClose:hover {
+  opacity: 1;
+}
+
+.modalIcon {
+  margin-bottom: 1.5rem;
+}
+
+.modalTitle {
+  color: var(--gold-primary);
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.modalDesc {
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+  opacity: 0.9;
+  font-size: 1.1rem;
 }

@@ -1,20 +1,51 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './page.module.css';
-import { Compass, Clock, BookOpen, Bell, Map, Shield, ListChecks, Fingerprint, GraduationCap, History, Sun, Heart } from 'lucide-react';
+import { 
+  Compass, Clock, BookOpen, ListChecks, Fingerprint, GraduationCap, History, 
+  Sun, Heart, MapPin, HandHeart, Feather, Calculator, Book, CalendarCheck, 
+  HelpCircle, Library, BookType, Headphones, Baby, MoonStar, Mic, 
+  ShieldCheck, CalendarRange, Activity, Coins, Scroll
+} from 'lucide-react';
 import Image from 'next/image';
 
+const featuresData = [
+  { Icon: Clock, title: "Tam Zamanında", desc: "Diyanet ile tam uyumlu, konumunuza özel kesin namaz vakitleri ve bildirimler." },
+  { Icon: Compass, title: "Kıble Pusulası", desc: "Dünyanın neresinde olursanız olun, gelişmiş pusula ile kıblenizi saniyeler içinde bulun." },
+  { Icon: BookOpen, title: "Kur'an-ı Kerim", desc: "Mushaf görünümü ile Kur'an-ı Kerim okuyun, ayetlerin meallerine kolayca ulaşın." },
+  { Icon: Scroll, title: "Haftanın Hutbesi", desc: "Diyanet İşleri Başkanlığı'nın her hafta yayımladığı cuma hutbelerini anında okuyun." },
+  { Icon: MapPin, title: "Cami Bul", desc: "Bulunduğunuz konuma en yakın camileri harita üzerinde kolayca keşfedin ve yol tarifi alın." },
+  { Icon: HandHeart, title: "Gönül Köprüsü", desc: "Dualarda buluşmak için Gönül Köprüsü ile diğer kullanıcılarla manevi bağ kurun." },
+  { Icon: Feather, title: "Hikmetname", desc: "Her güne özel seçilmiş altın değerindeki dini sözler ve hikmetli mesajlarla ruhunuzu besleyin." },
+  { Icon: Calculator, title: "Zekatmatik", desc: "Mal varlığınızı girerek vermeniz gereken zekat miktarını en doğru ve kolay şekilde hesaplayın." },
+  { Icon: Coins, title: "Fitre Hesaplama", desc: "Ailenizin fitre miktarını güncel Diyanet verilerine göre hızlıca hesaplayın." },
+  { Icon: Book, title: "Namaz Rehberi", desc: "Beş vakit namazın kılınışını, dualarını ve surelerini resimli ve anlatımlı rehberle öğrenin." },
+  { Icon: CalendarCheck, title: "İbadet Takibi", desc: "Günlük ibadetlerinizi kaydedin, aylık veya yıllık grafiklerle gelişiminizi gözlemleyin." },
+  { Icon: HelpCircle, title: "Bilgi Yarışması", desc: "İslami konulardaki bilgi seviyenizi ölçün ve eğlenerek yeni dini bilgiler öğrenin." },
+  { Icon: Library, title: "Siyer-i Nebi", desc: "Peygamber Efendimiz'in (SAV) örnek hayatını ve İslam tarihinin önemli olaylarını okuyun." },
+  { Icon: BookType, title: "İslami Sözlük", desc: "Dini terimlerin, kavramların ve tasavvufi kelimelerin anlamlarını geniş sözlükten öğrenin." },
+  { Icon: Headphones, title: "Huzur Modu", desc: "Dinlendirici sesler eşliğinde zikir veya ibadet yaparken manevi bir atmosfere girin." },
+  { Icon: Baby, title: "Bebek İsimleri", desc: "Kur'an-ı Kerim'de geçen ve dini anlamı güzel olan kız ve erkek bebek isimlerini inceleyin." },
+  { Icon: MoonStar, title: "Rüya Tabirleri", desc: "İslami kaynaklara dayanan detaylı rüya tabirleri sözlüğü ile rüyalarınızın anlamını bulun." },
+  { Icon: Mic, title: "Aşr-ı Şerifler", desc: "Özel günlerde okunan Aşr-ı Şerifleri dinleyin, Arapça ve Türkçe meallerini takip edin." },
+  { Icon: ShieldCheck, title: "Cevşen-ül Kebir", desc: "Peygamber Efendimiz'e vahyedilen bu eşsiz duayı okuyun ve manevi zırhınızı kuşanın." },
+  { Icon: CalendarRange, title: "Dini Günler ve Geceler", desc: "Kandiller, bayramlar ve üç aylar gibi önemli dini günleri kaçırmadan takvimden takip edin." },
+  { Icon: ListChecks, title: "Kaza Takibi", desc: "Kaçırdığınız namazların ve oruçların çetelesini tutun, kaza borçlarınızı kolayca yönetin." },
+  { Icon: Fingerprint, title: "Zikirmatik", desc: "Gelişmiş dijital zikirmatik ile tesbihatlarınızı çekin, zikir hedeflerinizi belirleyin." },
+  { Icon: Activity, title: "Zikir Programı", desc: "Günlük düzenli zikir hedeflerinizi belirleyin ve programlı bir şekilde ibadet edin." },
+  { Icon: History, title: "Kerâhet Vakitleri", desc: "İbadet edilmesi uygun olmayan kerâhet vakitlerini takip edin, ibadetlerinizi planlayın." },
+  { Icon: Heart, title: "Esmaül Hüsna", desc: "Allah'ın 99 ismini, anlamlarını ve faziletlerini keşfedin, derin manalara yolculuk yapın." },
+  { Icon: Sun, title: "40 Hadis", desc: "Peygamber Efendimizin (SAV) seçme hadis-i şeriflerini okuyun ve hayatınıza rehber edinin." }
+];
+
 export default function NamazLandingPage() {
+  const [activeModal, setActiveModal] = useState<any>(null);
+
   return (
     <div className={styles.landing}>
       {/* Hero Section */}
       <section className={styles.hero}>
-        <div className={styles.topNav}>
-          <a href="/" className={styles.backToShop}>
-            Mağazaya Git
-          </a>
-        </div>
         <div className={styles.ornament}>
           <Image 
             src="/logo-gold.png" 
@@ -36,18 +67,13 @@ export default function NamazLandingPage() {
             href="https://play.google.com/store/apps/details?id=com.namazapp.vakitleri" 
             target="_blank" 
             rel="noopener noreferrer" 
-            className={styles.playButton}
+            className={styles.playButtonImageWrap}
           >
-            <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M17.523 15.3414L20.6136 12.2508L3.63916 2.5002C3.41407 2.37053 3.16781 2.30256 2.91716 2.30103C2.66651 2.2995 2.41829 2.36444 2.18916 2.4912L12.1892 12.4912L17.523 15.3414Z" fill="#EA4335"/>
-              <path d="M2.18916 22.4912C2.41829 22.618 2.66651 22.6829 2.91716 22.6814C3.16781 22.6798 3.41407 22.6119 3.63916 22.4822L20.6136 12.7316L17.523 9.641L12.1892 12.4912L2.18916 22.4912Z" fill="#34A853"/>
-              <path d="M2.18916 2.4912L1.87916 2.8012C1.75131 2.92901 1.67916 3.10238 1.67916 3.2832C1.67916 3.46402 1.75131 3.63738 1.87916 3.76519L11.8792 13.7652L12.1892 13.4552V11.5272L2.18916 2.4912Z" fill="#FBBC04"/>
-              <path d="M12.1892 12.4912L2.18916 22.4912C2.31697 22.619 2.49034 22.6912 2.67116 22.6912C2.85198 22.6912 3.02534 22.6191 3.15316 22.4912L13.1532 12.4912L12.1892 11.5272V12.4912Z" fill="#4285F4"/>
-            </svg>
-            <div className={styles.playButtonText}>
-              <span className={styles.getItOn}>HEMEN İNDİR</span>
-              <span className={styles.googlePlay}>Google Play</span>
-            </div>
+            <img 
+              src="/googlebuton.png" 
+              alt="Google Play'den Alın" 
+              className={styles.playButtonImage}
+            />
           </a>
         </div>
       </section>
@@ -62,78 +88,30 @@ export default function NamazLandingPage() {
         </div>
 
         <div className={styles.featureGrid}>
-          <div className={styles.featureCard}>
-            <Clock className={styles.featureIcon} color="#D4AF37" />
-            <h3 className={styles.featureTitle}>Tam Zamanında</h3>
-            <p className={styles.featureDesc}>
-              Diyanet ile tam uyumlu, konumunuza özel kesin namaz vakitleri ve bildirimler.
-            </p>
-          </div>
-
-          <div className={styles.featureCard}>
-            <Compass className={styles.featureIcon} color="#D4AF37" />
-            <h3 className={styles.featureTitle}>Kıble Pusulası</h3>
-            <p className={styles.featureDesc}>
-              Dünyanın neresinde olursanız olun, gelişmiş pusula ile kıblenizi saniyeler içinde bulun.
-            </p>
-          </div>
-
-          <div className={styles.featureCard}>
-            <BookOpen className={styles.featureIcon} color="#D4AF37" />
-            <h3 className={styles.featureTitle}>Kur'an-ı Kerim</h3>
-            <p className={styles.featureDesc}>
-              Mushaf görünümü ile Kur'an-ı Kerim okuyun, ayetlerin meallerine kolayca ulaşın.
-            </p>
-          </div>
-
-          <div className={styles.featureCard}>
-            <ListChecks className={styles.featureIcon} color="#D4AF37" />
-            <h3 className={styles.featureTitle}>Kaza Takibi</h3>
-            <p className={styles.featureDesc}>
-              Kaçırdığınız namazların ve oruçların çetelesini tutun, kaza borçlarınızı kolayca yönetin.
-            </p>
-          </div>
-
-          <div className={styles.featureCard}>
-            <Fingerprint className={styles.featureIcon} color="#D4AF37" />
-            <h3 className={styles.featureTitle}>Zikirmatik</h3>
-            <p className={styles.featureDesc}>
-              Gelişmiş dijital zikirmatik ile tesbihatlarınızı çekin, zikir hedeflerinizi belirleyin.
-            </p>
-          </div>
-
-          <div className={styles.featureCard}>
-            <GraduationCap className={styles.featureIcon} color="#D4AF37" />
-            <h3 className={styles.featureTitle}>Namaz Öğren</h3>
-            <p className={styles.featureDesc}>
-              Resimli ve anlatımlı rehberler ile namaz kılmayı adım adım, en doğru şekilde öğrenin.
-            </p>
-          </div>
-
-          <div className={styles.featureCard}>
-            <History className={styles.featureIcon} color="#D4AF37" />
-            <h3 className={styles.featureTitle}>Kerâhet Vakitleri</h3>
-            <p className={styles.featureDesc}>
-              İbadet edilmesi uygun olmayan kerâhet vakitlerini takip edin, ibadetlerinizi planlayın.
-            </p>
-          </div>
-
-          <div className={styles.featureCard}>
-            <Heart className={styles.featureIcon} color="#D4AF37" />
-            <h3 className={styles.featureTitle}>Esmaül Hüsna</h3>
-            <p className={styles.featureDesc}>
-              Allah'ın 99 ismini, anlamlarını ve faziletlerini keşfedin, derin manalara yolculuk yapın.
-            </p>
-          </div>
-
-          <div className={styles.featureCard}>
-            <Sun className={styles.featureIcon} color="#D4AF37" />
-            <h3 className={styles.featureTitle}>40 Hadis</h3>
-            <p className={styles.featureDesc}>
-              Peygamber Efendimizin (SAV) seçme hadis-i şeriflerini okuyun ve hayatınıza rehber edinin.
-            </p>
-          </div>
+          {featuresData.map((feature, idx) => (
+            <div 
+              key={idx} 
+              className={styles.featureCard}
+              onClick={() => setActiveModal(feature)}
+            >
+              <feature.Icon className={styles.featureIcon} color="#D4AF37" />
+              <h3 className={styles.featureTitle}>{feature.title}</h3>
+              <p className={styles.featureDesc}>{feature.desc}</p>
+            </div>
+          ))}
         </div>
+
+        {/* Modal Overlay */}
+        {activeModal && (
+          <div className={styles.modalOverlay} onClick={() => setActiveModal(null)}>
+            <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+              <button className={styles.modalClose} onClick={() => setActiveModal(null)}>✕</button>
+              <activeModal.Icon size={48} color="#D4AF37" className={styles.modalIcon} />
+              <h3 className={styles.modalTitle}>{activeModal.title}</h3>
+              <p className={styles.modalDesc}>{activeModal.desc}</p>
+            </div>
+          </div>
+        )}
       </section>
 
       {/* Screenshots / App Showcase */}
