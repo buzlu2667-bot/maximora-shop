@@ -253,6 +253,37 @@
   opacity: 0.6;
 }
 
+.disclaimerSection {
+  padding: 4rem 2rem;
+  background-color: var(--emerald-primary);
+  display: flex;
+  justify-content: center;
+}
+
+.disclaimerBox {
+  max-width: 800px;
+  background: rgba(0,0,0,0.2);
+  border-left: 4px solid var(--gold-primary);
+  padding: 2rem;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+}
+
+.disclaimerTitle {
+  color: var(--gold-primary);
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.disclaimerText {
+  font-size: 1rem;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
 @media (max-width: 768px) {
   .hero {
     height: auto;
