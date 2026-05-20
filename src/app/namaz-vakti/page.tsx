@@ -143,18 +143,6 @@ export default function NamazLandingPage() {
         </div>
       </section>
 
-      {/* GPS Disclaimer Section */}
-      <section className={styles.disclaimerSection}>
-        <div className={styles.disclaimerBox}>
-          <h3 className={styles.disclaimerTitle}>
-            <MapPin size={24} /> GPS Destekli Mahalle Hassasiyeti
-          </h3>
-          <p className={styles.disclaimerText}>
-            Diğer uygulamalar Diyanet'in sadece il/ilçe merkezi vakitlerini internetten kopyalarken; bizim uygulamamız GPS konumunuza göre <strong>tam bulunduğunuz sokağa özel</strong> astronomik hesaplama yapar. Üstelik bu sayede internetsiz bile kusursuz çalışır! (Konum hassasiyetinden dolayı resmi il merkezi vakitleriyle aranızda 1-2 dakikalık bilimsel farklılıklar görülebilir).
-          </p>
-        </div>
-      </section>
-
       <footer className={styles.footer}>
         <p>&copy; 2026 Maximora Studio. Tüm Hakları Saklıdır.</p>
         <p style={{ marginTop: '0.5rem', fontSize: '0.8rem' }}>
