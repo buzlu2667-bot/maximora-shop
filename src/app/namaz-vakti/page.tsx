@@ -133,7 +133,7 @@ export default function NamazLandingPage() {
             </h3>
             <p style={{ fontSize: '1.1rem', lineHeight: '1.6', opacity: 0.9 }}>
               Emeklerinizin kaybolması imkansızdır! Telefonunuzu değiştirmeden veya uygulamayı silmeden hemen önce <strong>Ayarlar &gt; Veri Yedekleme</strong> menüsüne girerek tüm kayıtlarınızı tek bir dosya halinde dışa aktarabilirsiniz. 
-              Bu dosyayı kendinize (Mail, WhatsApp vb.) gönderin. Yeni telefonunuzda uygulamayı kurduktan sonra 'Yedeği Geri Yükle' diyerek ibadetlerinize hiçbir şey eksilmeden, güvenle kaldığınız yerden devam edebilirsiniz.
+              Bu dosyayı <strong>Google Drive'a veya telefonunuzun İndirilenler klasörüne</strong> kaydedin. Yeni telefonunuzda uygulamayı kurduktan sonra 'Yedeği Geri Yükle' diyerek bu dosyayı seçebilir ve ibadetlerinize hiçbir şey eksilmeden, güvenle kaldığınız yerden devam edebilirsiniz.
             </p>
           </div>
         </div>
