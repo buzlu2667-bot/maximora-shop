@@ -114,6 +114,31 @@ export default function NamazLandingPage() {
         )}
       </section>
 
+      {/* Privacy and Security Section */}
+      <section style={{ padding: '4rem 1rem', backgroundColor: 'rgba(21, 57, 43, 0.4)', borderTop: '1px solid rgba(212, 175, 55, 0.1)', borderBottom: '1px solid rgba(212, 175, 55, 0.1)' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
+          <ShieldCheck size={48} color="#D4AF37" style={{ margin: '0 auto 1.5rem auto' }} />
+          <h2 style={{ color: '#D4AF37', fontSize: '2rem', marginBottom: '1.5rem' }}>Neden Üyelik İstemiyoruz? Verileriniz Nasıl Korunuyor?</h2>
+          
+          <div style={{ textAlign: 'left', backgroundColor: 'rgba(0, 0, 0, 0.2)', padding: '2rem', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
+            <p style={{ fontSize: '1.1rem', lineHeight: '1.6', marginBottom: '1.5rem', opacity: 0.9 }}>
+              <strong style={{ color: '#D4AF37' }}>Bizim için en büyük öncelik mahremiyetinizdir.</strong> Kaza namazlarınız, çektiğiniz zikirler, tuttuğunuz oruçlar veya hatimleriniz gibi ibadet geçmişinize ait hiçbir kayıt bizim sunucularımıza gönderilmez ve kimseyle paylaşılmaz. 
+            </p>
+            <p style={{ fontSize: '1.1rem', lineHeight: '1.6', marginBottom: '2rem', opacity: 0.9 }}>
+              Sizi kayıt olmaya, e-posta vermeye veya şifre ezberlemeye asla zorlamayız! Tüm verileriniz tamamen <strong>sizin telefonunuzun hafızasında</strong>, %100 çevrimdışı (internetsiz) ve güvenli bir şekilde saklanır.
+            </p>
+            
+            <h3 style={{ color: '#D4AF37', fontSize: '1.3rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <span style={{ fontSize: '1.5rem' }}>📁</span> Telefon Değiştirirken Verilerim Ne Olacak?
+            </h3>
+            <p style={{ fontSize: '1.1rem', lineHeight: '1.6', opacity: 0.9 }}>
+              Emeklerinizin kaybolması imkansızdır! Telefonunuzu değiştirmeden veya uygulamayı silmeden hemen önce <strong>Ayarlar &gt; Veri Yedekleme</strong> menüsüne girerek tüm kayıtlarınızı tek bir dosya halinde dışa aktarabilirsiniz. 
+              Bu dosyayı kendinize (Mail, WhatsApp vb.) gönderin. Yeni telefonunuzda uygulamayı kurduktan sonra 'Yedeği Geri Yükle' diyerek ibadetlerinize hiçbir şey eksilmeden, güvenle kaldığınız yerden devam edebilirsiniz.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Screenshots / App Showcase */}
       <section className={styles.screenshots}>
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
