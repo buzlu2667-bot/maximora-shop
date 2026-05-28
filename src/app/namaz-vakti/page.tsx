@@ -6,11 +6,12 @@ import {
   Compass, Clock, BookOpen, ListChecks, Fingerprint, GraduationCap, History, 
   Sun, Heart, MapPin, HandHeart, Feather, Calculator, Book, CalendarCheck, 
   HelpCircle, Library, BookType, Headphones, Baby, MoonStar, Mic, 
-  ShieldCheck, CalendarRange, Activity, Coins, Scroll
+  ShieldCheck, CalendarRange, Activity, Coins, Scroll, Bot
 } from 'lucide-react';
 import Image from 'next/image';
 
 const featuresData = [
+  { Icon: Bot, title: "İmam AI (Yapay Zeka)", desc: "Aklınıza takılan tüm dini soruları saniyeler içinde cevaplayan akıllı İslami asistanınız." },
   { Icon: Clock, title: "Tam Zamanında", desc: "Diyanet ile tam uyumlu, konumunuza özel kesin namaz vakitleri ve bildirimler." },
   { Icon: Compass, title: "Kıble Pusulası", desc: "Dünyanın neresinde olursanız olun, gelişmiş pusula ile kıblenizi saniyeler içinde bulun." },
   { Icon: BookOpen, title: "Kur'an-ı Kerim", desc: "Mushaf görünümü ile Kur'an-ı Kerim okuyun, ayetlerin meallerine kolayca ulaşın." },
