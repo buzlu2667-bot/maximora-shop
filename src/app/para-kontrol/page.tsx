@@ -53,12 +53,6 @@ export default function ParaKontrolPage() {
     <div className={styles.landing}>
       {/* Hero Section */}
       <section className={styles.hero}>
-        <div className={styles.topNav}>
-          <a href="/" className={styles.backToShop}>
-            Mağazaya Dön
-          </a>
-        </div>
-        
         <div className={styles.heroContent}>
           <div style={{ 
             display: 'inline-flex', 
