@@ -85,7 +85,7 @@ export default function ParaKontrolPage() {
 
           <div className={styles.downloadButtons}>
             <a 
-              href="https://play.google.com/store/apps/details?id=com.parakontrol.app" 
+              href="https://play.google.com/store/apps/details?id=com.bagarakk.parakontrol" 
               target="_blank" 
               rel="noopener noreferrer" 
               className={styles.playButtonImageWrap}
