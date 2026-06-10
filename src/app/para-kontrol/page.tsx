@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './page.module.css';
 import { 
   Wallet, 
@@ -9,13 +9,46 @@ import {
   Layers, 
   Cloud, 
   ShieldCheck, 
-  ChevronRight,
-  ArrowUpRight,
-  Plus
+  Bot,
+  Coins,
+  Target,
+  Globe,
+  PiggyBank,
+  Mic,
+  Calendar,
+  AlertTriangle,
+  ArrowRightLeft,
+  Bell,
+  FileSpreadsheet,
+  Calculator,
+  Receipt,
+  Fingerprint,
+  FileText
 } from 'lucide-react';
 import Image from 'next/image';
 
+const featuresData = [
+  { Icon: Wallet, title: "Gelir & Gider Takibi", desc: "Tüm gelir ve giderlerinizi anlık olarak kaydederek bütçe dengenizi kolayca sağlayın." },
+  { Icon: Bot, title: "Yapay Zeka Finans Koçu", desc: "Akıllı yapay zeka asistanınız harcamalarınızı analiz eder, size özel bütçe ve tasarruf tavsiyeleri sunar." },
+  { Icon: Mic, title: "Sesli & Akıllı Ekleme", desc: "Harcamalarınızı uzun uzun yazmak yerine sesli komutlarla veya akıllı asistanla anında kaydedin." },
+  { Icon: Globe, title: "Çoklu Para Birimi & Canlı Kurlar", desc: "Farklı para birimleriyle işlem yapın, tüm döviz kurlarını canlı olarak sistem üzerinden takip edin." },
+  { Icon: PieChart, title: "Detaylı Analiz & Donut Grafik", desc: "Paranızın tam olarak nereye gittiğini görsel ve etkileşimli grafiklerle detaylıca inceleyin." },
+  { Icon: Calendar, title: "Finansal Takvim", desc: "Gelecek ödemelerinizi, taksitlerinizi ve gelirlerinizi takvim üzerinden kolayca planlayın." },
+  { Icon: AlertTriangle, title: "Aylık Limit & AI Uyarısı", desc: "Harcama limitleri belirleyin; limitinizi aşmaya yaklaştığınızda yapay zeka sizi önceden uyarsın." },
+  { Icon: PiggyBank, title: "Kumbara & Hedefler", desc: "Hayalleriniz için birikim hedefleri belirleyin ve kumbaranızdaki paranızı adım adım takip edin." },
+  { Icon: ArrowRightLeft, title: "Borç / Alacak Takibi", desc: "Kimden ne alacağınız, kime ne borcunuz var unutmayın. Gelişmiş cari hesap takibi." },
+  { Icon: Bell, title: "Günlük Hatırlatıcılar", desc: "Ödeme günü gelen fatura ve taksitleriniz için otomatik günlük bildirimler alın." },
+  { Icon: FileSpreadsheet, title: "Excel Rapor (VIP)", desc: "Tüm finansal verilerinizi tek tıkla gelişmiş Excel formatında dışa aktarın ve raporlayın." },
+  { Icon: Calculator, title: "Dahili Hesap Makinesi", desc: "Uygulamadan çıkmadan karmaşık hesaplarınızı yapabileceğiniz entegre hesap makinesi." },
+  { Icon: Receipt, title: "Fiş & Fatura Kaydı", desc: "Harcamalarınıza ait fiş ve faturaların fotoğraflarını çekerek kalıcı olarak arşivleyin." },
+  { Icon: Cloud, title: "Bulut Yedekleme & Senkron", desc: "Verileriniz güvenle bulutta saklanır ve tüm cihazlarınızda anlık olarak eşitlenir." },
+  { Icon: Fingerprint, title: "Biyometrik Güvenlik", desc: "FaceID veya parmak izi kilidi ile tüm finansal bilgilerinizi meraklı gözlerden koruyun." },
+  { Icon: FileText, title: "PDF Paylaşımı", desc: "Aylık özetlerinizi veya detaylı harcama raporlarınızı şık PDF belgeleri olarak paylaşın." }
+];
+
 export default function ParaKontrolPage() {
+  const [activeModal, setActiveModal] = useState<any>(null);
+
   return (
     <div className={styles.landing}>
       {/* Hero Section */}
@@ -52,17 +85,16 @@ export default function ParaKontrolPage() {
 
           <div className={styles.downloadButtons}>
             <a 
-              href="#" 
-              className={styles.playButton}
-              onClick={(e) => e.preventDefault()}
+              href="https://play.google.com/store/apps/details?id=com.parakontrol.app" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className={styles.playButtonImageWrap}
             >
-              <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M17.523 15.3414L20.6136 12.2508L3.63916 2.5002C3.41407 2.37053 3.16781 2.30256 2.91716 2.30103C2.66651 2.2995 2.41829 2.36444 2.18916 2.4912L12.1892 12.4912L17.523 15.3414Z" fill="#000000"/>
-                <path d="M2.18916 22.4912C2.41829 22.618 2.66651 22.6829 2.91716 22.6814C3.16781 22.6798 3.41407 22.6119 3.63916 22.4822L20.6136 12.7316L17.523 9.641L12.1892 12.4912L2.18916 22.4912Z" fill="#000000"/>
-                <path d="M2.18916 2.4912L1.87916 2.8012C1.75131 2.92901 1.67916 3.10238 1.67916 3.2832C1.67916 3.46402 1.75131 3.63738 1.87916 3.76519L11.8792 13.7652L12.1892 13.4552V11.5272L2.18916 2.4912Z" fill="#000000"/>
-                <path d="M12.1892 12.4912L2.18916 22.4912C2.31697 22.619 2.49034 22.6912 2.67116 22.6912C2.85198 22.6912 3.02534 22.6191 3.15316 22.4912L13.1532 12.4912L12.1892 11.5272V12.4912Z" fill="#000000"/>
-              </svg>
-              Google Play'den İndir
+              <img 
+                src="/googlebuton.png" 
+                alt="Google Play'den Alın" 
+                className={styles.playButtonImage}
+              />
             </a>
           </div>
         </div>
@@ -78,72 +110,40 @@ export default function ParaKontrolPage() {
         </div>
 
         <div className={styles.featureGrid}>
-          <div className={styles.featureCard}>
-            <div className={styles.iconWrapper}>
-              <Plus size={32} />
+          {featuresData.map((feature, idx) => (
+            <div 
+              key={idx} 
+              className={styles.featureCard}
+              onClick={() => setActiveModal(feature)}
+            >
+              <div className={styles.iconWrapper}>
+                <feature.Icon size={32} />
+              </div>
+              <h3 className={styles.featureTitle}>{feature.title}</h3>
+              <p className={styles.featureDesc}>{feature.desc}</p>
             </div>
-            <h3 className={styles.featureTitle}>Hızlı Kayıt</h3>
-            <p className={styles.featureDesc}>
-              Saniyeler içinde harcamalarınızı ekleyin, kategorize edin ve unutun. Para Kontrol sizin için hatırlar.
-            </p>
-          </div>
-
-          <div className={styles.featureCard}>
-            <div className={styles.iconWrapper}>
-              <PieChart size={32} />
-            </div>
-            <h3 className={styles.featureTitle}>Görsel Analiz</h3>
-            <p className={styles.featureDesc}>
-              Paranızın nereye gittiğini etkileşimli grafiklerle görün. Harcama alışkanlıklarınızı keşfedin.
-            </p>
-          </div>
-
-          <div className={styles.featureCard}>
-            <div className={styles.iconWrapper}>
-              <TrendingUp size={32} />
-            </div>
-            <h3 className={styles.featureTitle}>Bütçe Planlama</h3>
-            <p className={styles.featureDesc}>
-              Aylık veya haftalık bütçeler oluşturun, limitlerinizi aşmadan tasarruf etmeye başlayın.
-            </p>
-          </div>
-
-          <div className={styles.featureCard}>
-            <div className={styles.iconWrapper}>
-              <Layers size={32} />
-            </div>
-            <h3 className={styles.featureTitle}>Kategori Yönetimi</h3>
-            <p className={styles.featureDesc}>
-              İhtiyaçlarınıza göre sınırsız kategori oluşturun ve harcamalarınızı kusursuzca düzenleyin.
-            </p>
-          </div>
-
-          <div className={styles.featureCard}>
-            <div className={styles.iconWrapper}>
-              <Cloud size={32} />
-            </div>
-            <h3 className={styles.featureTitle}>Bulut Senkronizasyon</h3>
-            <p className={styles.featureDesc}>
-              Verileriniz tüm cihazlarınızda anlık olarak senkronize edilir. Telefonunuzu değiştirseniz de paranız güvende.
-            </p>
-          </div>
-
-          <div className={styles.featureCard}>
-            <div className={styles.iconWrapper}>
-              <ShieldCheck size={32} />
-            </div>
-            <h3 className={styles.featureTitle}>Tam Gizlilik</h3>
-            <p className={styles.featureDesc}>
-              Verileriniz uçtan uca şifrelenir. Finansal bilgileriniz sadece size özel kalır.
-            </p>
-          </div>
+          ))}
         </div>
+
+        {/* Modal Overlay */}
+        {activeModal && (
+          <div className={styles.modalOverlay} onClick={() => setActiveModal(null)}>
+            <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+              <button className={styles.modalClose} onClick={() => setActiveModal(null)}>✕</button>
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem', color: '#00E5FF' }}>
+                <activeModal.Icon size={48} />
+              </div>
+              <h3 className={styles.modalTitle}>{activeModal.title}</h3>
+              <p className={styles.modalDesc}>{activeModal.desc}</p>
+            </div>
+          </div>
+        )}
       </section>
 
       {/* Showcase Section */}
       <section className={styles.showcase}>
         <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-          <h2 style={{ fontSize: '2.5rem', fontWeight: 700 }}>Uygulama Deneyimi</h2>
+          <h2 style={{ fontSize: '2.5rem', fontWeight: 700, color: '#fff', textShadow: '0 0 20px rgba(0, 122, 255, 0.4)' }}>Uygulama Deneyimi</h2>
         </div>
         <div className={styles.showcaseContainer}>
           <div className={styles.carousel}>
