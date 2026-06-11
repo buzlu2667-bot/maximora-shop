@@ -84,7 +84,6 @@ export default function NamazGizlilikPage() {
           </p>
           <div className={styles.contactInfo}>
             <p><strong>E-posta:</strong> destek@maximorashop.com</p>
-            <p><strong>Web:</strong> www.maximorashop.com</p>
           </div>
         </section>
 

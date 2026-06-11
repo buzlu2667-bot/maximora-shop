@@ -210,4 +210,8 @@
   .contactInfo p {
     font-size: 0.95rem;
   }
+
+  .emailLink {
+    font-size: 0.85rem;
+  }
 }
