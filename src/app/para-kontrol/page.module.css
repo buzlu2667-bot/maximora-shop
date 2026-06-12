@@ -229,8 +229,9 @@
 
 @media (max-width: 768px) {
   .hero {
+    min-height: auto;
     height: auto;
-    padding: 8rem 1.5rem 4rem;
+    padding: 4rem 1.5rem 3rem;
   }
   .title {
     font-size: 3rem;
