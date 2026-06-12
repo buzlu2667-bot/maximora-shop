@@ -141,10 +141,10 @@ export default function ParaKontrolPage() {
         </div>
         <div className={styles.showcaseContainer}>
           <div className={styles.carousel}>
-            {[1, 2, 3, 4, 5, 1, 2, 3, 4, 5].map((i, index) => (
+            {[1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8].map((i, index) => (
               <div key={index} className={styles.screenshotWrapper}>
                 <img 
-                  src={`/para-kontrol/screen${i}.png`} 
+                  src={`/para-kontrol/${i}.png`} 
                   alt={`Para Kontrol Ekran ${i}`}
                   className={styles.screenshotImg}
                   onError={(e) => {
