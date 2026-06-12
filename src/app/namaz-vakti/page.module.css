@@ -235,14 +235,14 @@
 }
 
 .screenshotImg {
-  width: 300px;
-  height: 600px;
+  flex: 0 0 280px;
+  width: 280px;
+  height: auto;
   border-radius: 20px;
-  object-fit: contain;
-  background-color: #051a11; /* Uygulamanın koyu yeşili */
+  object-fit: cover;
   border: 2px solid var(--gold-primary);
   box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  padding: 5px;
+  display: block;
 }
 
 .footer {
