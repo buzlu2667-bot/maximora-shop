@@ -17,6 +17,17 @@ export default function RecentlyViewed({ currentProduct }: RecentlyViewedProps) 
     const saved = localStorage.getItem('maximora_recently_viewed');
     let list = saved ? JSON.parse(saved) : [];
 
+    // Eski Supabase URL'lerini yenisiyle güncelle (Migration sonrası kırık görselleri önlemek için)
+    const currentSupabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    if (currentSupabaseUrl) {
+      list = list.map((item: any) => {
+        if (item.image && typeof item.image === 'string' && item.image.includes('.supabase.co')) {
+          item.image = item.image.replace(/https:\/\/[a-zA-Z0-9]+\.supabase\.co/, currentSupabaseUrl);
+        }
+        return item;
+      });
+    }
+
     // 2. Eğer şu an bir ürün sayfasındaysak, bu ürünü listeye ekle
     if (currentProduct) {
       const simplifiedProduct = {
