@@ -55,7 +55,13 @@ export default function LoginPage() {
         router.push('/');
       }
     } catch (err: any) {
-      toast.error(err.message === 'Invalid login credentials' ? 'E-posta veya şifre hatalı.' : err.message);
+      if (err.message === 'Invalid login credentials') {
+        toast.error('E-posta veya şifre hatalı.');
+      } else if (err.message === 'Email not confirmed') {
+        toast.error('Lütfen önce e-posta adresinize gelen onay linkine tıklayın.');
+      } else {
+        toast.error(err.message);
+      }
     } finally {
       setLoading(false);
     }
