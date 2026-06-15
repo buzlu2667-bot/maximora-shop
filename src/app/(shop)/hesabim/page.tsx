@@ -145,7 +145,7 @@ export default function AccountPage() {
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                 <span>{tab === 'orders' ? 'Siparişlerim' : tab === 'savings' ? 'Kazançlarım' : 'Mağaza Kredisi'}</span>
                 <span style={{ fontSize: '0.8rem', opacity: 0.6 }}>
-                   ({tab === 'orders' ? orders.length : tab === 'savings' ? orders.filter(o => (o.cart_discount > 0 || o.multi_item_discount_amount > 0 || o.coupon_discount > 0)).length : creditBalance > 0 ? '1' : '0'})
+                   ({tab === 'orders' ? orders.length : tab === 'savings' ? orders.filter(o => (o.cart_discount > 0 || o.multi_item_discount_amount > 0 || o.coupon_discount > 0 || o.used_credit > 0)).length : creditBalance > 0 ? '1' : '0'})
                 </span>
                 
                 {tab === 'credit' && creditBalance > 0 && (
@@ -207,8 +207,8 @@ export default function AccountPage() {
                         return (
                           <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '1rem', backgroundColor: '#fafafa', padding: '0.75rem', borderRadius: '12px' }}>
                             {img && (
-                              <div style={{ width: '50px', height: '65px', borderRadius: '8px', overflow: 'hidden', flexShrink: 0, border: '1px solid #eee' }}>
-                                <img src={img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                              <div style={{ width: '50px', height: '65px', borderRadius: '8px', overflow: 'hidden', flexShrink: 0, border: '1px solid #eee', backgroundColor: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <img src={img} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                               </div>
                             )}
                             <div>
@@ -286,8 +286,8 @@ export default function AccountPage() {
       {activeTab === 'savings' && (
         <div style={{ animation: 'fadeIn 0.5s ease' }}>
           {(() => {
-            const allSavingsOrders = orders.filter(o => (Number(o.cart_discount) > 0 || Number(o.multi_item_discount_amount) > 0 || Number(o.coupon_discount) > 0));
-            const totalSavings = allSavingsOrders.reduce((sum, o) => sum + Number(o.cart_discount) + Number(o.multi_item_discount_amount) + Number(o.coupon_discount), 0);
+            const allSavingsOrders = orders.filter(o => (Number(o.cart_discount) > 0 || Number(o.multi_item_discount_amount) > 0 || Number(o.coupon_discount) > 0 || Number(o.used_credit) > 0));
+            const totalSavings = allSavingsOrders.reduce((sum, o) => sum + Number(o.cart_discount) + Number(o.multi_item_discount_amount) + Number(o.coupon_discount) + Number(o.used_credit || 0), 0);
             
             if (totalSavings === 0) {
                return (
@@ -317,7 +317,7 @@ export default function AccountPage() {
 
                 <div className={styles.savingsGrid}>
                    {paginatedSavings.map((order) => {
-                     const orderTotalSaving = Number(order.cart_discount) + Number(order.multi_item_discount_amount) + Number(order.coupon_discount);
+                     const orderTotalSaving = Number(order.cart_discount) + Number(order.multi_item_discount_amount) + Number(order.coupon_discount) + Number(order.used_credit || 0);
                      return (
                        <div key={order.id} className={styles.savingsCard}>
                           <div className={styles.savingsCardLabel}>
