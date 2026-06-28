@@ -119,14 +119,14 @@ export default function OtoTakipProPage() {
         )}
       </section>
 
-      {/* Showcase Section */}
+      {/* Showcase Section (Gizlendi) */}
+      {/* 
       <section className={styles.showcase}>
         <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
           <h2 style={{ fontSize: '2.5rem', fontWeight: 700, color: '#fff', textShadow: '0 0 20px rgba(245, 158, 11, 0.4)' }}>Uygulama İçi Görünümler</h2>
         </div>
         <div className={styles.showcaseContainer}>
           <div className={styles.carousel}>
-            {/* Using placeholders 1-8. You can upload real screenshots to public/ototakip-pro/ later */}
             {[1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8].map((i, index) => (
               <div key={index} className={styles.screenshotWrapper}>
                 <img 
@@ -134,7 +134,6 @@ export default function OtoTakipProPage() {
                   alt={`OtoTakip Pro Ekran ${i}`}
                   className={styles.screenshotImg}
                   onError={(e) => {
-                    // Fallback to para-kontrol images for demonstration if ototakip-pro folder is empty
                     (e.target as HTMLImageElement).src = `/para-kontrol/${i}.png`;
                   }}
                 />
@@ -143,6 +142,7 @@ export default function OtoTakipProPage() {
           </div>
         </div>
       </section>
+      */}
 
       <footer className={styles.footer}>
         <div className={styles.footerText}>

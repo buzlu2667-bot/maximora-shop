@@ -254,7 +254,17 @@
     text-align: left;
     min-height: auto;
     aspect-ratio: auto;
-    transform: translateZ(0);
+    transform: none !important;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .featureCard:hover, .featureCard:active {
+    transform: none !important;
+    box-shadow: none !important;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01)) !important;
+    border-color: rgba(0, 229, 255, 0.15) !important;
+  }
+  .featureCard::before {
+    display: none;
   }
   .iconWrapper {
     width: 3rem;
