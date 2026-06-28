@@ -1,3 +1,7 @@
+:global(body) {
+  background-color: #050505 !important;
+}
+
 .landing {
   --brand-primary: #F59E0B; /* Premium Gold/Orange */
   --brand-secondary: #FFB300;
@@ -7,6 +11,7 @@
   --text-muted: #A0A0A0;
   
   min-height: 100vh;
+  min-height: 100dvh;
   background-color: var(--bg-black);
   color: var(--text-white);
   font-family: 'Inter', sans-serif;

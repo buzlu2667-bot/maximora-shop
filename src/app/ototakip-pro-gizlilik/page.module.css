@@ -1,3 +1,7 @@
+:global(body) {
+  background-color: #050505 !important;
+}
+
 .container {
   --brand-primary: #F59E0B;
   --bg-black: #050505;
@@ -6,6 +10,7 @@
   --text-muted: #A0A0A0;
   
   min-height: 100vh;
+  min-height: 100dvh;
   background-color: var(--bg-black);
   color: var(--text-white);
   font-family: 'Inter', sans-serif;
