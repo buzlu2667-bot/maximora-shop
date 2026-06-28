@@ -33,7 +33,9 @@ export default function OtoTakipProPage() {
   const [activeModal, setActiveModal] = useState<any>(null);
 
   return (
-    <div className={styles.landing}>
+    <>
+      <style dangerouslySetInnerHTML={{ __html: 'body { background-color: #050505 !important; margin: 0; padding: 0; }' }} />
+      <div className={styles.landing}>
       {/* Hero Section */}
       <section className={styles.hero}>
         <div className={styles.heroContent}>
@@ -151,5 +153,6 @@ export default function OtoTakipProPage() {
         </div>
       </footer>
     </div>
+    </>
   );
 }
