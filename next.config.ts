@@ -11,6 +11,18 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async rewrites() {
+    return {
+      fallback: [
+        {
+          source: '/falizo/:path*',
+          destination: '/falizo/index.html',
+        },
+      ],
+      beforeFiles: [],
+      afterFiles: [],
+    };
+  },
 };
 
 export default nextConfig;
