@@ -78,16 +78,26 @@ export default function RootLayout({
           <Providers />
           {children}
         </GoogleOAuthProvider>
-        
+
         {/* Zoho SalesIQ Integration */}
-        <Script id="zsiq-setup" strategy="lazyOnload">
-          {`window.$zoho=window.$zoho || {};$zoho.salesiq=$zoho.salesiq||{ready:function(){}}`}
-        </Script>
-        <Script 
-          id="zsiqscript" 
-          src="https://salesiq.zohopublic.eu/widget?wc=siq29fd88e9bb8b4958a20deefd5a65d1786b037dd062bf291f6503ec4a6a556ff4" 
-          strategy="lazyOnload" 
+        <Script
+          id="zsiq-setup"
+          strategy="lazyOnload"
+          dangerouslySetInnerHTML={{
+            __html: `window.$zoho=window.$zoho || {};$zoho.salesiq=$zoho.salesiq||{ready:function(){}}`
+          }}
         />
+        <Script
+          id="zsiqscript"
+          src="https://salesiq.zohopublic.eu/widget?wc=siq29fd88e9bb8b4958a20deefd5a65d1786b037dd062bf291f6503ec4a6a556ff4"
+          strategy="lazyOnload"
+        />
+
+        {/* Intercom Integration (Commented out for now) */}
+        {/* 
+          Script id="intercom-settings" ... 
+          Script id="intercom-script" ... 
+        */}
       </body>
     </html>
   );
