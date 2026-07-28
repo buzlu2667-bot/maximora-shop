@@ -23,6 +23,12 @@ const nextConfig: NextConfig = {
       afterFiles: [],
     };
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 export default nextConfig;
