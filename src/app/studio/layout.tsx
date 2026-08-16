@@ -1,4 +1,10 @@
 import React from 'react';
+import styles from './page.module.css';
+
+export const metadata = {
+  title: 'Maximora Studio | Dijital Mükemmellik',
+  description: 'Modern tasarım, güçlü yazılım ve kusursuz deneyimle markanızı bir adım öne çıkarıyoruz.',
+};
 
 export default function StudioLayout({
   children,
@@ -6,17 +12,8 @@ export default function StudioLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
-      <style dangerouslySetInnerHTML={{ __html: `
-        html, body {
-          background-color: #050508 !important;
-          margin: 0;
-          padding: 0;
-        }
-      `}} />
-      <div style={{ position: 'relative', width: '100%', backgroundColor: '#050508' }}>
-        {children}
-      </div>
-    </>
+    <div className={styles.studioLayoutWrapper}>
+      {children}
+    </div>
   );
 }
