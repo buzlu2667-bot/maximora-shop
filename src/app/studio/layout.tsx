@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './page.module.css';
+import StudioTopBar from '@/components/TopBar/StudioTopBar';
 
 export const metadata = {
   title: 'Maximora Studio | Dijital Mükemmellik',
@@ -13,6 +14,7 @@ export default function StudioLayout({
 }) {
   return (
     <div className={styles.studioLayoutWrapper}>
+      <StudioTopBar />
       {children}
     </div>
   );

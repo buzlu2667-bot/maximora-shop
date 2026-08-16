@@ -21,6 +21,12 @@ export default function AdminSettingsPage() {
     topbar_bg_color: '#d4af37',
     topbar_speed: 3,
     topbar_height: 40,
+    studio_topbar_mode: false,
+    studio_topbar_text: '',
+    studio_topbar_color: '#ffffff',
+    studio_topbar_bg_color: '#111111',
+    studio_topbar_speed: 3,
+    studio_topbar_height: 40,
     global_discount_percent: 0
   });
 
@@ -47,6 +53,12 @@ export default function AdminSettingsPage() {
           topbar_bg_color: data.topbar_bg_color || '#d4af37',
           topbar_speed: data.topbar_speed || 3,
           topbar_height: data.topbar_height || 40,
+          studio_topbar_mode: data.studio_topbar_mode || false,
+          studio_topbar_text: data.studio_topbar_text || '',
+          studio_topbar_color: data.studio_topbar_color || '#ffffff',
+          studio_topbar_bg_color: data.studio_topbar_bg_color || '#111111',
+          studio_topbar_speed: data.studio_topbar_speed || 3,
+          studio_topbar_height: data.studio_topbar_height || 40,
           global_discount_percent: data.global_discount_percent || 0
         });
       }
@@ -216,6 +228,111 @@ export default function AdminSettingsPage() {
                 }}>
                   <span style={{ color: settings.topbar_color, fontSize: '0.85rem', fontWeight: 'bold' }}>
                     {settings.topbar_text || 'ÖNİZLEME YAZISI'}
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Studio Kayan Yazı */}
+        <div style={{ marginBottom: '3rem', borderBottom: '1px solid #eee', paddingBottom: '2.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+            <div>
+              <h3 style={{ fontSize: '1.2rem', marginBottom: '0.3rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Type size={20} color="#d4af37" />
+                Studio Kayan Yazı
+              </h3>
+              <p style={{ color: '#666', fontSize: '0.9rem' }}>Sadece /studio sayfasının en tepesinde kayan yazı gösterir.</p>
+            </div>
+            <label className="switch">
+              <input 
+                type="checkbox" 
+                checked={settings.studio_topbar_mode}
+                onChange={(e) => setSettings({ ...settings, studio_topbar_mode: e.target.checked })}
+              />
+              <span className="slider round"></span>
+            </label>
+          </div>
+
+          {settings.studio_topbar_mode && (
+            <div style={{ marginTop: '1.5rem', padding: '1.5rem', backgroundColor: '#f9f9f9', borderRadius: '8px', border: '1px solid #eee' }}>
+              <div style={{ marginBottom: '1.5rem' }}>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold', fontSize: '0.9rem' }}>Kayan Metin</label>
+                <input 
+                  type="text" 
+                  value={settings.studio_topbar_text}
+                  onChange={(e) => setSettings({ ...settings, studio_topbar_text: e.target.value })}
+                  placeholder="Studio duyurunuzu yazın..."
+                  style={{ width: '100%', padding: '0.8rem', borderRadius: '6px', border: '1px solid #d1d5db', fontSize: '1rem' }}
+                />
+              </div>
+
+              <div className="settings-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
+                <div>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.5rem', fontWeight: 'bold', fontSize: '0.9rem' }}>Yazı Rengi</label>
+                  <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                    <input type="color" value={settings.studio_topbar_color} onChange={(e) => setSettings({ ...settings, studio_topbar_color: e.target.value })} style={{ width: '40px', height: '40px', cursor: 'pointer' }} />
+                    <input type="text" value={settings.studio_topbar_color} onChange={(e) => setSettings({ ...settings, studio_topbar_color: e.target.value })} style={{ padding: '0.7rem', borderRadius: '6px', border: '1px solid #d1d5db', fontSize: '0.85rem', width: '100%' }} />
+                  </div>
+                </div>
+                <div>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.5rem', fontWeight: 'bold', fontSize: '0.9rem' }}>Arka Plan</label>
+                  <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                    <input type="color" value={settings.studio_topbar_bg_color} onChange={(e) => setSettings({ ...settings, studio_topbar_bg_color: e.target.value })} style={{ width: '40px', height: '40px', cursor: 'pointer' }} />
+                    <input type="text" value={settings.studio_topbar_bg_color} onChange={(e) => setSettings({ ...settings, studio_topbar_bg_color: e.target.value })} style={{ padding: '0.7rem', borderRadius: '6px', border: '1px solid #d1d5db', fontSize: '0.85rem', width: '100%' }} />
+                  </div>
+                </div>
+              </div>
+
+              <div className="settings-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
+                <div>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.5rem', fontWeight: 'bold', fontSize: '0.9rem' }}>
+                    <Zap size={16} />
+                    Hız (1: En Yavaş, 5: En Hızlı)
+                  </label>
+                  <select 
+                    value={settings.studio_topbar_speed} 
+                    onChange={(e) => setSettings({ ...settings, studio_topbar_speed: parseInt(e.target.value) })}
+                    style={{ width: '100%', padding: '0.7rem', borderRadius: '6px', border: '1px solid #d1d5db' }}
+                  >
+                    <option value={1}>1 (Çok Yavaş)</option>
+                    <option value={2}>2 (Yavaş)</option>
+                    <option value={3}>3 (Normal)</option>
+                    <option value={4}>4 (Hızlı)</option>
+                    <option value={5}>5 (Işık Hızı)</option>
+                  </select>
+                </div>
+                <div>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.5rem', fontWeight: 'bold', fontSize: '0.9rem' }}>
+                    <ArrowsUpFromLine size={16} />
+                    Yükseklik ({settings.studio_topbar_height}px)
+                  </label>
+                  <input 
+                    type="range" 
+                    min="30" 
+                    max="80" 
+                    value={settings.studio_topbar_height}
+                    onChange={(e) => setSettings({ ...settings, studio_topbar_height: parseInt(e.target.value) })}
+                    style={{ width: '100%', cursor: 'pointer', accentColor: '#111' }}
+                  />
+                </div>
+              </div>
+
+              <div style={{ borderTop: '1px solid #eee', paddingTop: '1.5rem' }}>
+                <label style={{ display: 'block', marginBottom: '0.8rem', fontWeight: 'bold', fontSize: '0.8rem', color: '#999' }}>ÖNİZLEME</label>
+                <div style={{ 
+                  backgroundColor: settings.studio_topbar_bg_color, 
+                  height: `${settings.studio_topbar_height}px`,
+                  padding: '0 1rem', 
+                  borderRadius: '8px', 
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  overflow: 'hidden'
+                }}>
+                  <span style={{ color: settings.studio_topbar_color, fontSize: '0.85rem', fontWeight: 'bold' }}>
+                    {settings.studio_topbar_text || 'ÖNİZLEME YAZISI'}
                   </span>
                 </div>
               </div>
