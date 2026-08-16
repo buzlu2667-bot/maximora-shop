@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './page.module.css';
 import StudioTopBar from '@/components/TopBar/StudioTopBar';
+import StudioAnnouncementPopup from '@/components/AnnouncementPopup/StudioAnnouncementPopup';
 
 export const metadata = {
   title: 'Maximora Studio | Dijital Mükemmellik',
@@ -16,6 +17,7 @@ export default function StudioLayout({
     <div className={styles.studioLayoutWrapper}>
       <StudioTopBar />
       {children}
+      <StudioAnnouncementPopup />
     </div>
   );
 }
