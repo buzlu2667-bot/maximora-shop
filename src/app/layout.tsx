@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 import { Providers } from "@/components/Providers";
+import { SplashScreen } from "@/components/SplashScreen";
 import Script from 'next/script';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
@@ -68,6 +69,7 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <body>
+        <SplashScreen />
         {/* SEO Structured Data */}
         <script
           type="application/ld+json"
