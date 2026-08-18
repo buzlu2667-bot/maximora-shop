@@ -2,9 +2,12 @@
 
 import React, { useState } from 'react';
 import { ArrowRight, CheckCircle2, ShieldCheck, Zap, Code2, Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import styles from './Teklif.module.css';
 
 export default function TeklifAlPage() {
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     fullName: '',
     phone: '',
@@ -38,7 +41,7 @@ export default function TeklifAlPage() {
         throw new Error('Bir hata oluştu. Lütfen tekrar deneyin.');
       }
 
-      setStatus('success');
+      router.push('/studio/teklif-al/basarili');
     } catch (err: any) {
       console.error('Lead error:', err);
       setStatus('error');
