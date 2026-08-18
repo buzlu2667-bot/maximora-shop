@@ -1,0 +1,266 @@
+.header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: transparent;
+  transition: all 0.3s ease;
+  padding: 1.5rem 0;
+}
+
+.header.scrolled {
+  background-color: rgba(5, 5, 5, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.25rem;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  color: #ffffff;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.goldText {
+  color: #d4af37;
+  font-weight: 600;
+}
+
+.desktopNav {
+  display: none;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .desktopNav {
+    display: flex;
+  }
+}
+
+.navLink {
+  color: #a0a0a0;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.navLink:hover {
+  color: #ffffff;
+}
+
+.navLink::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: #d4af37;
+  transition: width 0.3s ease;
+}
+
+.navLink:hover::after {
+  width: 100%;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.contactBtn {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: transparent;
+  color: #d4af37;
+  border: 1px solid #d4af37;
+  padding: 0.5rem 1.2rem;
+  border-radius: 100px;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+@media (min-width: 768px) {
+  .contactBtn {
+    display: flex;
+  }
+}
+
+.contactBtn:hover {
+  background-color: #d4af37;
+  color: #050505;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+}
+
+.mobileMenuBtn {
+  display: flex;
+  background: none;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 0;
+}
+
+@media (min-width: 768px) {
+  .mobileMenuBtn {
+    display: none;
+  }
+}
+
+/* Mobile Navigation */
+.mobileNav {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: #0a0a0a;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
+}
+
+.mobileNavOpen {
+  max-height: calc(100vh - 70px); /* Fill the screen minus header height */
+  padding: 1rem 0;
+  overflow-y: auto; /* Allow scrolling inside the menu */
+}
+
+.mobileNavLink {
+  display: block;
+  color: #ffffff;
+  text-decoration: none;
+  padding: 1.25rem 5%;
+  font-size: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background-color 0.2s ease;
+}
+
+.mobileNavLink:hover {
+  background-color: rgba(212, 175, 55, 0.1);
+  color: #d4af37;
+}
+
+.mobileContactBtn {
+  margin: 1rem 5% 0;
+  text-align: center;
+  background-color: #d4af37;
+  color: #050505;
+  padding: 0.75rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* Dropdown */
+.navItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 100%; /* Ensures dropdown is aligned properly */
+}
+
+.chevronIcon {
+  transition: transform 0.3s ease;
+}
+
+.navItem:hover .chevronIcon {
+  transform: rotate(180deg);
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 15px); /* Push it slightly down to avoid overlapping the nav line */
+  left: 0;
+  background-color: rgba(5, 5, 5, 0.85); /* Slightly more transparent for glass effect */
+  backdrop-filter: blur(12px); /* True glassmorphism */
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-top: 2px solid #d4af37;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  padding: 0.5rem 0;
+  border-radius: 0 0 8px 8px;
+}
+
+.navItem:hover .dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown::before {
+  content: '';
+  position: absolute;
+  top: -15px; /* Transparent bridge to keep hover state active when mouse leaves navItem towards dropdown */
+  left: 0;
+  width: 100%;
+  height: 15px;
+}
+
+.dropdownLink {
+  color: #a0a0a0;
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.dropdownLink:hover {
+  color: #d4af37;
+  background-color: rgba(212, 175, 55, 0.05);
+  padding-left: 1.75rem;
+}
+
+/* Mobile Sub Nav */
+.mobileSubNav {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.mobileSubNavLink {
+  color: #a0a0a0;
+  text-decoration: none;
+  padding: 0.75rem 5% 0.75rem 10%;
+  font-size: 0.9rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.2s ease;
+}
+
+.mobileSubNavLink:hover {
+  color: #d4af37;
+  background-color: rgba(212, 175, 55, 0.05);
+}

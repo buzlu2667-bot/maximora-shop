@@ -1,0 +1,72 @@
+.container {
+  min-height: 100vh;
+  background-color: #050505;
+  color: #ffffff;
+  padding: 8rem 5% 4rem;
+  font-family: 'Inter', system-ui, sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.glowBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 15% 50%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 85% 30%, rgba(212, 175, 55, 0.03) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.contentWrapper {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #ffffff;
+}
+
+.goldText {
+  color: #d4af37;
+}
+
+.lastUpdated {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 3rem;
+}
+
+.textContent {
+  color: #a0a0a0;
+  line-height: 1.8;
+  font-size: 1.05rem;
+}
+
+.textContent h2 {
+  color: #ffffff;
+  font-size: 1.5rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.textContent p {
+  margin-bottom: 1.5rem;
+}
+
+.textContent ul {
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+.textContent li {
+  margin-bottom: 0.5rem;
+}

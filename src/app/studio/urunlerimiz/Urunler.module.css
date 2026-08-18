@@ -1,0 +1,325 @@
+.container {
+  position: relative;
+  background-color: #050505;
+  color: #fff;
+  font-family: 'Inter', system-ui, sans-serif;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.glowBackground {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 80vh;
+  background: radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.goldText {
+  color: #d4af37;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.5rem 1.2rem;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: #d4af37;
+  margin-bottom: 2rem;
+  background: rgba(212, 175, 55, 0.05);
+}
+
+/* Hero Section */
+.heroSection {
+  padding: 6rem 5% 4rem;
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  z-index: 10;
+}
+
+.title {
+  font-size: clamp(1.8rem, 5vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+  color: #ffffff;
+}
+
+.description {
+  font-size: 1.1rem;
+  color: #a0a0a0;
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
+}
+
+.heroContactBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #21358b; /* Competitor-like blue or we can keep it gold */
+  background-color: #1a2a6c;
+  color: #fff;
+  padding: 0.8rem 2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.heroContactBtn:hover {
+  background-color: #121d4a;
+}
+
+/* Products Grid Section */
+.productsSection {
+  padding: 2rem 5% 8rem;
+  max-width: 1300px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4rem 3rem;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.productCard {
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.productImageWrapper {
+  width: 100%;
+  position: relative;
+  margin-bottom: 2rem;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+}
+
+.productImagePlaceholder {
+  width: 100%;
+  height: 280px;
+  background: radial-gradient(circle at 50% 50%, rgba(26, 42, 108, 0.2) 0%, #050505 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+}
+
+/* Creating a premium grid pattern background */
+.productImagePlaceholder::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.5;
+  z-index: 1;
+}
+
+.productImagePlaceholder svg {
+  transform: scale(2.5);
+  opacity: 1;
+  z-index: 3;
+  filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4));
+  transition: all 0.4s ease;
+}
+
+.productCard:hover .productImagePlaceholder svg {
+  transform: scale(2.8) translateY(-5px);
+  filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.7));
+}
+
+.imageOverlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 2;
+  transition: all 0.4s ease;
+}
+
+.productCard:hover .imageOverlay {
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.25) 0%, transparent 70%);
+}
+
+.productTag {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: #d4af37;
+  color: #050505;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.4rem 1rem;
+  border-radius: 100px;
+  z-index: 20;
+  text-transform: uppercase;
+}
+
+.productInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+.productInfo h3 {
+  font-size: 1.5rem;
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.productInfo p {
+  color: #888;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.productAction {
+  margin-top: auto;
+}
+
+.actionBtn {
+  display: inline-block;
+  background-color: #1a2a6c; /* Deep blue similar to reference */
+  color: #fff;
+  font-weight: 500;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  padding: 0.8rem 2.5rem;
+  border-radius: 4px;
+}
+
+.actionBtn:hover {
+  background-color: #121d4a;
+}
+
+/* Mobile Banner Section */
+.mobileBannerSection {
+  padding: 0 5% 8rem;
+  max-width: 1300px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+}
+
+.mobileBannerContainer {
+  background: linear-gradient(135deg, #0a0a0a 0%, #111 100%);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 24px;
+  padding: 4rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+
+.mobileBannerContainer::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(circle at top right, rgba(212, 175, 55, 0.1) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.mobileBannerContent {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.mobileIconWrapper {
+  width: 80px;
+  height: 80px;
+  background: rgba(212, 175, 55, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 2rem;
+  box-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
+}
+
+.mobileBannerContent h2 {
+  color: #888;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+.mobileBannerContent h3 {
+  color: #fff;
+  font-size: 2.2rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.3;
+}
+
+.mobileBannerContent p {
+  color: #a0a0a0;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
+}
+
+.mobileBannerActions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.actionBtnSecondary {
+  display: inline-block;
+  background-color: transparent;
+  color: #d4af37;
+  font-weight: 500;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  padding: 0.8rem 2.5rem;
+  border-radius: 4px;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.actionBtnSecondary:hover {
+  background-color: rgba(212, 175, 55, 0.1);
+  color: #fff;
+}

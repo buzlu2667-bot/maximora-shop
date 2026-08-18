@@ -47,7 +47,7 @@ export default function StudioPage() {
     },
     {
       title: 'Mobil Deneyim',
-      description: 'Kullanıcı alışkanlıklarına yön veren, akıcı iOS ve Android uygulamaları.',
+      description: 'Kullanıcı alışkanlıklarına yön veren, akıcı Android uygulamaları.',
       icon: <Smartphone size={28} strokeWidth={1.5} />,
       tags: ['React Native', 'Mobile UX']
     },
@@ -113,13 +113,7 @@ export default function StudioPage() {
       <div className={styles.glowBackground}></div>
       <div className={styles.glowSpotlight}></div>
       
-      {/* Navigation */}
-      <nav className={styles.nav}>
-        <div className={styles.logo}>MAXIMORA STUDIO</div>
-        <button onClick={openChat} className={styles.contactLink} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: 'inherit' }}>
-          İletişim
-        </button>
-      </nav>
+      {/* Navigation - Moved to StudioHeader */}
 
       {/* Hero */}
       <header className={styles.hero}>
@@ -133,7 +127,7 @@ export default function StudioPage() {
             Sıradan olanı reddediyoruz. Markanızın hak ettiği premium dijital deneyimi, en ileri teknolojilerle kusursuz bir şekilde inşa ediyoruz.
           </p>
           <div className={styles.ctaWrapper}>
-            <Link href="#contact" className={styles.primaryButton}>
+            <Link href="/studio/teklif-al" className={styles.primaryButton}>
               Projeyi Başlat <ArrowRight size={18} />
             </Link>
           </div>
@@ -161,6 +155,8 @@ export default function StudioPage() {
           </div>
         </div>
       </div>
+
+
 
       {/* Services Grid */}
       <section className={styles.servicesSection}>
@@ -222,6 +218,8 @@ export default function StudioPage() {
         </div>
       </section>
 
+
+
       {/* FAQ Section */}
       <section className={styles.faqSection}>
         <div className={styles.sectionHeader}>
@@ -248,20 +246,7 @@ export default function StudioPage() {
         </div>
       </section>
 
-      {/* Contact */}
-      <section id="contact" className={styles.contactSection}>
-        <div className={styles.contactGlass}>
-          <h2>Harika bir fikriniz mi var?</h2>
-          <p>Sizinle tanışmak ve projenizi hayata geçirmek için sabırsızlanıyoruz.</p>
-          <button onClick={openChat} className={styles.goldButton} style={{ border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
-            Bizimle Konuşun
-          </button>
-        </div>
-      </section>
-      
-      <footer className={styles.footer}>
-        <p>© {new Date().getFullYear()} Maximora Studio. Tüm hakları saklıdır.</p>
-      </footer>
+      {/* Contact & Footer - Moved to StudioFooter */}
     </div>
   );
 }
