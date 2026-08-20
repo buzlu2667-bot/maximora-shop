@@ -68,22 +68,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="tr">
-      <body>
-        <SplashScreen />
-        {/* SEO Structured Data */}
+      <head>
+        {/* Google tag (gtag.js) */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18127474381"></script>
         <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-
-        {/* Google Ads Tag (gtag.js) */}
-        <Script
-          strategy="afterInteractive"
-          src={`https://www.googletagmanager.com/gtag/js?id=AW-18127474381`}
-        />
-        <Script
-          id="google-ads"
-          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];
@@ -92,6 +80,14 @@ export default function RootLayout({
               gtag('config', 'AW-18127474381');
             `,
           }}
+        />
+      </head>
+      <body>
+        <SplashScreen />
+        {/* SEO Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
 
         <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}>
