@@ -64,6 +64,7 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <head>
+        <meta name="google-site-verification" content="2KXPvTAH7x4gzM1Nn2HSlYSARZPCf7pHYDAawRj3z_U" />
         {/* Google tag (gtag.js) */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18127474381"></script>
         <script
