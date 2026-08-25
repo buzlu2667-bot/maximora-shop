@@ -10,14 +10,14 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://maximorashop.com'),
   title: {
     template: '%s | Maximora',
-    default: 'Maximora | Premium Çanta, Aksesuar ve Özel Tasarım Ürünler',
+    default: 'Maximora Studio | Yazılım & Web Tasarım Ajansı',
   },
-  description: "Maximora'da premium çanta, aksesuar ve özel tasarım ürünleri en iyi fiyatlarla keşfedin. Hızlı kargo, güvenli ödeme ve %100 müşteri memnuniyeti.",
+  description: "Maximora Studio ile işletmenizi dijitale taşıyın. Profesyonel web tasarım, e-ticaret paketleri, özel yazılım ve mobil uygulama çözümleri.",
   openGraph: {
-    title: 'Maximora | Premium Çanta, Aksesuar ve Özel Tasarım Ürünler',
-    description: "Maximora'da premium çanta, aksesuar ve özel tasarım ürünleri en iyi fiyatlarla keşfedin.",
+    title: 'Maximora Studio | Yazılım & Web Tasarım Ajansı',
+    description: "Maximora Studio ile işletmenizi dijitale taşıyın. Profesyonel web tasarım, e-ticaret paketleri, özel yazılım ve mobil uygulama çözümleri.",
     url: 'https://maximorashop.com',
-    siteName: 'Maximora',
+    siteName: 'Maximora Studio',
     locale: 'tr_TR',
     type: 'website',
   },
@@ -41,17 +41,12 @@ const jsonLd = {
       '@type': 'WebSite',
       '@id': 'https://maximorashop.com/#website',
       url: 'https://maximorashop.com/',
-      name: 'Maximora',
-      potentialAction: {
-        '@type': 'SearchAction',
-        target: 'https://maximorashop.com/search?q={search_term_string}',
-        'query-input': 'required name=search_term_string'
-      }
+      name: 'Maximora Studio'
     },
     {
       '@type': 'Organization',
       '@id': 'https://maximorashop.com/#organization',
-      name: 'Maximora',
+      name: 'Maximora Studio',
       url: 'https://maximorashop.com/',
       logo: 'https://maximorashop.com/favicon.png',
       sameAs: [
