@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://maximorashop.com';
-  
+
   // Sabit sayfalar
   const staticEntries: MetadataRoute.Sitemap = [
     {
