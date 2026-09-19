@@ -21,8 +21,8 @@ export function SplashScreen() {
       <Image 
         src="/logo-gold.png" 
         alt="Maximora" 
-        width={250} 
-        height={80} 
+        width={400} 
+        height={120} 
         className={styles.logo}
         priority
       />

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, X, ArrowRight, ChevronDown } from 'lucide-react';
+import { Menu, X, ArrowRight, ChevronDown, ChevronRight } from 'lucide-react';
 import styles from './StudioHeader.module.css';
 
 export default function StudioHeader() {
@@ -53,7 +53,22 @@ export default function StudioHeader() {
       ]
     },
     { name: 'Ürünlerimiz', path: '/studio/urunlerimiz' },
-    { name: 'Projelerimiz', path: '/studio/projelerimiz' },
+    { 
+      name: 'Projelerimiz', 
+      path: '#',
+      subLinks: [
+        { name: 'Web Siteleri', path: '/studio/projelerimiz' },
+        { 
+          name: 'Mobil Uygulamalar', 
+          path: '#',
+          subLinks: [
+            { name: 'Namaz Vakitleri', path: 'https://www.maximorashop.com/namaz-vakti', external: true },
+            { name: 'Para Kontrol', path: 'https://www.maximorashop.com/para-kontrol', external: true },
+            { name: 'Oto Takip Pro', path: 'https://www.maximorashop.com/ototakip-pro', external: true },
+          ]
+        }
+      ]
+    },
     { name: 'Kurumsal', path: '/studio/kurumsal' },
   ];
 
@@ -75,9 +90,36 @@ export default function StudioHeader() {
                   </span>
                   <div className={styles.dropdown}>
                     {link.subLinks.map(sub => (
-                      <Link key={sub.name} href={sub.path} className={styles.dropdownLink}>
-                        {sub.name}
-                      </Link>
+                      (sub as any).subLinks ? (
+                        <div key={sub.name} className={styles.nestedDropdownContainer}>
+                          <span className={styles.dropdownLink} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}>
+                            {sub.name} <ChevronRight size={14} className={styles.chevronIconRight} />
+                          </span>
+                          <div className={styles.nestedDropdown}>
+                            {(sub as any).subLinks.map((nested: any) => (
+                              <Link 
+                                key={nested.name} 
+                                href={nested.path} 
+                                className={styles.dropdownLink}
+                                target={nested.external ? "_blank" : "_self"}
+                                rel={nested.external ? "noopener noreferrer" : undefined}
+                              >
+                                {nested.name}
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      ) : (
+                        <Link 
+                          key={sub.name} 
+                          href={sub.path} 
+                          className={styles.dropdownLink}
+                          target={(sub as any).external ? "_blank" : "_self"}
+                          rel={(sub as any).external ? "noopener noreferrer" : undefined}
+                        >
+                          {sub.name}
+                        </Link>
+                      )
                     ))}
                   </div>
                 </>
@@ -113,14 +155,39 @@ export default function StudioHeader() {
                 </div>
                 <div className={styles.mobileSubNav}>
                   {link.subLinks.map(sub => (
-                    <Link 
-                      key={sub.name} 
-                      href={sub.path} 
-                      className={styles.mobileSubNavLink}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {sub.name}
-                    </Link>
+                    (sub as any).subLinks ? (
+                      <div key={sub.name} className={styles.mobileNestedContainer}>
+                        <div className={styles.mobileSubNavLink} style={{ color: '#d4af37', borderBottom: 'none', paddingBottom: '0.25rem', pointerEvents: 'none' }}>
+                          {sub.name}
+                        </div>
+                        <div className={styles.mobileNestedNav}>
+                          {(sub as any).subLinks.map((nested: any) => (
+                            <Link 
+                              key={nested.name} 
+                              href={nested.path} 
+                              className={styles.mobileSubNavLink}
+                              style={{ paddingLeft: '15%' }}
+                              onClick={() => setMobileMenuOpen(false)}
+                              target={nested.external ? "_blank" : "_self"}
+                              rel={nested.external ? "noopener noreferrer" : undefined}
+                            >
+                              {nested.name}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    ) : (
+                      <Link 
+                        key={sub.name} 
+                        href={sub.path} 
+                        className={styles.mobileSubNavLink}
+                        onClick={() => setMobileMenuOpen(false)}
+                        target={(sub as any).external ? "_blank" : "_self"}
+                        rel={(sub as any).external ? "noopener noreferrer" : undefined}
+                      >
+                        {sub.name}
+                      </Link>
+                    )
                   ))}
                 </div>
               </>

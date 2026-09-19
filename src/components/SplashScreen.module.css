@@ -19,35 +19,37 @@
 
 .logo {
   width: auto;
-  height: 48px; /* Or adjust to make it look right */
+  height: 80px; 
   opacity: 0;
-  animation: fadePulse 2.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  /* cubic-bezier(0.16, 1, 0.3, 1) provides a very smooth, premium ease-out snap */
+  animation: zoomInSit 2.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @media (min-width: 768px) {
   .logo {
-    height: 64px;
+    height: 110px;
   }
 }
 
-@keyframes fadePulse {
+@keyframes zoomInSit {
   0% {
     opacity: 0;
-    transform: scale(0.9);
-    filter: brightness(0.8);
+    transform: scale(2.5) translateY(20px);
+    filter: blur(10px) brightness(1.5);
   }
-  40% {
+  30% {
     opacity: 1;
-    transform: scale(1.05);
-    filter: brightness(1.2); /* Slight glimmer */
+    transform: scale(1) translateY(0);
+    filter: blur(0px) brightness(1);
   }
-  70% {
+  75% {
     opacity: 1;
-    transform: scale(1);
-    filter: brightness(1);
+    transform: scale(1) translateY(0);
+    filter: blur(0px) brightness(1);
   }
   100% {
     opacity: 0;
-    transform: scale(0.95);
+    transform: scale(0.9);
+    filter: blur(8px);
   }
 }
