@@ -374,8 +374,10 @@
   font-size: clamp(1.6rem, 5vw, 2.2rem);
   color: #fff;
   margin-bottom: 2rem;
-  word-break: break-word;
-  hyphens: auto;
+  word-break: keep-all;
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  hyphens: none;
 }
 
 .seoContent {
