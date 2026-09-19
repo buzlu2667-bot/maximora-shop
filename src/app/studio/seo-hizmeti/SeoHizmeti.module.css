@@ -66,6 +66,10 @@
   letter-spacing: -0.02em;
   margin-bottom: 1.5rem;
   color: #ffffff;
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  hyphens: none;
+  word-break: keep-all;
 }
 
 .description {
