@@ -26,6 +26,7 @@ import {
   FileText
 } from 'lucide-react';
 import Image from 'next/image';
+import AppLandingHeader from '../../components/AppLandingHeader';
 
 const featuresData = [
   { Icon: Wallet, title: "Gelir & Gider Takibi", desc: "Tüm gelir ve giderlerinizi anlık olarak kaydederek bütçe dengenizi kolayca sağlayın." },
@@ -51,8 +52,9 @@ export default function ParaKontrolPage() {
 
   return (
     <>
-      <style dangerouslySetInnerHTML={{ __html: 'body { background-color: #000 !important; margin: 0; padding: 0; }' }} />
+      <style dangerouslySetInnerHTML={{ __html: 'body { background-color: #050505 !important; margin: 0; padding: 0; }' }} />
       <div className={styles.landing}>
+      <AppLandingHeader title="Para Kontrol" />
       {/* Hero Section */}
       <section className={styles.hero}>
         <div className={styles.heroContent}>

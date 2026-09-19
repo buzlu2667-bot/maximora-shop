@@ -17,6 +17,7 @@ import {
   Coins
 } from 'lucide-react';
 import Image from 'next/image';
+import AppLandingHeader from '../../components/AppLandingHeader';
 
 const featuresData = [
   { Icon: CarFront, title: "Çoklu Araç Yönetimi", desc: "Tüm araçlarınızı tek bir garajda toplayın. Hem kişisel araçlarınız hem de ticari filonuz için ideal çözüm." },
@@ -36,6 +37,7 @@ export default function OtoTakipProPage() {
     <>
       <style dangerouslySetInnerHTML={{ __html: 'body { background-color: #050505 !important; margin: 0; padding: 0; }' }} />
       <div className={styles.landing}>
+      <AppLandingHeader title="Oto Takip Pro" />
       {/* Hero Section */}
       <section className={styles.hero}>
         <div className={styles.heroContent}>

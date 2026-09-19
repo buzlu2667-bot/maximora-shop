@@ -9,6 +9,7 @@ import {
   ShieldCheck, CalendarRange, Activity, Coins, Scroll, Bot
 } from 'lucide-react';
 import Image from 'next/image';
+import AppLandingHeader from '../../components/AppLandingHeader';
 
 const featuresData = [
   { Icon: Bot, title: "İmam AI (Yapay Zeka)", desc: "Aklınıza takılan tüm dini soruları saniyeler içinde cevaplayan akıllı İslami asistanınız." },
@@ -45,6 +46,7 @@ export default function NamazLandingPage() {
 
   return (
     <div className={styles.landing}>
+      <AppLandingHeader title="Namaz Vakitleri" />
       {/* Hero Section */}
       <section className={styles.hero}>
         <div className={styles.ornament}>
