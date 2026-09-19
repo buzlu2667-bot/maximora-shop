@@ -147,8 +147,9 @@
 }
 
 .mobileNavOpen {
-  max-height: calc(100vh - 70px); /* Fill the screen minus header height */
-  padding: 1rem 0;
+  max-height: calc(100vh - 70px); /* Fallback */
+  max-height: calc(100dvh - 70px); /* Fill the screen minus header height, dynamic viewport */
+  padding: 1rem 0 3rem; /* Extra bottom padding so it doesn't get cut off */
   overflow-y: auto; /* Allow scrolling inside the menu */
 }
 
@@ -168,7 +169,7 @@
 }
 
 .mobileContactBtn {
-  margin: 1rem 5% 0;
+  margin: 1rem 5% 2rem; /* Add bottom margin */
   text-align: center;
   background-color: #d4af37;
   color: #050505;
