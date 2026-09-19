@@ -38,12 +38,18 @@
 
 /* Hero Section */
 .heroSection {
-  padding: 6rem 5% 2rem;
+  padding: 3rem 5% 2rem;
   max-width: 900px;
   margin: 0 auto;
   text-align: center;
   position: relative;
   z-index: 10;
+}
+
+@media (min-width: 768px) {
+  .heroSection {
+    padding-top: 6rem;
+  }
 }
 
 .title {
