@@ -217,6 +217,50 @@
   color: #ffffff;
 }
 
+/* Text Slider */
+.sliderContainer {
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  font-weight: 500;
+  color: #a0a0a0;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.sliderWords {
+  display: inline-flex;
+  overflow: hidden;
+  height: 1.5em; /* Match font height to clip the sliding text nicely */
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  min-width: 260px; /* Fixed width to prevent jumping */
+}
+
+@media (max-width: 768px) {
+  .sliderWords {
+    min-width: 100%;
+  }
+}
+
+.slidingWord {
+  color: #d4af37;
+  font-weight: 700;
+  display: inline-block;
+  animation: slideUpFade 2.5s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  white-space: nowrap;
+}
+
+@keyframes slideUpFade {
+  0% { opacity: 0; transform: translateY(30px); }
+  15% { opacity: 1; transform: translateY(0); }
+  85% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-30px); }
+}
+
 .goldText {
   background: linear-gradient(135deg, #f9f295 0%, #e0aa3e 40%, #e0aa3e 60%, #b8860b 100%);
   -webkit-background-clip: text;

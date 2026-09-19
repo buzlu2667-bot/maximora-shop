@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { 
   Globe, 
@@ -26,6 +26,22 @@ import styles from './page.module.css';
 
 export default function StudioPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+
+  const slidingServices = [
+    "Kurumsal Web Sitesi",
+    "E-Ticaret Platformu",
+    "Mobil Uygulama",
+    "Özel Yazılım",
+    "SEO Hizmeti"
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlideIndex((prev) => (prev + 1) % slidingServices.length);
+    }, 2500);
+    return () => clearInterval(timer);
+  }, []);
 
   const toggleFaq = (index: number) => {
     setOpenFaq(openFaq === index ? null : index);
@@ -123,6 +139,14 @@ export default function StudioPage() {
             Fikrinizi <br />
             <span className={styles.goldText}>Geleceğe</span> Taşıyoruz.
           </h1>
+          
+          <div className={styles.sliderContainer}>
+            <div className={styles.sliderWords}>
+              <span key={currentSlideIndex} className={styles.slidingWord}>
+                {slidingServices[currentSlideIndex]}
+              </span>
+            </div>
+          </div>
           <p className={styles.description}>
             Sıradan olanı reddediyoruz. Markanızın hak ettiği premium dijital deneyimi, en ileri teknolojilerle kusursuz bir şekilde inşa ediyoruz.
           </p>
