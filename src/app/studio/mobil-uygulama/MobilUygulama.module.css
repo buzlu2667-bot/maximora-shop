@@ -232,7 +232,7 @@
 
 /* Features Grid Section */
 .featuresSection {
-  padding: 6rem 5%;
+  padding: clamp(3rem, 8vw, 6rem) 5%;
   max-width: 1300px;
   margin: 0 auto;
   position: relative;
@@ -288,7 +288,7 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 4rem;
-  padding: 6rem 5%;
+  padding: clamp(3rem, 8vw, 6rem) 5%;
   max-width: 1300px;
   margin: 0 auto;
   position: relative;
@@ -376,7 +376,7 @@
 
 /* SEO Text Section */
 .seoSection {
-  padding: 6rem 5% 8rem;
+  padding: clamp(3rem, 8vw, 6rem) 5% clamp(4rem, 10vw, 8rem);
   max-width: 1000px; /* narrower for better readability */
   margin: 0 auto;
   position: relative;
