@@ -15,13 +15,13 @@ export default function FalizoPrivacyPolicy() {
             <span style={{ marginLeft: '8px' }}>Geri Dön</span>
           </Link>
           <h1 style={styles.title}>Gizlilik Politikası</h1>
-          <p style={styles.subtitle}>Falizo - Canlı Fal & Astroloji</p>
+          <p style={styles.subtitle}>Falizo: Kahve Falı & Tarot</p>
         </div>
 
         {/* Content */}
         <div style={styles.content}>
           <p style={styles.introText}>
-            Maximora Studio olarak, "Falizo - Canlı Fal & Astroloji" uygulamamızı kullanan kullanıcılarımızın gizliliğine ve güvenliğine büyük önem veriyoruz. Bu politika, fal ve astroloji hizmetlerimizden yararlanırken verilerinizin nasıl korunduğunu açıklar.
+            Maximora Studio olarak, "Falizo: Kahve Falı & Tarot" uygulamamızı kullanan kullanıcılarımızın gizliliğine ve güvenliğine büyük önem veriyoruz. Bu politika, fal ve astroloji hizmetlerimizden yararlanırken verilerinizin nasıl korunduğunu açıklar.
           </p>
 
           {/* Section 1 */}
