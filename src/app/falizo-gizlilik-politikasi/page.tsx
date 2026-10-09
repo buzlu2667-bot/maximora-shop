@@ -68,7 +68,7 @@ export default function FalizoPrivacyPolicy() {
               <h2 style={styles.sectionTitle}>Veri Güvenliği</h2>
             </div>
             <p style={styles.text}>
-              Verileriniz bulut (Supabase) altyapımızda uçtan uca şifreleme yöntemleriyle korunmaktadır. Ödeme işlemleri doğrudan Google Play altyapısı üzerinden gerçekleşir ve kredi kartı bilgileriniz hiçbir şekilde sunucularımıza ulaşmaz veya kaydedilmez.
+              Verileriniz bulut altyapımızda uçtan uca şifreleme yöntemleriyle korunmaktadır. Ödeme işlemleri doğrudan Google Play altyapısı üzerinden gerçekleşir ve kredi kartı bilgileriniz hiçbir şekilde sunucularımıza ulaşmaz veya kaydedilmez.
             </p>
           </section>
 
