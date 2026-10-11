@@ -1455,13 +1455,19 @@
   }
 
   .hero {
-    padding-top: 6.5rem;
+    padding-top: 9.5rem;
     padding-bottom: 3.5rem;
     text-align: center;
   }
 
   .heroBadge {
     margin: 0 auto;
+    max-width: 95%;
+  }
+
+  .badgeText {
+    font-size: 0.74rem;
+    line-height: 1.35;
   }
 
   .heroActionGroup {
@@ -1475,7 +1481,7 @@
   }
 
   .cylinderStage {
-    padding: 1rem 0 2rem;
+    padding: 1.5rem 0 2rem;
   }
 
   .cylinderAura {
@@ -1494,21 +1500,30 @@
   }
 
   .floatingBadgeTop {
-    left: 0;
+    left: -10px;
     top: -15px;
+    right: auto;
+    bottom: auto;
     transform: scale(0.85);
-  }
-
-  .floatingBadgeBottom {
-    right: 0;
-    bottom: -10px;
-    transform: scale(0.85);
+    z-index: 5;
   }
 
   .floatingBadgeCenter {
-    left: 50%;
-    transform: translateX(-50%) scale(0.85);
-    bottom: -35px;
+    left: -10px;
+    bottom: 70px;
+    right: auto;
+    top: auto;
+    transform: scale(0.85);
+    z-index: 5;
+  }
+
+  .floatingBadgeBottom {
+    right: -10px;
+    bottom: -15px;
+    left: auto;
+    top: auto;
+    transform: scale(0.85);
+    z-index: 5;
   }
 
   .tarotCardsContainer {
