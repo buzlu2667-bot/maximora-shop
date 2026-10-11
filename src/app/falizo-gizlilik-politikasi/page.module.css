@@ -1,0 +1,286 @@
+.privacyPage {
+  --bg-deep: #08060F;
+  --gold-primary: #F2D474;
+  --gold-accent: #D4AF37;
+  --purple-accent: #A855F7;
+  --purple-light: #C084FC;
+  --glass-bg: rgba(22, 17, 39, 0.65);
+  --glass-border: rgba(212, 175, 55, 0.25);
+  --glass-border-purple: rgba(168, 85, 247, 0.25);
+  --text-white: #FFFFFF;
+  --text-soft: #EADCF8;
+  --text-muted: #9E91B8;
+
+  position: relative;
+  min-height: 100vh;
+  background-color: var(--bg-deep);
+  color: var(--text-white);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  overflow-x: hidden;
+  padding: 3rem 1.5rem 5rem;
+}
+
+.spaceBackground {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: 
+    radial-gradient(circle at 50% 10%, rgba(123, 47, 190, 0.25) 0%, transparent 60%),
+    radial-gradient(circle at 10% 40%, rgba(212, 175, 55, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 90% 70%, rgba(168, 85, 247, 0.18) 0%, transparent 55%),
+    radial-gradient(circle at 50% 95%, rgba(67, 24, 118, 0.3) 0%, transparent 60%);
+}
+
+.starsOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(1px 1px at 20px 30px, #ffffff, rgba(0, 0, 0, 0)),
+                    radial-gradient(1.5px 1.5px at 150px 120px, var(--gold-primary), rgba(0, 0, 0, 0)),
+                    radial-gradient(1px 1px at 320px 240px, #ffffff, rgba(0, 0, 0, 0)),
+                    radial-gradient(1.5px 1.5px at 450px 80px, var(--purple-light), rgba(0, 0, 0, 0));
+  background-size: 800px 500px;
+  opacity: 0.5;
+}
+
+.contentWrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.header {
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.75rem;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.headerTopBar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--gold-primary);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 9999px;
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  backdrop-filter: blur(12px);
+  transition: all 0.25s ease;
+}
+
+.backButton:hover {
+  background: rgba(212, 175, 55, 0.2);
+  transform: translateX(-4px);
+  border-color: var(--gold-primary);
+}
+
+.brandPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.15rem;
+  border-radius: 9999px;
+  background: rgba(168, 85, 247, 0.15);
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  color: var(--purple-light);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.title {
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
+  font-weight: 900;
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.goldGradientText {
+  background: linear-gradient(135deg, #FFFFFF 20%, var(--gold-primary) 70%, #F59E0B 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  color: var(--gold-primary);
+  margin: 0;
+  font-weight: 600;
+}
+
+.introBox {
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  padding: 1.75rem 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  line-height: 1.8;
+  color: var(--text-soft);
+  font-size: 1.02rem;
+}
+
+.legalNoticeBox {
+  background: rgba(245, 158, 11, 0.12);
+  border: 1.5px solid rgba(245, 158, 11, 0.45);
+  border-radius: 20px;
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 2.5rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  color: #FEF3C7;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.legalNoticeIcon {
+  flex-shrink: 0;
+  margin-top: 0.2rem;
+}
+
+.sectionList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.cardSection {
+  background: var(--glass-bg);
+  backdrop-filter: blur(28px);
+  border: 1px solid var(--glass-border-purple);
+  border-radius: 24px;
+  padding: 2rem;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+  transition: border-color 0.3s ease;
+}
+
+.cardSection:hover {
+  border-color: var(--gold-primary);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.iconCircle {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: rgba(212, 175, 55, 0.15);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sectionTitle {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.sectionText {
+  font-size: 0.96rem;
+  line-height: 1.75;
+  color: var(--text-soft);
+  margin: 0 0 1rem;
+}
+
+.bulletList {
+  margin: 0;
+  padding-left: 1.4rem;
+  color: var(--text-soft);
+}
+
+.bulletItem {
+  font-size: 0.95rem;
+  line-height: 1.75;
+  margin-bottom: 0.75rem;
+}
+
+.bulletItem strong {
+  color: var(--gold-primary);
+}
+
+.contactBox {
+  margin-top: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  background: rgba(212, 175, 55, 0.1);
+  border-radius: 16px;
+  border-left: 4px solid var(--gold-primary);
+  color: #FFFFFF;
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.lastUpdate {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-align: right;
+  margin-top: 2rem;
+  font-style: italic;
+}
+
+.footer {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--glass-border);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .privacyPage {
+    padding: 2rem 1rem 4rem;
+  }
+
+  .introBox {
+    padding: 1.25rem 1.25rem;
+    font-size: 0.95rem;
+  }
+
+  .cardSection {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .legalNoticeBox {
+    flex-direction: column;
+    padding: 1.25rem;
+  }
+
+  .backButton {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .brandPill {
+    font-size: 0.72rem;
+    padding: 0.4rem 0.8rem;
+    width: 100%;
+    justify-content: center;
+  }
+}

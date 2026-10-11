@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Para Kontrol - Akıllı Finans ve Gider Takibi',
-  description: 'Harcamalarınızı yönetin, bütçenizi planlayın ve finansal özgürlüğünüzü kazanın. Para Kontrol ile her kuruşun hesabını tutun.',
+  title: 'Harcama Rehberi - Bütçe & Gider Takibi',
+  description: 'Harcamalarınızı yönetin, bütçenizi planlayın ve finansal özgürlüğünüzü kazanın. Harcama Rehberi ile her kuruşun hesabını tutun.',
 };
 
 export default function ParaKontrolLayout({

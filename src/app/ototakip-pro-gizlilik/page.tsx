@@ -40,7 +40,7 @@ export default function OtoTakipProGizlilikPage() {
           </p>
           <ul>
             <li>
-              <strong>Araç ve Maliyet Verileri:</strong> Eklediğiniz araç bilgileri, yakıt harcamaları, bakım kayıtları ve kara kutu notları, Supabase tabanlı güvenli bulut sunucularımızda saklanır.
+              <strong>Araç ve Maliyet Verileri:</strong> Eklediğiniz araç bilgileri, yakıt harcamaları, bakım kayıtları ve kara kutu notları, yüksek güvenlikli şifreli bulut sunucularımızda saklanır.
             </li>
             <li>
               <strong>Kullanıcı Kimliği:</strong> E-posta ve şifrenizle oluşturduğunuz hesabınız, uygulamanın farklı cihazlarda senkronize çalışması için güvenli bir şekilde (Hashlenerek) korunur.

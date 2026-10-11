@@ -15,7 +15,7 @@ export default function ParaKontrolGizlilikPage() {
         </Link>
         <div className={styles.accentBar}></div>
         <h1 className={styles.title}>Gizlilik Politikası</h1>
-        <p className={styles.subtitle}>Para Kontrol - Akıllı Finans Asistanı</p>
+        <p className={styles.subtitle}>Harcama Rehberi - Bütçe & Gider Takibi</p>
       </div>
 
       <div className={styles.content}>
@@ -25,7 +25,7 @@ export default function ParaKontrolGizlilikPage() {
             <h2>Gizlilik Taahhüdümüz</h2>
           </div>
           <p>
-            Para Kontrol uygulaması olarak, finansal verilerinizin mahremiyetine en üst düzeyde önem veriyoruz. 
+            Harcama Rehberi uygulaması olarak, finansal verilerinizin mahremiyetine en üst düzeyde önem veriyoruz. 
             Bu politika, verilerinizin güvenliği ve gizliliği konusundaki standartlarımızı açıklar.
           </p>
         </section>
@@ -36,7 +36,7 @@ export default function ParaKontrolGizlilikPage() {
             <h2>Veri Toplama ve Depolama</h2>
           </div>
           <p>
-            Para Kontrol, kullanıcılarından doğrudan kişisel kimlik bilgisi toplamaz:
+            Harcama Rehberi, kullanıcılarından doğrudan kişisel kimlik bilgisi toplamaz:
           </p>
           <ul>
             <li>

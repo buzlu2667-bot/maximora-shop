@@ -63,7 +63,7 @@ export default function StudioHeader() {
           path: '#',
           subLinks: [
             { name: 'Namaz Vakitleri', path: 'https://www.maximorashop.com/namaz-vakti', external: true },
-            { name: 'Para Kontrol', path: 'https://www.maximorashop.com/para-kontrol', external: true },
+            { name: 'Harcama Rehberi', path: 'https://www.maximorashop.com/para-kontrol', external: true },
             { name: 'Oto Takip Pro', path: 'https://www.maximorashop.com/ototakip-pro', external: true },
           ]
         }
