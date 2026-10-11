@@ -305,7 +305,7 @@ export default function FalizoHomePage() {
                   className={styles.brandLogo}
                 />
                 <div className={styles.brandTextWrapper}>
-                  <span className={styles.brandName}>Falizo: Kahve Falı & Tarot</span>
+                  <span className={styles.brandName}>Falizo<span className={styles.brandNameSub}>: Kahve Falı & Tarot</span></span>
                   <span className={styles.brandTagline}>Canlı & Gerçek Falcılar</span>
                 </div>
               </Link>

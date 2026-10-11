@@ -82,6 +82,13 @@
   line-height: 1.6;
 }
 
+.landing h1,
+.landing h2,
+.landing h3,
+.landing h4 {
+  color: #FFFFFF;
+}
+
 /* Ambient cosmic glows in background */
 .spaceBackground {
   position: fixed;
@@ -176,6 +183,10 @@
   background-clip: text;
   -webkit-text-fill-color: transparent;
   white-space: nowrap;
+}
+
+.brandNameSub {
+  display: inline;
 }
 
 .brandTagline {
@@ -299,6 +310,7 @@
   line-height: 1.12;
   letter-spacing: -0.03em;
   margin: 0;
+  color: #FFFFFF;
 }
 
 .goldGradientText {
@@ -310,7 +322,7 @@
 }
 
 .purpleGradientText {
-  background: linear-gradient(135deg, #E0AAFF 0%, #C77DFF 50%, #9D4EDD 100%);
+  background: linear-gradient(135deg, #F5EDFF 0%, #D8B4FE 45%, #C084FC 80%, #A855F7 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -601,6 +613,7 @@
   line-height: 1.2;
   margin: 0 0 1rem;
   letter-spacing: -0.02em;
+  color: #FFFFFF;
 }
 
 .sectionSubtitle {
@@ -1270,6 +1283,7 @@
   font-size: clamp(2.2rem, 4.5vw, 3.5rem);
   font-weight: 900;
   margin: 0 0 1rem;
+  color: #FFFFFF;
 }
 
 .ctaSubtitle {
@@ -1405,8 +1419,41 @@
   transform: translateY(0);
 }
 
-/* Dedicated Mobile Responsiveness (< 768px) */
 @media (max-width: 768px) {
+  .header {
+    padding: 0.75rem 0;
+  }
+
+  .headerInner {
+    gap: 0.5rem;
+  }
+
+  .brandLogo {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+  }
+
+  .brandNameSub {
+    display: none;
+  }
+
+  .brandName {
+    font-size: 1.1rem;
+  }
+
+  .brandTagline {
+    font-size: 0.65rem;
+  }
+
+  .headerCta {
+    padding: 0.45rem 0.85rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+    gap: 0.35rem;
+  }
+
   .hero {
     padding-top: 6.5rem;
     padding-bottom: 3.5rem;
