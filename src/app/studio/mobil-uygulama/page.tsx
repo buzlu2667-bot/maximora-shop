@@ -62,11 +62,12 @@ export default function MobilUygulamaPage() {
   return (
     <div className={styles.container}>
       <div className={styles.glowBackground}></div>
+      <div className={styles.techGrid}></div>
 
       {/* Hero Section */}
       <section className={styles.heroSection}>
         <div className={styles.heroContent}>
-          <div className={styles.badge}>MOBİL UYGULAMA</div>
+          <div className={styles.badge}>✦ MOBİL UYGULAMA</div>
           <h1 className={styles.title}>
             Fikirlerinizi Cebinize <br/>
             <span className={styles.goldText}>Sığdırıyoruz.</span>

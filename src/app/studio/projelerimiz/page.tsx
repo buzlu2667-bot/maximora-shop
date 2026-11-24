@@ -62,11 +62,12 @@ export default function ProjelerimizPage() {
   return (
     <div className={styles.container}>
       <div className={styles.glowBackground}></div>
+      <div className={styles.techGrid}></div>
 
       {/* Hero Section */}
       <section className={styles.heroSection}>
         <div className={styles.heroContent}>
-          <div className={styles.badge}>PORTFOLYO</div>
+          <div className={styles.badge}>✦ PORTFOLYO</div>
           <h1 className={styles.title}>
             Bazı İşler Anlatılmaz, <br/>
             <span className={styles.goldText}>Sadece İzlenir.</span>

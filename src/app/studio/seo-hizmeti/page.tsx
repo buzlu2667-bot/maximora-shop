@@ -53,11 +53,12 @@ export default function SeoHizmetiPage() {
   return (
     <div className={styles.container}>
       <div className={styles.glowBackground}></div>
+      <div className={styles.techGrid}></div>
 
       {/* Hero Section */}
       <section className={styles.heroSection}>
         <div className={styles.heroContent}>
-          <div className={styles.badge}>TEKNİK SEO ALTYAPISI</div>
+          <div className={styles.badge}>✦ TEKNİK SEO ALTYAPISI</div>
           <h1 className={styles.title}>
             Arama Sonuçlarında <br/>
             <span className={styles.goldText}>Zirveyi Hedefleyin.</span>

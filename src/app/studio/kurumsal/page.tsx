@@ -47,11 +47,12 @@ export default function KurumsalPage() {
   return (
     <div className={styles.container}>
       <div className={styles.glowBackground}></div>
+      <div className={styles.techGrid}></div>
 
       {/* Hero Section */}
       <section className={styles.heroSection}>
         <div className={styles.heroContent}>
-          <div className={styles.badge}>BİZ KİMİZ?</div>
+          <div className={styles.badge}>✦ BİZ KİMİZ?</div>
           <h1 className={styles.title}>
             Dijitalde Kuralları <br/>
             <span className={styles.goldText}>Yeniden Yazıyoruz.</span>

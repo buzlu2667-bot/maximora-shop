@@ -52,10 +52,11 @@ export default function TeklifAlPage() {
   return (
     <div className={styles.container}>
       <div className={styles.glowBackground}></div>
+      <div className={styles.techGrid}></div>
       
       <div className={styles.contentWrapper}>
         <div className={styles.leftSide}>
-          <div className={styles.badge}>HEMEN BAŞLAYALIM</div>
+          <div className={styles.badge}>✦ HEMEN BAŞLAYALIM</div>
           <h1 className={styles.title}>
             Fikrinizi <br/>
             <span className={styles.goldText}>Gerçeğe Dönüştürelim.</span>

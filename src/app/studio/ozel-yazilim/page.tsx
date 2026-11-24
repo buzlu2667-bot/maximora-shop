@@ -53,11 +53,12 @@ export default function OzelYazilimPage() {
   return (
     <div className={styles.container}>
       <div className={styles.glowBackground}></div>
+      <div className={styles.techGrid}></div>
 
       {/* Hero Section */}
       <section className={styles.heroSection}>
         <div className={styles.heroContent}>
-          <div className={styles.badge}>ÖZEL YAZILIM</div>
+          <div className={styles.badge}>✦ ÖZEL YAZILIM</div>
           <h1 className={styles.title}>
             Hayallerinizdeki Projeyi <br/>
             <span className={styles.goldText}>Koda Döküyoruz.</span>

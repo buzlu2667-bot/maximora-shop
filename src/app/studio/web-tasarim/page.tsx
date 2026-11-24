@@ -51,11 +51,12 @@ export default function WebTasarimPage() {
   return (
     <div className={styles.container}>
       <div className={styles.glowBackground}></div>
+      <div className={styles.techGrid}></div>
 
       {/* Hero Section */}
       <section className={styles.heroSection}>
         <div className={styles.heroContent}>
-          <div className={styles.badge}>WEB TASARIM</div>
+          <div className={styles.badge}>✦ WEB TASARIM</div>
           <h1 className={styles.title}>
             Markanızı Dijitalde <br/>
             <span className={styles.goldText}>Zirveye Taşıyoruz.</span>
