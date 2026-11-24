@@ -2,12 +2,10 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Mail, MapPin, Phone, ArrowUpRight } from 'lucide-react';
+import { Mail, MapPin, ArrowUpRight, MessageCircle, Clock, ShieldCheck, Zap, Headphones } from 'lucide-react';
 import styles from './StudioFooter.module.css';
 
 export default function StudioFooter() {
-
-
   return (
     <footer className={styles.footerWrapper}>
       {/* CTA Section */}
@@ -31,6 +29,39 @@ export default function StudioFooter() {
       {/* Main Footer */}
       <div className={styles.mainFooter}>
         <div className={styles.container}>
+
+          {/* Trust & Assurance Badges */}
+          <div className={styles.trustBadges}>
+            <div className={styles.trustItem}>
+              <div className={styles.trustIconWrap}>
+                <ShieldCheck size={22} />
+              </div>
+              <div>
+                <span className={styles.trustTitle}>Revizyon & Memnuniyet</span>
+                <span className={styles.trustDesc}>Tam onay verene kadar yanınızdayız</span>
+              </div>
+            </div>
+
+            <div className={styles.trustItem}>
+              <div className={styles.trustIconWrap}>
+                <Zap size={22} />
+              </div>
+              <div>
+                <span className={styles.trustTitle}>Şeffaf Süreç & Canlı Demo</span>
+                <span className={styles.trustDesc}>Görmeden ve denemeden karar vermeyin</span>
+              </div>
+            </div>
+
+            <div className={styles.trustItem}>
+              <div className={styles.trustIconWrap}>
+                <Headphones size={22} />
+              </div>
+              <div>
+                <span className={styles.trustTitle}>Birebir Destek & Danışmanlık</span>
+                <span className={styles.trustDesc}>Doğrudan geliştirici ile hızlı iletişim</span>
+              </div>
+            </div>
+          </div>
           
           <div className={styles.grid}>
             {/* Brand Column */}
@@ -42,9 +73,9 @@ export default function StudioFooter() {
                 Sıradan olanı reddediyoruz. Markanızın hak ettiği premium dijital deneyimi, en ileri teknolojilerle kusursuz bir şekilde inşa ediyoruz.
               </p>
               <div className={styles.socialLinks}>
-                <a href="#" className={styles.socialIcon}>IG</a>
-                <a href="#" className={styles.socialIcon}>TW</a>
-                <a href="#" className={styles.socialIcon}>IN</a>
+                <a href="#" className={styles.socialIcon} aria-label="Instagram">IG</a>
+                <a href="#" className={styles.socialIcon} aria-label="Twitter">TW</a>
+                <a href="#" className={styles.socialIcon} aria-label="LinkedIn">IN</a>
               </div>
             </div>
 
@@ -61,15 +92,57 @@ export default function StudioFooter() {
 
             {/* Contact Column */}
             <div className={styles.contactCol}>
-              <h3 className={styles.colTitle}>İletişim</h3>
+              <h3 className={styles.colTitle}>İletişim & Destek</h3>
               <ul className={styles.contactList}>
                 <li>
-                  <MapPin size={20} className={styles.contactIcon} />
-                  <span>İstanbul, Türkiye</span>
+                  <div className={styles.contactIconWrap}>
+                    <MapPin size={18} className={styles.contactIcon} />
+                  </div>
+                  <div className={styles.contactInfo}>
+                    <span className={styles.contactMain}>İstanbul, Türkiye</span>
+                    <span className={styles.contactSub}>Dijital Tasarım & Yazılım Stüdyosu</span>
+                  </div>
                 </li>
+
                 <li>
-                  <Mail size={20} className={styles.contactIcon} />
-                  <a href="mailto:destek@maximorashop.com">destek@maximorashop.com</a>
+                  <div className={styles.contactIconWrapWhatsapp}>
+                    <MessageCircle size={18} />
+                  </div>
+                  <div className={styles.contactInfo}>
+                    <a 
+                      href="https://wa.me/905384657526?text=Merhaba,%20web%20sitesi%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum." 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className={styles.whatsappLink}
+                    >
+                      WhatsApp İletişim Hattı
+                    </a>
+                    <span className={styles.onlineBadge}>
+                      <span className={styles.onlineDot} /> Çevrimiçi Destek (Ort. 15 dk)
+                    </span>
+                  </div>
+                </li>
+
+                <li>
+                  <div className={styles.contactIconWrap}>
+                    <Mail size={18} className={styles.contactIcon} />
+                  </div>
+                  <div className={styles.contactInfo}>
+                    <a href="mailto:destek@maximorashop.com" className={styles.mailLink}>
+                      destek@maximorashop.com
+                    </a>
+                    <span className={styles.contactSub}>Proje & Teklif Talepleri</span>
+                  </div>
+                </li>
+
+                <li>
+                  <div className={styles.contactIconWrap}>
+                    <Clock size={18} className={styles.contactIcon} />
+                  </div>
+                  <div className={styles.contactInfo}>
+                    <span className={styles.contactMain}>Pzt - Cts: 09:00 - 21:00</span>
+                    <span className={styles.contactSub}>7/24 Kesintisiz E-Posta</span>
+                  </div>
                 </li>
               </ul>
             </div>
