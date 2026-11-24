@@ -128,23 +128,27 @@ export default function StudioPage() {
     <div className={styles.container}>
       <div className={styles.glowBackground}></div>
       <div className={styles.glowSpotlight}></div>
+      <div className={styles.techGrid}></div>
       
       {/* Navigation - Moved to StudioHeader */}
 
       {/* Hero */}
       <header className={styles.hero}>
         <div className={styles.heroContent}>
-          <div className={styles.badge}>DİJİTAL ATÖLYE</div>
+          <div className={styles.badge}>✦ NEXT-GEN DIGITAL STUDIO</div>
           <h1 className={styles.title}>
             Fikrinizi <br />
             <span className={styles.goldText}>Geleceğe</span> Taşıyoruz.
           </h1>
           
           <div className={styles.sliderContainer}>
-            <div className={styles.sliderWords}>
-              <span key={currentSlideIndex} className={styles.slidingWord}>
-                {slidingServices[currentSlideIndex]}
-              </span>
+            <div className={styles.sliderBadge}>
+              <span className={styles.sliderSparkle}>✦</span>
+              <div className={styles.sliderWords}>
+                <span key={currentSlideIndex} className={styles.slidingWord}>
+                  {slidingServices[currentSlideIndex]}
+                </span>
+              </div>
             </div>
           </div>
           <p className={styles.description}>
